@@ -233,7 +233,7 @@
 
 ---
 
-## 五、訂單列表頁面（Order List Page）
+## 五、團購紀錄頁面（Order List Page）
 
 
 ### 使用情境
