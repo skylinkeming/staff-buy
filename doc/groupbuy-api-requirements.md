@@ -233,16 +233,6 @@
 
 ---
 
-#### Response
-
-```json
-{
-  "data": {}
-}
-```
-
----
-
 ## 五、訂單列表頁面（Order List Page）
 
 
