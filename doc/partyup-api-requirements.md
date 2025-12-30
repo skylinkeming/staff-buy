@@ -66,12 +66,12 @@
 
 #### Query Params（可選）
 
-| 欄位      | 型別    | 必填 | 說明                             |
-| --------- | ------- | ---- | -------------------------------- |
-| searchKey | string  | 否   | 商品、揪團名稱 (搜尋用)          |
-| isActive  | boolean | 否   | 揪團是否進行中(沒有帶的話就全撈) |
-| page      | number  | 是   | 目前的分頁                       |
-| pageSize  | number  | 是   | 一個分頁顯示幾筆                 |
+| 欄位         | 型別   | 必填 | 說明                             |
+| ------------ | ------ | ---- | -------------------------------- |
+| searchKey    | string | 否   | 商品、揪團名稱 (搜尋用)          |
+| partyStatus | number | 否   | 揪團狀態(ex:1-進行中)(沒有帶的話就全撈) |
+| page         | number | 是   | 目前的分頁                       |
+| pageSize     | number | 是   | 一個分頁顯示幾筆                 |
 
 #### Response
 
@@ -83,7 +83,7 @@
       "party_name": "毛巾團購",
       "participants": 236,
       "period": "2025/11/1~2025/11/30",
-      "is_active": true, //是否仍上架中
+      "party_status": 1, //上架中
       "product_options": [
         {
           "id": "a22523",
@@ -132,7 +132,7 @@
   "party_name": "毛巾團購",
   "participants": 236,
   "period": "2025/11/1~2025/11/30",
-  "is_active": true, //是否仍上架中
+  "party_status": 1, //上架中
   "product_options": [
     {
       "product_id": "a1235",
@@ -182,10 +182,10 @@
 | 欄位                        | 型別   | 必填 | 說明                           |
 | --------------------------- | ------ | ---- | ------------------------------ |
 | cart                        | array  | 是   | 欲結帳的揪團商品清單           |
-| cart[].partyId              | string | 是   | 揪團的 id                  |
-| cart[].buyItems             | array  | 是   | 購買的揪團商品清單                   |
+| cart[].partyId              | string | 是   | 揪團的 id                      |
+| cart[].buyItems             | array  | 是   | 購買的揪團商品清單             |
 | cart[].buyItems[].productId | string | 是   | 商品選項的 ID                  |
-| cart[].buyItems[].qty  | number | 是   | 購買數量                       |
+| cart[].buyItems[].qty       | number | 是   | 購買數量                       |
 | cart[].shippingInfo         | object | 否   | 宅配資訊(需要宅配資訊時為必填) |
 | cart[].shippingInfo.name    | string | 是   | 收件人姓名                     |
 | cart[].shippingInfo.phone   | string | 是   | 收件人電話                     |
