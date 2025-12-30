@@ -46,14 +46,14 @@
 
 #### Query Params（可選）
 
-| 欄位      | 型別   | 必填 | 說明                       |
-| --------- | ------ | ---- | -------------------------- |
-| searchKey | string | 否   | 商品、揪團名稱 (搜尋用)    |
-| isActive  | string | 否   | 是否上架中, 若沒有帶則全撈 |
-| startDate | string | 否   | 搜尋起始日期               |
-| endDate   | string | 否   | 搜尋結束日期               |
-| page      | number | 是   | 目前的分頁                 |
-| pageSize  | number | 是   | 一個分頁顯示幾筆           |
+| 欄位        | 型別   | 必填 | 說明                                    |
+| ----------- | ------ | ---- | --------------------------------------- |
+| searchKey   | string | 否   | 商品、揪團名稱 (搜尋用)                 |
+| partyStatus | string | 否   | (ex: 1:上架中, 0:已下架) 若沒有帶則全撈 |
+| startDate   | string | 否   | 搜尋起始日期                            |
+| endDate     | string | 否   | 搜尋結束日期                            |
+| page        | number | 是   | 目前的分頁                              |
+| pageSize    | number | 是   | 一個分頁顯示幾筆                        |
 
 #### Response
 
@@ -65,7 +65,7 @@
       "party_name": "毛巾團購",
       "participants": 236,
       "period": "2025/11/1~2025/11/30",
-      "is_active": true, //是否仍上架中
+      "partyStatus": "上架中",
       "pagination": {
         "page": 1,
         "page_size": 10,
@@ -106,8 +106,19 @@
   "party_name": "毛巾團購",
   "participants": 236,
   "period": "2025/11/1~2025/11/30",
-  "is_active": true, //是否仍上架中
+  "party_status": 1, //是否仍上架中
   "requires_shipping_info": false, //是否需要宅配資訊
+  "party_status_options": [
+    //揪團狀態清單
+    {
+      "value": "已下架",
+      "id": "0"
+    },
+    {
+      "value": "上架中",
+      "id": "1"
+    }
+  ],
   "product_options": [
     {
       "product_id": "a1235",
@@ -143,24 +154,24 @@
 
 #### Request Body
 
-| 欄位                            | 型別          | 必填 | 說明                    |
-| ------------------------------- | ------------- | ---- | ----------------------- |
-| id                              | string        | 是   | 揪團 id                 |
-| party_name                      | string        | 是   | 揪團名稱                |
-| startDate                       | string        | 是   | 揪團開始時間            |
-| endDate                         | string        | 是   | 揪團結束時間            |
-| isActive                        | boolean       | 是   | 揪團狀態(ex:是否上架中) |
-| requiresShippingInfo            | boolean       | 是   | 是否需要填宅配資訊      |
-| productOptions                  | array         | 是   | 商品選項資訊            |
-| productOptions[].prod_id        | string        | 是   | 商品選項名稱            |
-| productOptions[].prod_name      | string        | 是   | 商品選項名稱            |
-| productOptions[].option_desc    | string        | 是   | 商品選項描述            |
-| productOptions[].party_price    | string        | 是   | 商品選項揪團價          |
-| productOptions[].original_price | string        | 否   | 商品選項原價/市價       |
-| otherProductImages              | array<string> | 否   | 其他商品圖片            |
-| prodSummary                     | string        | 是   | 商品介紹                |
-| prodSpec                        | string        | 是   | 商品規格                |
-| note                            | string        | 是   | 揪團注意事項            |
+| 欄位                            | 型別          | 必填 | 說明                   |
+| ------------------------------- | ------------- | ---- | ---------------------- |
+| id                              | string        | 是   | 揪團 id                |
+| party_name                      | string        | 是   | 揪團名稱               |
+| startDate                       | string        | 是   | 揪團開始時間           |
+| endDate                         | string        | 是   | 揪團結束時間           |
+| partyStatus                     | number        | 是   | 揪團狀態(ex:1=>上架中) |
+| requiresShippingInfo            | boolean       | 是   | 是否需要填宅配資訊     |
+| productOptions                  | array         | 是   | 商品選項資訊           |
+| productOptions[].prod_id        | string        | 是   | 商品選項名稱           |
+| productOptions[].prod_name      | string        | 是   | 商品選項名稱           |
+| productOptions[].option_desc    | string        | 是   | 商品選項描述           |
+| productOptions[].party_price    | string        | 是   | 商品選項揪團價         |
+| productOptions[].original_price | string        | 否   | 商品選項原價/市價      |
+| otherProductImages              | array<string> | 否   | 其他商品圖片           |
+| prodSummary                     | string        | 是   | 商品介紹               |
+| prodSpec                        | string        | 是   | 商品規格               |
+| note                            | string        | 是   | 揪團注意事項           |
 
 ```json
 {
@@ -168,7 +179,7 @@
   "party_name": "毛巾團購",
   "startDate": "2025/11/1",
   "endDate": "2025/11/30",
-  "isActive": true,
+  "party_status": 1,
   "requiresShippingInfo": false,
   "productOptions": [
     {
@@ -281,6 +292,17 @@
       "staff_id": "015550",
       "staff_name": "張阿爆",
       "order_status": 3, // 已領取(?)
+      "order_status_options": [
+        //訂單狀態清單
+        {
+          "value": "已成單",
+          "id": "2"
+        },
+        {
+          "value": "已領取",
+          "id": "3"
+        }
+      ],
       "product_options": [
         {
           "prod_id": "a1235",
