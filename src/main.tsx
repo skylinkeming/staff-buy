@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import StaffProductPage from "./pages/staffbuy/StaffProductPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -12,19 +13,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/staffbuy",
-    element: (
-      <>
-        <h1>員購頁面</h1>
-      </>
-    ),
+    element: <StaffProductPage />,
   },
   {
     path: "/staffbuy/products",
-    element: (
-      <>
-        <h1>員購商品頁面</h1>
-      </>
-    ),
+    element: <StaffProductPage />,
   },
   {
     path: "/groupbuy",

@@ -1,0 +1,45 @@
+import QuantityInput from "./QuantityInput";
+
+interface TableRowData {
+  name: string;
+  price: number;
+  stock: number;
+  quantity: number;
+  subtotal: number;
+}
+
+export default function ProductListTable({ data }: { data?: TableRowData[] }) {
+  return (
+    <div className="w-[100%] bg-white border-[#F5F5F5] border-[1px] rounded-[10px] mb-[40px]">
+      <table className="w-full table-auto border-collapse">
+        <thead>
+          <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333]">
+            <th className="text-center">員購品項</th>
+            <th className="text-center">購買價格</th>
+            <th className="text-center">剩餘數量</th>
+            <th className="text-center">購買數量</th>
+            <th className="text-center">小計</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data?.map((item, index) => (
+            <tr key={index} className="hover:bg-[#FFF6E9]">
+              <td className="text-center py-[15px]">{item.name}</td>
+              <td className="text-center py-[15px]">{item.price}</td>
+              <td className="text-center py-[15px]">{item.stock}</td>
+              <td className="text-center py-[15px] flex justify-center">
+                <QuantityInput
+                  variant={"stepper"}
+                  inputNumber={item.quantity}
+                  onChange={(val) => {}}
+                />
+              </td>
+              {/* <td className="text-center py-[15px]">{item.quantity}</td> */}
+              <td className="text-center py-[15px]">{item.subtotal}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
