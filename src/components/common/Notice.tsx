@@ -1,6 +1,11 @@
-export default function Notice() {
+export default function Notice({ className = "" }: { className?: string }) {
   return (
-    <div className="w-[100%] bg-white border-[#E5E5E5] border-[1px] rounded-[10px] mb-[40px]">
+    <div
+      className={
+        "w-[100%] bg-white border-[#E5E5E5] border-[1px] rounded-[10px] " +
+        className
+      }
+    >
       <div className="bg-[#4F48E5] flex items-center justify-center text-[white] h-[32px] rounded-tl-[10px] rounded-tr-[10px]">
         注意事項
       </div>

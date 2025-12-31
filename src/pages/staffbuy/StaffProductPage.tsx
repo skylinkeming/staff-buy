@@ -1,14 +1,8 @@
 import CartSummary from "../../components/business/CartSummary";
 import Notice from "../../components/common/Notice";
 import ProductListTable from "../../components/business/ProductListTable";
+import Searchbar from "../../components/common/Searchbar";
 
-// interface TableRowData {
-//   name: string;
-//   price: number;
-//   stock: number;
-//   quantity: number;
-//   subtotal: number;
-// }
 
 export default function StaffProductPage() {
   return (
@@ -17,7 +11,11 @@ export default function StaffProductPage() {
         <h2>員購商品</h2>
         <div className="flex gap-[40px] ">
           <div className="w-[740px] inline-block">
-            <Notice />
+            <Notice className="mb-[30px]" />
+            <Searchbar
+              className="mb-[30px]"
+              onClickSearch={(searchKey) => {}}
+            />
             <ProductListTable
               data={[
                 {
