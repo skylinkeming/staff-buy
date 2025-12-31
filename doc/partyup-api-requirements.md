@@ -66,12 +66,12 @@
 
 #### Query Params（可選）
 
-| 欄位         | 型別   | 必填 | 說明                             |
-| ------------ | ------ | ---- | -------------------------------- |
-| searchKey    | string | 否   | 商品、揪團名稱 (搜尋用)          |
+| 欄位        | 型別   | 必填 | 說明                                    |
+| ----------- | ------ | ---- | --------------------------------------- |
+| searchKey   | string | 否   | 商品、揪團名稱 (搜尋用)                 |
 | partyStatus | number | 否   | 揪團狀態(ex:1-進行中)(沒有帶的話就全撈) |
-| page         | number | 是   | 目前的分頁                       |
-| pageSize     | number | 是   | 一個分頁顯示幾筆                 |
+| page        | number | 是   | 目前的分頁                              |
+| pageSize    | number | 是   | 一個分頁顯示幾筆                        |
 
 #### Response
 
@@ -179,17 +179,17 @@
 
 #### Request Body
 
-| 欄位                        | 型別   | 必填 | 說明                           |
-| --------------------------- | ------ | ---- | ------------------------------ |
-| cart                        | array  | 是   | 欲結帳的揪團商品清單           |
-| cart[].partyId              | string | 是   | 揪團的 id                      |
-| cart[].buyItems             | array  | 是   | 購買的揪團商品清單             |
-| cart[].buyItems[].productId | string | 是   | 商品選項的 ID                  |
-| cart[].buyItems[].qty       | number | 是   | 購買數量                       |
-| cart[].shippingInfo         | object | 否   | 宅配資訊(需要宅配資訊時為必填) |
-| cart[].shippingInfo.name    | string | 是   | 收件人姓名                     |
-| cart[].shippingInfo.phone   | string | 是   | 收件人電話                     |
-| cart[].shippingInfo.address | string | 是   | 收件地址                       |
+| 欄位                               | 型別   | 必填 | 說明                           |
+| ---------------------------------- | ------ | ---- | ------------------------------ |
+| cart                               | array  | 是   | 欲結帳的揪團商品清單           |
+| cart[].partyId                     | string | 是   | 揪團的 id                      |
+| cart[].buyItems                    | array  | 是   | 購買的揪團商品清單             |
+| cart[].buyItems[].productId        | string | 是   | 商品選項的 ID                  |
+| cart[].buyItems[].qty              | number | 是   | 購買數量                       |
+| cart[].shippingInfo                | object | 否   | 宅配資訊(需要宅配資訊時為必填) |
+| cart[].shippingInfo.name           | string | 是   | 收件人姓名                     |
+| cart[].shippingInfo.phone          | string | 是   | 收件人電話                     |
+| cart[].shippingInfo.address        | string | 是   | 收件地址                       |
 
 ```json
 {
@@ -198,7 +198,7 @@
       "partyId": "g2223", //第一個揪團商品結帳
       "buyItems": [
         {
-          "option_id": "P001",
+          "productId": "P001",
           "qty": 2
         }
       ],
@@ -230,7 +230,9 @@
 
 ```json
 {
-  "data": {}
+  "data": {
+    "message":"訂購成功"
+  }
 }
 ```
 
