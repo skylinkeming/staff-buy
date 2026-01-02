@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import StaffProductPage from "./pages/staffbuy/StaffProductPage.tsx";
+import StaffCheckoutPage from "./pages/staffbuy/StaffCheckoutPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,8 +17,12 @@ const router = createBrowserRouter([
     element: <StaffProductPage />,
   },
   {
-    path: "/staffbuy/products",
+    path: "/staffbuy/purchase",
     element: <StaffProductPage />,
+  },
+  {
+    path: "/staffbuy/checkout",
+    element: <StaffCheckoutPage />,
   },
   {
     path: "/groupbuy",

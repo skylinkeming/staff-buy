@@ -1,4 +1,4 @@
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function CartSummary({
@@ -7,33 +7,34 @@ export default function CartSummary({
   className?: string;
 }) {
   const location = useLocation();
+  const isStaffBuy = location.pathname.includes("staffbuy");
   const cart = useCartStore((state) =>
-    location.pathname.includes("staffbuy") ? state.staffCart : state.groupCart
+    isStaffBuy ? state.staffCart : state.groupCart
   );
   const cartItems = Object.values(cart);
 
   return (
     <div
       className={
-        "border-[1px] border-[#D9D9D9] p-[30px] w-[260px] rounded-[10px] " +
+        "border-[1px] border-[#D9D9D9] p-[20px] w-[260px] rounded-[10px] " +
         className
       }
     >
       {cartItems.length > 0 && (
-        <div className="w-full flex flex-col gap-[15px] mb-[20px]">
+        <div className="w-full flex flex-col gap-[15px] mb-[20px] max-h-[500px] overflow-y-auto">
           {cartItems.map((cartItem) => {
             return (
               <div
                 key={cartItem.productId}
                 className="flex space-around w-full"
               >
-                <div className="w-[170px] flex-shrink-0">
+                <div className="w-[140px] flex-shrink-0">
                   {cartItem.productName}
                 </div>
                 <div className="w-[40px] flex-shrink-0">
                   x {cartItem.quantity}
                 </div>
-                <div className="w-[25px] flex-shrink-0 flex-1 text-right">
+                <div className="w-[25px] flex-shrink-0 flex-1 text-right pr-[5px]">
                   {cart[cartItem.productId]?.quantity * cartItem.price}
                 </div>
               </div>
@@ -52,9 +53,13 @@ export default function CartSummary({
           </span>
         </div>
       </div>
-      <div className="bg-[#4F48E5] text-[white] rounded-[15px] px-[60px] py-[8px] text-center cursor-pointer">
+
+      <Link
+        to={isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout"}
+        className="bg-[#4F48E5] text-[white] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] w-full inline-block underline-offset-[0px] "
+      >
         購買商品
-      </div>
+      </Link>
     </div>
   );
 }
