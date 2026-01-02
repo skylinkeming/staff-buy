@@ -1,10 +1,27 @@
 import CartSummary from "../../components/business/CartSummary";
 import Notice from "../../components/common/Notice";
-import ProductListTable from "../../components/business/ProductListTable";
+import ProductTable from "../../components/business/ProductTable";
 import Searchbar from "../../components/common/Searchbar";
+import { useCartStore } from "../../store/useCartStore";
 
+const productArr = (() => {
+  const result = [];
+  for (let i = 0; i < 10; i++) {
+    result.push({
+      id: i.toString(),
+      name: "小籠包",
+      price: 50,
+      stock: 100,
+    });
+  }
+
+  return result;
+})();
 
 export default function StaffProductPage() {
+  const updateCart = useCartStore((state) => state.updateCart);
+  const staffCart = useCartStore((state) => state.staffCart);
+
   return (
     <div className="min-h-[100%] w-[100%] relative flex flex-col items-center justify-center gap-[40px] bg-[#FBFBFB]">
       <div>
@@ -16,86 +33,27 @@ export default function StaffProductPage() {
               className="mb-[30px]"
               onClickSearch={(searchKey) => {}}
             />
-            <ProductListTable
-              data={[
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-                {
-                  name: "小籠包",
-                  price: 50,
-                  stock: 100,
-                  quantity: 2,
-                  subtotal: 100,
-                },
-              ]}
+            <ProductTable
+              data={productArr.map((prd) => {
+                return {
+                  ...prd,
+                  quantity: staffCart[prd.id] ? staffCart[prd.id].quantity : 0,
+                  subtotal: staffCart[prd.id]
+                    ? staffCart[prd.id]?.quantity * prd.price
+                    : 0,
+                };
+              })}
+              onChange={(item, qty) => {
+                updateCart(
+                  "staff",
+                  {
+                    productId: item.id,
+                    productName: item.name,
+                    price: item.price,
+                  },
+                  qty
+                );
+              }}
             />
           </div>
           <div className="sticky top-[0px] h-[400px] inline-block">

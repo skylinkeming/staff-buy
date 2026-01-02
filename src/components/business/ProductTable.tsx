@@ -1,6 +1,7 @@
 import QuantityInput from "./QuantityInput";
 
 interface TableRowData {
+  id: string;
   name: string;
   price: number;
   stock: number;
@@ -8,7 +9,13 @@ interface TableRowData {
   subtotal: number;
 }
 
-export default function ProductListTable({ data }: { data?: TableRowData[] }) {
+export default function ProductTable({
+  data,
+  onChange,
+}: {
+  data?: TableRowData[];
+  onChange: (prod: TableRowData, qty: number) => void;
+}) {
   return (
     <div className="w-[100%] bg-white border-[#F5F5F5] border-[1px] rounded-[10px] mb-[40px]">
       <table className="w-full table-auto border-collapse">
@@ -22,8 +29,8 @@ export default function ProductListTable({ data }: { data?: TableRowData[] }) {
           </tr>
         </thead>
         <tbody>
-          {data?.map((item, index) => (
-            <tr key={index} className="hover:bg-[#FFF6E9]">
+          {data?.map((item) => (
+            <tr key={item.id} className="hover:bg-[#FFF6E9]">
               <td className="text-center py-[15px]">{item.name}</td>
               <td className="text-center py-[15px]">{item.price}</td>
               <td className="text-center py-[15px]">{item.stock}</td>
@@ -31,10 +38,11 @@ export default function ProductListTable({ data }: { data?: TableRowData[] }) {
                 <QuantityInput
                   variant={"stepper"}
                   inputNumber={item.quantity}
-                  onChange={(val) => {}}
+                  onChange={(val) => {
+                    onChange(item, val);
+                  }}
                 />
               </td>
-              {/* <td className="text-center py-[15px]">{item.quantity}</td> */}
               <td className="text-center py-[15px]">{item.subtotal}</td>
             </tr>
           ))}
