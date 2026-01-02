@@ -15,6 +15,7 @@ interface CartState {
     product: Omit<CartItem, "quantity">,
     targetQuantity: number
   ) => void;
+  removeFromCart: (type: "staff" | "group", productId: string) => void;
   clearCart: (type: "staff" | "group") => void;
 }
 
@@ -31,6 +32,14 @@ export const useCartStore = create<CartState>((set) => ({
       } else {
         newCart[product.productId] = { ...product, quantity: targetQuantity };
       }
+
+      return { [cartKey]: newCart };
+    }),
+  removeFromCart: (type, productId) =>
+    set((state) => {
+      const cartKey = type === "staff" ? "staffCart" : "groupCart";
+      const newCart = { ...state[cartKey] };
+      delete newCart[productId];
 
       return { [cartKey]: newCart };
     }),

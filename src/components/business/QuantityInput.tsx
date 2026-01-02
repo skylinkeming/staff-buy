@@ -1,11 +1,13 @@
 export default function QuantityInput({
   variant = "stepper",
+  className = "",
   inputNumber,
   onChange,
 }: {
   variant: string;
   inputNumber: number;
   onChange: (newVal: number) => void;
+  className?: string;
 }) {
   const handleIncrement = () => {
     onChange(inputNumber + 1);
@@ -24,7 +26,12 @@ export default function QuantityInput({
 
   if (variant === "classic") {
     return (
-      <div className="flex border-[1px] border-[#E5E5E5] w-[70px] rounded-[7px]">
+      <div
+        className={
+          "flex border-[1px] border-[#E5E5E5] w-[70px] rounded-[7px] " +
+          className
+        }
+      >
         <div
           className="flex cursor-pointer items-center w-[20px] bg-[#F5F5F5] px-[5px] rounded-tl-[7px] rounded-bl-[7px]"
           onClick={handleDecrement}
@@ -67,7 +74,7 @@ export default function QuantityInput({
   }
 
   return (
-    <div className="flex">
+    <div className={"flex " + className}>
       <div
         className="flex cursor-pointer items-center w-[14px] rotate-180"
         onClick={handleDecrement}
