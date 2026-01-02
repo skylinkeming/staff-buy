@@ -18,6 +18,8 @@ const productArr = (() => {
   return result;
 })();
 
+const CART_TYPE = "staff";
+
 export default function StaffProductPage() {
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
@@ -44,8 +46,10 @@ export default function StaffProductPage() {
                 };
               })}
               onChange={(item, qty) => {
+                // 打stock api檢查庫存數量
+
                 updateCart(
-                  "staff",
+                  CART_TYPE,
                   {
                     productId: item.id,
                     productName: item.name,
