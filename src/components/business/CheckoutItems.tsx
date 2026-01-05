@@ -57,7 +57,7 @@ export default function CheckoutItems() {
                     onClick={() => handleClickRemoveButton(cartItem.productId)}
                   />
                   <div
-                    className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center bg-[#E5486D] px-2.5 py-1.25 rounded-[5px]"
+                    className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center bg-staffbuy-secondary px-2.5 py-1.25 rounded-[5px]"
                     onClick={() => handleClickRemoveButton(cartItem.productId)}
                   >
                     <FaRegTrashAlt

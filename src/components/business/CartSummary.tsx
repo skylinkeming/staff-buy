@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useCartStore } from "../../store/useCartStore";
 
 export default function CartSummary({
@@ -9,6 +9,7 @@ export default function CartSummary({
   showDetail?: boolean;
 }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const isStaffBuy = location.pathname.includes("staffbuy");
   const cart = useCartStore((state) =>
     isStaffBuy ? state.staffCart : state.groupCart
@@ -56,9 +57,10 @@ export default function CartSummary({
       </div>
 
       <div
-        // to={isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout"}
-        onClick={() => {}}
-        className="bg-staffbuy-primary text-[white] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] w-full inline-block underline-offset-[0px] "
+        onClick={() => {
+          navigate(isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout");
+        }}
+        className="bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] w-full inline-block underline-offset-[0px] "
       >
         購買商品
       </div>
