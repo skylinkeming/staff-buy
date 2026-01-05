@@ -15,7 +15,7 @@ export default function CustomDatePicker({
     <ConfigProvider locale={zhTW}>
       <DatePicker
         className="md:w-full"
-        value={dayjs(value)}
+        value={value ? dayjs(value) : dayjs()}
         onChange={(_, str) => {
           onChange(str || "");
         }}

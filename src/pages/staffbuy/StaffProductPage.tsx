@@ -1,11 +1,11 @@
-import CartSummary from "../../components/business/CartSummary";
+import CartSummary from "../../components/staffbuy/purchase/CartSummary";
 import Notice from "../../components/common/Notice";
-import ProductTable from "../../components/business/ProductTable";
+import ProductTable from "../../components/staffbuy/purchase/ProductTable";
 import Searchbar from "../../components/common/Searchbar";
 import { useCartStore } from "../../store/useCartStore";
 import type { ReactNode } from "react";
-import MobileProductTable from "@/components/business/MobileProductTable";
-import MobileCheckoutBar from "@/components/business/MobileCheckoutBar";
+import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
+import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import { useNavigate } from "react-router";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 

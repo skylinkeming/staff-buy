@@ -1,4 +1,4 @@
-import FormInput from "../common/FormInput";
+import FormInput from "../../common/FormInput";
 
 export default function OrdererInfo() {
   return (

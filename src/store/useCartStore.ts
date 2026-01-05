@@ -10,17 +10,19 @@ interface CartItem {
 interface CartState {
   staffCart: Record<string, CartItem>;
   groupCart: Record<string, CartItem>;
-  pickupMethod: string;
   ordererInfo: {
     name: string;
     dept: string;
     staffId: string;
   };
   shippingInfo: {
+    pickupMethod: string;
+    pickupDate: string;
     name: string;
     phone: string;
     address: string;
     deliveryTime: string;
+    bagQty: string;
   };
   invoiceInfo: {
     location: string;
@@ -41,17 +43,19 @@ interface CartState {
 export const useCartStore = create<CartState>((set) => ({
   staffCart: {},
   groupCart: {},
-  pickupMethod: "2",
   ordererInfo: {
     name: "王大名",
     dept: "資訊部",
     staffId: "016655",
   },
   shippingInfo: {
+    pickupDate: "",
     name: "",
     phone: "",
     address: "",
     deliveryTime: "",
+    pickupMethod: "2",
+    bagQty: "0",
   },
   invoiceInfo: {
     location: "",

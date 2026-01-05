@@ -1,9 +1,9 @@
-import CheckoutItems from "../../components/business/CheckoutItems";
-import OrdererInfo from "../../components/business/OrdererInfo";
-import ShippingInfo from "../../components/business/ShippingInfo";
-import InvoiceInfo from "../../components/business/InvoiceInfo";
-import MobileCheckoutBar from "@/components/business/MobileCheckoutBar";
-import CartSummary from "@/components/business/CartSummary";
+import CheckoutItems from "../../components/staffbuy/checkout/CheckoutItems";
+import OrdererInfo from "../../components/staffbuy/checkout/OrdererInfo";
+import ShippingInfo from "../../components/staffbuy/checkout/ShippingInfo";
+import InvoiceInfo from "../../components/staffbuy/checkout/InvoiceInfo";
+import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
+import CartSummary from "@/components/staffbuy/purchase/CartSummary";
 import { BlockTitle } from "./StaffProductPage";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 

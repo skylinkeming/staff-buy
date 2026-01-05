@@ -43,7 +43,7 @@ export default function FormInput({
       <Select
         value={value}
         style={{ width: "100%" }}
-        onChange={() => {}}
+        onChange={onChange}
         options={optionData}
       />
     );

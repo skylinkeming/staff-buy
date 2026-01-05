@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router";
-import { useCartStore } from "../../store/useCartStore";
+import { useCartStore } from "../../../store/useCartStore";
 
 export default function CartSummary({
   className = "",

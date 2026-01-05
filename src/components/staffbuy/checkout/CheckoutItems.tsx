@@ -1,6 +1,6 @@
 import { useLocation } from "react-router";
-import { useCartStore } from "../../store/useCartStore";
-import QuantityInput from "./QuantityInput";
+import { useCartStore } from "../../../store/useCartStore";
+import QuantityInput from "../purchase/QuantityInput";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function CheckoutItems() {
