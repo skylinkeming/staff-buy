@@ -1,9 +1,8 @@
-import { Select } from "antd";
 import FormInput from "../common/FormInput";
 
 export default function ShippingInfo() {
   return (
-    <div className="bg-[white] flex flex-col gap-[10px] px-[10px] py-[20px] rounded-[15px]">
+    <div className="bg-[white] grid grid-cols-1 px-2.5 py-5 rounded-[15px] max-w-175 md:grid-cols-2 gap-2.5">
       <FormInput
         required
         variant="date-picker"

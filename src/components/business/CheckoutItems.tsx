@@ -21,19 +21,17 @@ export default function CheckoutItems() {
   return (
     <div>
       {cartItems.length > 0 && (
-        <div className="w-full flex flex-col gap-[5px] mb-[20px] ">
+        <div className="w-full flex flex-col gap-[5px] mb-[20px] md:w-[700px]">
           {cartItems.map((cartItem) => {
             return (
               <div
                 key={cartItem.productId}
-                className="flex space-around w-full bg-[white] py-[15px] px-[10px] box-border rounded-[10px] items-center max-h-[54px] border-box"
+                className="flex justify-around w-full bg-[white] py-[15px] px-[10px] box-border rounded-[10px] items-center max-h-[54px] border-box md:justify-between"
               >
-                <div className="w-[140px] flex-shrink-0">
-                  {cartItem.productName}
-                </div>
-                <div className="w-[40px] flex-shrink-0">${cartItem.price}</div>
+                <div className="w-35 max-w-[115px] md:max-w-[140px]">{cartItem.productName}</div>
+                <div className="w-10">${cartItem.price}</div>
                 <QuantityInput
-                  className="ml-[20px] flex justify-center"
+                  className="ml-5 flex justify-center"
                   variant="stepper"
                   inputNumber={cartItem.quantity}
                   onChange={(qty) => {
@@ -48,10 +46,10 @@ export default function CheckoutItems() {
                     );
                   }}
                 />
-                <div className="w-[25px] flex-shrink-0 text-right pr-[5px] ml-[20px]">
+                <div className="w-6.25 shrink-0 text-right pr-[5px] ml-[20px]">
                   ${cart[cartItem.productId]?.quantity * cartItem.price}
                 </div>
-                <div className="flex-1 flex items-center justify-end">
+                <div className="flex-1 shrink-0 w-8 flex items-center justify-end md:flex-none">
                   <img
                     className="cursor-pointer"
                     width={20}

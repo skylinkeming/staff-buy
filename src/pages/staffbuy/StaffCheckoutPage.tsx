@@ -3,11 +3,15 @@ import CheckoutItems from "../../components/business/CheckoutItems";
 import OrdererInfo from "../../components/business/OrdererInfo";
 import ShippingInfo from "../../components/business/ShippingInfo";
 import InvoiceInfo from "../../components/business/InvoiceInfo";
+import MobileCheckoutBar from "@/components/business/MobileCheckoutBar";
+import CartSummary from "@/components/business/CartSummary";
 
 export default function StaffCheckoutPage() {
+  const handlePurchase = () => {};
+
   return (
-    <div className="w-full p-[15px] bg-[#FBFBFB] pb-[80px]">
-      <div>
+    <div className="w-full p-[15px] bg-[#FBFBFB] pb-[120px] md:flex md:gap-[40px] md:justify-center">
+      <div className="">
         <BlockTitle className="mt-[28px] mb-[10px]">購買商品</BlockTitle>
         <CheckoutItems />
         <BlockTitle className="mt-[30px] mb-[10px]">訂購資訊</BlockTitle>
@@ -17,11 +21,13 @@ export default function StaffCheckoutPage() {
         <BlockTitle className="mt-[30px] mb-[10px]">發票資訊</BlockTitle>
         <InvoiceInfo />
       </div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div className="hidden md:inline-block sticky top-[0px] h-[400px]">
+        <CartSummary />
+      </div>
+      <MobileCheckoutBar
+        className="md:hidden"
+        onClickPurchaseBtn={handlePurchase}
+      />
     </div>
   );
 }
@@ -33,5 +39,7 @@ const BlockTitle = ({
   children: ReactNode;
   className?: string;
 }) => (
-  <div className={"text-[24px] w-full text-left " + className}>{children}</div>
+  <div className={"text-[20px] text-[#020202] w-full text-left " + className}>
+    {children}
+  </div>
 );

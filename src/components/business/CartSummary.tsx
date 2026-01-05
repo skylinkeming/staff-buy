@@ -16,12 +16,12 @@ export default function CartSummary({
   return (
     <div
       className={
-        "border-[1px] border-[#D9D9D9] p-[20px] w-[260px] rounded-[10px] " +
+        "border border-[#D9D9D9] p-[20px] w-[260px] rounded-[10px] " +
         className
       }
     >
       {cartItems.length > 0 && (
-        <div className="w-full flex flex-col gap-[15px] mb-[20px] max-h-[500px] overflow-y-auto">
+        <div className="w-full flex flex-col gap-[15px] mb-[20px] max-h-[500px] overflow-y-auto md:hidden">
           {cartItems.map((cartItem) => {
             return (
               <div
