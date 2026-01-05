@@ -1,5 +1,6 @@
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useCartStore } from "../../../store/useCartStore";
+import AppAlert from "@/components/common/AppAlert";
 
 export default function CartSummary({
   className = "",
@@ -57,7 +58,18 @@ export default function CartSummary({
       </div>
 
       <div
-        onClick={() => {
+        onClick={async () => {
+          if (cartItems.length === 0) {
+            await AppAlert({
+              title: "購物車沒有商品",
+              message: "請放入商品",
+              okText: "確認",
+              hideCancel:true,
+              type:"error"
+            });
+
+            return;
+          }
           navigate(isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout");
         }}
         className="bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] w-full inline-block underline-offset-[0px] "
