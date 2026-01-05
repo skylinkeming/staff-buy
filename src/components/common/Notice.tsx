@@ -2,18 +2,17 @@ import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Notice({ className = "" }: { className?: string }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
       className={
-        "w-full bg-white border-[#E5E5E5] border-[1px] rounded-tr-[10px] rounded-tl-[10px] overflow-hidden transition-all duration-300 " +
+        "w-full bg-white border-[#E5E5E5] border-[1px] rounded-[10px] overflow-hidden " +
         className
       }
     >
-      {/* 標題區塊 */}
       <div
-        className="bg-[#4F48E5] flex items-center justify-center text-white h-[32px] relative cursor-pointer"
+        className="bg-staffbuy-primary flex items-center justify-center text-white h-[32px] relative cursor-pointer z-20"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="font-medium">注意事項</span>
@@ -26,13 +25,14 @@ export default function Notice({ className = "" }: { className?: string }) {
           />
         </div>
       </div>
-      <div
-        className={`grid transition-all duration-300 ease-in-out ${
-          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <div className="py-[15px] px-[20px] whitespace-pre-line text-sm text-gray-700 leading-relaxed">
+
+      <div className="relative cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+        <div
+          className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${
+            isOpen ? "max-h-[1000px]" : "max-h-[90px]"
+          }`}
+        >
+          <div className="py-[15px] px-[20px] whitespace-pre-line text-sm text-gray-700 leading-relaxed pb-8">
             {`購物流程:
 1.線上輸入購買產品數量 > 2.自行選定取貨日期(宅配請提前一日出貨) > 3.索取發票 > 4.依日期至倉儲取貨
 
@@ -44,6 +44,11 @@ export default function Notice({ className = "" }: { className?: string }) {
 5. **發票請盡量使用載具**`}
           </div>
         </div>
+        <div
+          className={`absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white via-white/80 to-transparent transition-opacity duration-300 pointer-events-none z-10 ${
+            isOpen ? "opacity-0" : "opacity-100"
+          }`}
+        />
       </div>
     </div>
   );

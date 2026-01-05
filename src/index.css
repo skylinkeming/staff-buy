@@ -41,3 +41,11 @@ h1 {
     background-color: #f9f9f9;
   }
 }
+
+
+
+
+@theme {
+  --color-staffbuy-primary: rgb(23, 93, 204); 
+  --color-staffbuy-secondary: #f3f4f6;
+}

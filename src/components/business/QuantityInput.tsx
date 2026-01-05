@@ -87,7 +87,7 @@ export default function QuantityInput({
         value={inputNumber}
         onChange={handleChange}
         type="number"
-        className="w-7.5 text-[#4F48E5] font-bold  text-[16px] md:font-normal text-center appearance-none bg-transparent border-0 p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none md:text-inherit
+        className="w-7.5 text-staffbuy-primary font-bold  text-[16px] md:font-normal text-center appearance-none bg-transparent border-0 p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none md:text-inherit
          [&::-webkit-outer-spin-button]:appearance-none
          [&::-webkit-inner-spin-button]:appearance-none"
       />

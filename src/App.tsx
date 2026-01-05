@@ -6,14 +6,6 @@ function App() {
 
   return (
     <div id="tailwind-demo-marker" className="min-h-screen flex flex-col items-center justify-center gap-6 p-6 bg-gray-900 text-white">
-      <div className="flex items-center gap-4">
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
 
       <h1 className="text-4xl font-extrabold tracking-tight">Vite + React</h1>
 

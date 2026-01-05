@@ -27,7 +27,7 @@ export default function ProductTable({
     >
       <table className="w-full table-auto border-collapse">
         <thead>
-          <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333]">
+          <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333] sticky top-0 z-99">
             <th className="text-center">員購品項</th>
             <th className="text-center">購買價格</th>
             <th className="text-center">剩餘數量</th>

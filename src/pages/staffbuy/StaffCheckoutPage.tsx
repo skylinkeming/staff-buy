@@ -5,6 +5,7 @@ import InvoiceInfo from "../../components/business/InvoiceInfo";
 import MobileCheckoutBar from "@/components/business/MobileCheckoutBar";
 import CartSummary from "@/components/business/CartSummary";
 import { BlockTitle } from "./StaffProductPage";
+import Breadcrumbs from "@/components/common/BreadCrumbs";
 
 export default function StaffCheckoutPage() {
   const handlePurchase = () => {};
@@ -12,6 +13,9 @@ export default function StaffCheckoutPage() {
   return (
     <div className="w-full p-[15px] bg-[#FBFBFB] pb-[120px] md:flex md:gap-[40px] md:justify-center">
       <div className="">
+        <div className="max-w-7xl mx-auto mt-10">
+          <Breadcrumbs />
+        </div>
         <BlockTitle className="mt-[28px] mb-[10px]">購買商品</BlockTitle>
         <CheckoutItems />
         <BlockTitle className="mt-[30px] mb-[10px]">訂購資訊</BlockTitle>
@@ -21,14 +25,10 @@ export default function StaffCheckoutPage() {
         <BlockTitle className="mt-[30px] mb-[10px]">發票資訊</BlockTitle>
         <InvoiceInfo />
       </div>
-      <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
+      <div className="hidden md:inline-block sticky top-[0px] h-[400px] mt-15">
         <CartSummary />
       </div>
-      <MobileCheckoutBar
-        className="md:hidden"
-        onClickPurchaseBtn={handlePurchase}
-      />
+      <MobileCheckoutBar className="md:hidden" onClickBtn={handlePurchase} />
     </div>
   );
 }
-

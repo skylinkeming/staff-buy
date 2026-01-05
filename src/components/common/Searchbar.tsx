@@ -18,7 +18,7 @@ export default function Searchbar({
          [&::-webkit-inner-spin-button]:appearance-none"
       />
       <div
-        className="flex items-center gap-[10px] bg-[#4F48E5] text-[white] rounded-[10px] px-[20px] py-[5px] text-center cursor-pointer"
+        className="flex items-center gap-[10px] bg-staffbuy-primary text-[white] rounded-[10px] px-[20px] py-[5px] text-center cursor-pointer"
         onClick={() => onClickSearch(searchInputRef?.current || "")}
       >
         <div className="w-[16px] flex items-center">

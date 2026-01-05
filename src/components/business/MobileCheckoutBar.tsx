@@ -20,13 +20,13 @@ export default function MobileCheckoutBar({
   return (
     <div
       className={
-        "fixed drop-shadow-[0_-1px_5px_rgb(232,232,232)] bottom-[0px] left-[0px] w-screen bg-[white] px-[15px] py-[15px] z-50 box-border flex justify-between items-end " +
+        "z-100 fixed drop-shadow-[0_-1px_5px_rgb(232,232,232)] bottom-[0px] left-[0px] w-screen bg-[white] px-[15px] py-[15px] z-50 box-border flex justify-between items-end " +
         className
       }
     >
       <div className="flex items-end gap-[30px]">
         <div className="shrink-0">總金額</div>
-        <div className="text-[#4F48E5]  h-[32px]">
+        <div className="text-staffbuy-primary  h-[32px]">
           $NT
           <span className="text-[24px] ml-[10px] font-[700]">
             {cartItems.reduce((sum, cartItem) => {
@@ -36,7 +36,7 @@ export default function MobileCheckoutBar({
         </div>
       </div>
       <div
-        className="bg-[#4F48E5] text-[white] w-[130px] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] inline-block underline-offset-0 "
+        className="bg-staffbuy-primary text-[white] w-[130px] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] inline-block underline-offset-0 "
         onClick={onClickBtn}
       >
         {btnText}

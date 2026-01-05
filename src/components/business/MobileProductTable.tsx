@@ -21,13 +21,13 @@ export default function MobileProductTable({
   return (
     <div
       className={
-        "w-[100%] bg-white border-[#F5F5F5] border-[1px] rounded-[10px] mb-[40px] " +
+        "w-[100%] bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] " +
         className
       }
     >
       <table className="w-full table-auto border-collapse">
         <thead>
-          <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333]">
+          <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333] sticky z-99 top-0">
             <th className="px-2.5">員購品項</th>
             <th className="text-center">購買數量</th>
             <th className="text-center w-15">小計</th>
@@ -38,7 +38,7 @@ export default function MobileProductTable({
             <tr
               key={item.id}
               className={
-                "hover:bg-[#FFF6E9] border-b-[1px] border-b-[#F5F5F5] " +
+                "hover:bg-[#FFF6E9] border-b-[2px] border-b-[#F5F5F5] " +
                 (item.quantity > 0 ? "bg-[#FFF6E9]" : "")
               }
             >
