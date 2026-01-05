@@ -1,7 +1,7 @@
 import { useLocation } from "react-router";
 import { useCartStore } from "../../store/useCartStore";
 import QuantityInput from "./QuantityInput";
-import TrashCan from "../../assets/trash_can.png";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function CheckoutItems() {
   const location = useLocation();
@@ -28,7 +28,9 @@ export default function CheckoutItems() {
                 key={cartItem.productId}
                 className="flex justify-around w-full bg-[white] py-[15px] px-[10px] box-border rounded-[10px] items-center max-h-[54px] border-box md:justify-between"
               >
-                <div className="w-35 max-w-[115px] md:max-w-[140px]">{cartItem.productName}</div>
+                <div className="w-35 max-w-[115px] md:max-w-[140px]">
+                  {cartItem.productName}
+                </div>
                 <div className="w-10">${cartItem.price}</div>
                 <QuantityInput
                   className="ml-5 flex justify-center"
@@ -46,17 +48,26 @@ export default function CheckoutItems() {
                     );
                   }}
                 />
-                <div className="w-6.25 shrink-0 text-right pr-[5px] ml-[20px]">
+                <div className="w-10 shrink-0 text-right pr-[5px] ml-[20px] md:ml-0 md:pr-0">
                   ${cart[cartItem.productId]?.quantity * cartItem.price}
                 </div>
                 <div className="flex-1 shrink-0 w-8 flex items-center justify-end md:flex-none">
-                  <img
-                    className="cursor-pointer"
-                    width={20}
-                    src={TrashCan}
-                    alt="刪除按鈕"
+                  <FaRegTrashAlt
+                    className="md:hidden"
                     onClick={() => handleClickRemoveButton(cartItem.productId)}
                   />
+                  <div
+                    className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center bg-[#E5486D] px-2.5 py-1.25 rounded-[5px]"
+                    onClick={() => handleClickRemoveButton(cartItem.productId)}
+                  >
+                    <FaRegTrashAlt
+                      color={"white"}
+                      onClick={() =>
+                        handleClickRemoveButton(cartItem.productId)
+                      }
+                    />
+                    <div className="text-white">刪除</div>
+                  </div>
                 </div>
               </div>
             );
