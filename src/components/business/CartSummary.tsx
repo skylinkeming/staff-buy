@@ -28,7 +28,7 @@ export default function CartSummary({
                 key={cartItem.productId}
                 className="flex space-around w-full"
               >
-                <div className="w-[140px] flex-shrink-0">
+                <div className="w-35 flex-shrink-0">
                   {cartItem.productName}
                 </div>
                 <div className="w-[40px] flex-shrink-0">

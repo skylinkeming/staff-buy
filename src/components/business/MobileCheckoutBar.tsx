@@ -2,11 +2,13 @@ import { useCartStore } from "@/store/useCartStore";
 import { useLocation } from "react-router";
 
 export default function MobileCheckoutBar({
-  onClickPurchaseBtn,
+  onClickBtn,
   className = "",
+  btnText = "完成訂購",
 }: {
-  onClickPurchaseBtn: () => void;
+  onClickBtn: () => void;
   className?: string;
+  btnText?: string;
 }) {
   const location = useLocation();
   const isStaffBuy = location.pathname.includes("staffbuy");
@@ -33,8 +35,11 @@ export default function MobileCheckoutBar({
           </span>
         </div>
       </div>
-      <div className="bg-[#4F48E5] text-[white] w-[130px] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] inline-block underline-offset-0 ">
-        完成訂購
+      <div
+        className="bg-[#4F48E5] text-[white] w-[130px] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] inline-block underline-offset-0 "
+        onClick={onClickBtn}
+      >
+        {btnText}
       </div>
     </div>
   );

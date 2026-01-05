@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
 import CheckoutItems from "../../components/business/CheckoutItems";
 import OrdererInfo from "../../components/business/OrdererInfo";
 import ShippingInfo from "../../components/business/ShippingInfo";
 import InvoiceInfo from "../../components/business/InvoiceInfo";
 import MobileCheckoutBar from "@/components/business/MobileCheckoutBar";
 import CartSummary from "@/components/business/CartSummary";
+import { BlockTitle } from "./StaffProductPage";
 
 export default function StaffCheckoutPage() {
   const handlePurchase = () => {};
@@ -21,7 +21,7 @@ export default function StaffCheckoutPage() {
         <BlockTitle className="mt-[30px] mb-[10px]">發票資訊</BlockTitle>
         <InvoiceInfo />
       </div>
-      <div className="hidden md:inline-block sticky top-[0px] h-[400px]">
+      <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
         <CartSummary />
       </div>
       <MobileCheckoutBar
@@ -32,14 +32,3 @@ export default function StaffCheckoutPage() {
   );
 }
 
-const BlockTitle = ({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) => (
-  <div className={"text-[20px] text-[#020202] w-full text-left " + className}>
-    {children}
-  </div>
-);

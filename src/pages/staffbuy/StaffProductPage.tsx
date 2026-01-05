@@ -3,6 +3,10 @@ import Notice from "../../components/common/Notice";
 import ProductTable from "../../components/business/ProductTable";
 import Searchbar from "../../components/common/Searchbar";
 import { useCartStore } from "../../store/useCartStore";
+import type { ReactNode } from "react";
+import MobileProductTable from "@/components/business/MobileProductTable";
+import MobileCheckoutBar from "@/components/business/MobileCheckoutBar";
+import { useNavigate } from "react-router";
 
 const productArr = (() => {
   const result = [];
@@ -20,22 +24,61 @@ const productArr = (() => {
 
 const CART_TYPE = "staff";
 
+export const BlockTitle = ({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) => (
+  <div className={"text-[20px] text-[#020202] w-full text-left " + className}>
+    {children}
+  </div>
+);
+
 export default function StaffProductPage() {
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-[100%] w-[100%] relative flex flex-col items-center justify-center gap-[40px] bg-[#FBFBFB]">
+    <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center justify-center gap-[40px] bg-[#FBFBFB]">
       <div>
-        <h2>員購商品</h2>
+        <BlockTitle className="mb-4">員購</BlockTitle>
         <div className="flex gap-[40px] ">
-          <div className="w-[740px] inline-block">
-            <Notice className="mb-[30px]" />
+          <div className="w-full md:w-[740px] inline-block">
+            <Notice className="mb-[30px] w-full md:w-auto" />
             <Searchbar
-              className="mb-[30px]"
+              className="mb-[30px] md:w-[400px]"
               onClickSearch={(searchKey) => {}}
             />
             <ProductTable
+              className="hidden md:inline-block"
+              data={productArr.map((prd) => {
+                return {
+                  ...prd,
+                  quantity: staffCart[prd.id] ? staffCart[prd.id].quantity : 0,
+                  subtotal: staffCart[prd.id]
+                    ? staffCart[prd.id]?.quantity * prd.price
+                    : 0,
+                };
+              })}
+              onChange={(item, qty) => {
+                // 打stock api檢查庫存數量
+
+                updateCart(
+                  CART_TYPE,
+                  {
+                    productId: item.id,
+                    productName: item.name,
+                    price: item.price,
+                  },
+                  qty
+                );
+              }}
+            />
+            <MobileProductTable
+              className="inline-block md:hidden"
               data={productArr.map((prd) => {
                 return {
                   ...prd,
@@ -60,9 +103,16 @@ export default function StaffProductPage() {
               }}
             />
           </div>
-          <div className="sticky top-[0px] h-[400px] inline-block">
+          <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
             <CartSummary />
           </div>
+          <MobileCheckoutBar
+            btnText="購買商品"
+            className="md:hidden"
+            onClickBtn={() => {
+              navigate("/staffbuy/checkout");
+            }}
+          />
         </div>
       </div>
     </div>

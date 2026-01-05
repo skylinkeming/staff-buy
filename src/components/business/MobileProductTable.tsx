@@ -9,7 +9,7 @@ interface TableRowData {
   subtotal: number;
 }
 
-export default function ProductTable({
+export default function MobileProductTable({
   data,
   onChange,
   className = "",
@@ -28,11 +28,9 @@ export default function ProductTable({
       <table className="w-full table-auto border-collapse">
         <thead>
           <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333]">
-            <th className="text-center">員購品項</th>
-            <th className="text-center">購買價格</th>
-            <th className="text-center">剩餘數量</th>
+            <th className="px-2.5">員購品項</th>
             <th className="text-center">購買數量</th>
-            <th className="text-center w-[124px]">小計</th>
+            <th className="text-center w-15">小計</th>
           </tr>
         </thead>
         <tbody>
@@ -40,14 +38,32 @@ export default function ProductTable({
             <tr
               key={item.id}
               className={
-                "hover:bg-[#FFF6E9] " +
+                "hover:bg-[#FFF6E9] border-b-[1px] border-b-[#F5F5F5] " +
                 (item.quantity > 0 ? "bg-[#FFF6E9]" : "")
               }
             >
-              <td className="text-center py-[15px]">{item.name}</td>
-              <td className="text-center py-[15px]">{item.price}</td>
-              <td className="text-center py-[15px]">{item.stock}</td>
-              <td className="text-center py-[15px] flex justify-center">
+              <td className="px-2.5 py-2">
+                <div>{item.name}</div>
+                <div className="flex gap-[10px]">
+                  <div
+                    className={
+                      "text-[#6B5E55] text-[14px] " +
+                      (item.quantity > 0 ? "" : "bg-[#FBFBFB]")
+                    }
+                  >
+                    價格: {item.price}
+                  </div>
+                  <div
+                    className={
+                      "text-[#6B5E55] text-[14px] " +
+                      (item.quantity > 0 ? "" : "bg-[#FBFBFB]")
+                    }
+                  >
+                    剩餘: {item.stock}
+                  </div>
+                </div>
+              </td>
+              <td className="text-center py-[15px] flex justify-center items-center">
                 <QuantityInput
                   variant={"stepper"}
                   inputNumber={item.quantity}
@@ -56,7 +72,7 @@ export default function ProductTable({
                   }}
                 />
               </td>
-              <td className="text-center py-[15px]">{item.subtotal}</td>
+              <td className=" text-center w-15">{item.subtotal}</td>
             </tr>
           ))}
         </tbody>

@@ -10,10 +10,10 @@ export default function Searchbar({
   const searchInputRef = useRef(null);
 
   return (
-    <div className={"flex gap-[20px] " + className}>
+    <div className={"flex gap-[10px] " + className}>
       <input
         ref={searchInputRef}
-        className="rounded-[5px] border-[#E5E5E5] border-[1px] w-[250px] text-[16px] pl-[20px] appearance-none bg-transparent border-0 p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
+        className="rounded-[5px] border-[#E5E5E5] border-[1px] flex-1 text-[16px] px-[15px] appearance-none bg-transparent p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
          [&::-webkit-outer-spin-button]:appearance-none
          [&::-webkit-inner-spin-button]:appearance-none"
       />
@@ -37,7 +37,7 @@ export default function Searchbar({
             />
           </svg>
         </div>
-        <span>搜尋</span>
+        <span className="whitespace-nowrap">搜尋</span>
       </div>
     </div>
   );

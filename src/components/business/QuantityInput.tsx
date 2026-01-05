@@ -1,3 +1,5 @@
+import { FaPlay } from "react-icons/fa";
+
 export default function QuantityInput({
   variant = "stepper",
   className = "",
@@ -47,7 +49,7 @@ export default function QuantityInput({
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
           </svg>
         </div>
-        <div className="w-[38px] text-center border-[#E5E5E5] border-r-[1px] border-l-[1px] ">
+        <div className="w-[38px] text-center border-[#E5E5E5] border-r-[1px] border-l-[1px]">
           {inputNumber}
         </div>
         <div
@@ -79,20 +81,13 @@ export default function QuantityInput({
         className="flex cursor-pointer items-center w-[14px] rotate-180"
         onClick={handleDecrement}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="size-4"
-        >
-          <path d="M3 3.732a1.5 1.5 0 0 1 2.305-1.265l6.706 4.267a1.5 1.5 0 0 1 0 2.531l-6.706 4.268A1.5 1.5 0 0 1 3 12.267V3.732Z" />
-        </svg>
+        <FaPlay className="w-[7px]" />
       </div>
       <input
         value={inputNumber}
         onChange={handleChange}
         type="number"
-        className="w-[30px] text-[16px] text-center appearance-none bg-transparent border-0 p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
+        className="w-7.5 text-[#4F48E5] font-bold  text-[16px] md:font-normal text-center appearance-none bg-transparent border-0 p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none md:text-inherit
          [&::-webkit-outer-spin-button]:appearance-none
          [&::-webkit-inner-spin-button]:appearance-none"
       />
@@ -100,14 +95,7 @@ export default function QuantityInput({
         onClick={handleIncrement}
         className="flex cursor-pointer items-center w-[14px]"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="size-4"
-        >
-          <path d="M3 3.732a1.5 1.5 0 0 1 2.305-1.265l6.706 4.267a1.5 1.5 0 0 1 0 2.531l-6.706 4.268A1.5 1.5 0 0 1 3 12.267V3.732Z" />
-        </svg>
+        <FaPlay className="w-[7px]" />
       </div>
     </div>
   );
