@@ -68,8 +68,8 @@ export const useCartStore = create<CartState>((set) => ({
     carrierId: "",
   },
   formErrors: {
-    shippingInfo: false,
-    invoiceInfo: false,
+    shipping: true,
+    invoice: true,
   },
   updateCart: (type, product, targetQuantity) =>
     set((state) => {

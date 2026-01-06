@@ -5,13 +5,16 @@ import AppAlert from "@/components/common/AppAlert";
 export default function CartSummary({
   className = "",
   showDetail = false,
+  onClickPurchaseBtn,
 }: {
   className?: string;
   showDetail?: boolean;
+  onClickPurchaseBtn?: () => void;
 }) {
   const location = useLocation();
   const navigate = useNavigate();
   const isStaffBuy = location.pathname.includes("staffbuy");
+  const isCheckoutStage = location.pathname.includes("checkout");
   const cart = useCartStore((state) =>
     isStaffBuy ? state.staffCart : state.groupCart
   );
@@ -31,13 +34,13 @@ export default function CartSummary({
                 key={cartItem.productId}
                 className="flex space-around w-full"
               >
-                <div className="w-35 flex-shrink-0 font-bold text-[14px]">
+                <div className="w-35 shrink-0 font-bold text-[14px]">
                   {cartItem.productName}
                 </div>
-                <div className="w-[40px] flex-shrink-0 text-[14px]">
+                <div className="w-[40px] shrink-0 text-[14px]">
                   x {cartItem.quantity}
                 </div>
-                <div className="w-[25px] flex-shrink-0 flex-1 text-right pr-[5px] text-[14px]">
+                <div className="w-[25px] shrink-0 flex-1 text-right pr-[5px] text-[14px]">
                   {cart[cartItem.productId]?.quantity * cartItem.price}
                 </div>
               </div>
@@ -46,7 +49,7 @@ export default function CartSummary({
         </div>
       )}
       <div className="flex justify-between items-end mb-[20px]">
-        <div className="flex-shrink-0 text-[14px]">總金額</div>
+        <div className="shrink-0 text-[14px]">總金額</div>
         <div className="text-staffbuy-primary">
           $NT
           <span className="text-[22px] ml-[10px] font-[700]">
@@ -59,20 +62,25 @@ export default function CartSummary({
 
       <div
         onClick={async () => {
+          if (isCheckoutStage && onClickPurchaseBtn) {
+            onClickPurchaseBtn();
+            return;
+          }
+
           if (cartItems.length === 0) {
             await AppAlert({
               title: "購物車沒有商品",
               message: "請放入商品",
               okText: "確認",
-              hideCancel:true,
-              type:"error"
+              hideCancel: true,
+              type: "error",
             });
 
             return;
           }
           navigate(isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout");
         }}
-        className="bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] w-full inline-block underline-offset-[0px] "
+        className="bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center hover:text-[white] w-full inline-block underline-offset-[0px] "
       >
         購買商品
       </div>

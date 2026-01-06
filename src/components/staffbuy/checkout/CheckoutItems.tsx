@@ -2,6 +2,7 @@ import { useLocation } from "react-router";
 import { useCartStore } from "../../../store/useCartStore";
 import QuantityInput from "../purchase/QuantityInput";
 import { FaRegTrashAlt } from "react-icons/fa";
+import AppAlert from "@/components/common/AppAlert";
 
 export default function CheckoutItems() {
   const location = useLocation();
@@ -14,8 +15,13 @@ export default function CheckoutItems() {
   const cartItems = Object.values(cart);
   const CART_TYPE = isStaffBuy ? "staff" : "group";
 
-  const handleClickRemoveButton = (itemId: string) => {
-    removeFromCart(CART_TYPE, itemId);
+  const handleClickRemoveButton = async (itemId: string) => {
+    const res = await AppAlert({
+      message: "確認刪除品項?",
+    });
+    if (res === "ok") {
+      removeFromCart(CART_TYPE, itemId);
+    }
   };
 
   return (
@@ -51,21 +57,13 @@ export default function CheckoutItems() {
                 <div className="w-10 shrink-0 text-right pr-[5px] ml-[20px] md:ml-0 md:pr-0">
                   ${cart[cartItem.productId]?.quantity * cartItem.price}
                 </div>
-                <div className="flex-1 shrink-0 w-8 flex items-center justify-end md:flex-none">
-                  <FaRegTrashAlt
-                    className="md:hidden"
-                    onClick={() => handleClickRemoveButton(cartItem.productId)}
-                  />
-                  <div
-                    className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center bg-staffbuy-secondary px-2.5 py-1.25 rounded-[5px]"
-                    onClick={() => handleClickRemoveButton(cartItem.productId)}
-                  >
-                    <FaRegTrashAlt
-                      color={"white"}
-                      onClick={() =>
-                        handleClickRemoveButton(cartItem.productId)
-                      }
-                    />
+                <div
+                  className="flex-1 shrink-0 w-8 flex items-center justify-end md:flex-none"
+                  onClick={() => handleClickRemoveButton(cartItem.productId)}
+                >
+                  <FaRegTrashAlt className="md:hidden" />
+                  <div className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center bg-staffbuy-secondary px-2.5 py-1.25 rounded-[5px]">
+                    <FaRegTrashAlt color={"white"} />
                     <div className="text-white">刪除</div>
                   </div>
                 </div>

@@ -43,7 +43,7 @@ export default function StaffCheckoutPage() {
         <InvoiceInfo isSubmitting={isSubmitting} />
       </div>
       <div className="hidden md:inline-block sticky top-[0px] h-[400px] mt-15">
-        <CartSummary />
+        <CartSummary onClickPurchaseBtn={handlePurchase} />
       </div>
       <MobileCheckoutBar className="md:hidden" onClickBtn={handlePurchase} />
     </div>
