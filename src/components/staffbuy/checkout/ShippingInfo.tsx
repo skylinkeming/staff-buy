@@ -2,7 +2,6 @@ import { useCartStore, type CartState } from "@/store/useCartStore";
 import FormInput from "../../common/FormInput";
 import { useEffect } from "react";
 
-
 export default function ShippingInfo({
   isSubmitting,
 }: {
@@ -19,7 +18,9 @@ export default function ShippingInfo({
     return validateRules(shippingInfo)[key]();
   };
 
-  const hasError = Object.values(validateRules(shippingInfo)).some(rule => rule() !== "");
+  const hasError = Object.values(validateRules(shippingInfo)).some(
+    (rule) => rule() !== ""
+  );
 
   useEffect(() => {
     setFormError("shipping", hasError);
@@ -41,6 +42,7 @@ export default function ShippingInfo({
       />
       <FormInput
         required
+        variant="number"
         label="附提袋數"
         value={shippingInfo.bagQty}
         errorMsg={getFieldErrorMsg("bagQty")}
@@ -123,16 +125,13 @@ export default function ShippingInfo({
   );
 }
 
-
-
-
 const validateRules = (shippingInfo: Partial<CartState["shippingInfo"]>) => ({
   pickupDate: () => {
     if (!shippingInfo.pickupDate) return "請選擇取件日期";
     return "";
   },
   bagQty: () => {
-    if (!shippingInfo.bagQty) return "請填寫取件日期";
+    if (!shippingInfo.bagQty) return "請填寫附提袋數量";
     return "";
   },
   pickupMethod: () => {

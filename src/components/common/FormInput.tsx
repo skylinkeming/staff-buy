@@ -1,11 +1,12 @@
-import { Input, Select, DatePicker } from "antd";
+import { Input, Select } from "antd";
+import CustomDatePicker from "./CustomDatePicker";
 
 interface FormInputProps {
   label?: string;
   required?: boolean;
-  variant?: "input" | "select" | "date";
+  variant?: "text" | "number" | "select" | "date";
   value?: string;
-  onChange?: (val: string) => void;
+  onChange: (val: string) => void;
   optionData?: { value: string; label: string; disabled?: boolean }[];
   errorMsg?: string | false;
   placeholder?: string;
@@ -16,7 +17,7 @@ interface FormInputProps {
 export default function FormInput({
   label,
   required,
-  variant = "input",
+  variant = "text",
   value,
   onChange,
   optionData,
@@ -36,7 +37,7 @@ export default function FormInput({
             disabled={disabled}
             status={status}
             value={value}
-            onChange={(val) => !onChange || onChange(val || "")}
+            onChange={(val) => onChange(val || "")}
             options={optionData}
             placeholder={placeholder}
             className={`w-full ${errorClass} ${className}`}
@@ -44,13 +45,26 @@ export default function FormInput({
         );
       case "date":
         return (
-          <DatePicker
+          <CustomDatePicker
+            className={`w-full ${errorClass} ${className}`}
+            disabled={disabled}
+            status={status}
+            value={value || ""}
+            onChange={(val) => onChange(val || "")}
+          />
+        );
+      case "number":
+        return (
+          <Input
+            type="number"
             disabled={disabled}
             status={status}
             value={value}
-            onChange={(val) => !onChange || onChange(val || "")}
+            onChange={(e) => {
+              onChange(e.target.value || "");
+            }}
             placeholder={placeholder}
-            className={`w-full ${errorClass} ${className}`}
+            className={`${errorClass} ${className}`}
           />
         );
       default:
@@ -59,7 +73,7 @@ export default function FormInput({
             disabled={disabled}
             status={status}
             value={value}
-            onChange={(e) => !onChange || onChange(e.target.value || "")}
+            onChange={(e) => onChange(e.target.value || "")}
             placeholder={placeholder}
             className={`${errorClass} ${className}`}
           />
@@ -76,7 +90,11 @@ export default function FormInput({
         </label>
       )}
       {renderInput()}
-      {errorMsg && <span className="absolute top-2.5 right-0 text-xs text-red-500">{errorMsg}</span>}
+      {errorMsg && (
+        <span className="absolute top-2.5 right-0 text-xs text-red-500">
+          {errorMsg}
+        </span>
+      )}
     </div>
   );
 }
