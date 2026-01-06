@@ -7,7 +7,7 @@ interface CartItem {
   quantity: number;
 }
 
-interface CartState {
+export interface CartState {
   staffCart: Record<string, CartItem>;
   groupCart: Record<string, CartItem>;
   ordererInfo: {
@@ -29,6 +29,10 @@ interface CartState {
     donationCode: string;
     carrierId: string;
   };
+  formErrors: {
+    shipping: boolean;
+    invoice: boolean;
+  };
   updateCart: (
     type: "staff" | "group",
     product: Omit<CartItem, "quantity">,
@@ -38,6 +42,7 @@ interface CartState {
   updateShippingInfo: (info: Partial<CartState["shippingInfo"]>) => void;
   updateInvoiceInfo: (info: Partial<CartState["invoiceInfo"]>) => void;
   updateOrdererInfo: (info: Partial<CartState["ordererInfo"]>) => void;
+  setFormError: (module: "invoice" | "shipping", hasError: boolean) => void;
 }
 
 export const useCartStore = create<CartState>((set) => ({
@@ -61,6 +66,10 @@ export const useCartStore = create<CartState>((set) => ({
     location: "",
     donationCode: "",
     carrierId: "",
+  },
+  formErrors: {
+    shippingInfo: false,
+    invoiceInfo: false,
   },
   updateCart: (type, product, targetQuantity) =>
     set((state) => {
@@ -94,5 +103,9 @@ export const useCartStore = create<CartState>((set) => ({
   updateOrdererInfo: (info) =>
     set((state) => ({
       ordererInfo: { ...state.ordererInfo, ...info },
+    })),
+  setFormError: (module, hasError) =>
+    set((state) => ({
+      formErrors: { ...state.formErrors, [module]: hasError },
     })),
 }));
