@@ -1,3 +1,5 @@
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
 
@@ -14,11 +16,67 @@ export default function ProductTable({
   data,
   onChangeQty,
   className = "",
+  isNoData,
+  isLoading,
 }: {
   data?: TableRowData[];
   onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
+  isNoData?: boolean;
+  isLoading?: boolean;
 }) {
+  const renderTableBody = () => {
+    if (isLoading) {
+      return (
+        <tr>
+          <td className="text-center p-5 h-125" colSpan={5}>
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </td>
+        </tr>
+      );
+    }
+
+    if (isNoData) {
+      return (
+        <tr>
+          <td className="text-center p-5 h-125" colSpan={5}>
+            查無資料
+          </td>
+        </tr>
+      );
+    }
+
+    return data?.map((item) => (
+      <tr
+        key={item.id}
+        className={
+          "hover:bg-[#FFF6E9] " + (item.quantity > 0 ? "bg-[#FFF6E9]" : "")
+        }
+      >
+        <td className="text-center py-[15px]">{item.name}</td>
+        <td className="text-center py-[15px]">{item.price}</td>
+        <td className="text-center py-[15px]">{item.stock}</td>
+        <td className="text-center py-[15px] flex justify-center">
+          <QuantityInput
+            variant={"stepper"}
+            inputNumber={item.quantity}
+            onChange={(val) => {
+              if (val > item.stock) {
+                AppAlert({
+                  message: "超過現有庫存數量",
+                  hideCancel: true,
+                });
+                return;
+              }
+              onChangeQty(item, val);
+            }}
+          />
+        </td>
+        <td className="text-center py-[15px]">{item.subtotal}</td>
+      </tr>
+    ));
+  };
+
   return (
     <div
       className={
@@ -36,38 +94,7 @@ export default function ProductTable({
             <th className="text-center w-[124px]">小計</th>
           </tr>
         </thead>
-        <tbody>
-          {data?.map((item) => (
-            <tr
-              key={item.id}
-              className={
-                "hover:bg-[#FFF6E9] " +
-                (item.quantity > 0 ? "bg-[#FFF6E9]" : "")
-              }
-            >
-              <td className="text-center py-[15px]">{item.name}</td>
-              <td className="text-center py-[15px]">{item.price}</td>
-              <td className="text-center py-[15px]">{item.stock}</td>
-              <td className="text-center py-[15px] flex justify-center">
-                <QuantityInput
-                  variant={"stepper"}
-                  inputNumber={item.quantity}
-                  onChange={(val) => {
-                    if (val > item.stock) {
-                      AppAlert({
-                        message: "超過現有庫存數量",
-                        hideCancel: true,
-                      });
-                      return;
-                    }
-                    onChangeQty(item, val);
-                  }}
-                />
-              </td>
-              <td className="text-center py-[15px]">{item.subtotal}</td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{renderTableBody()}</tbody>
       </table>
     </div>
   );

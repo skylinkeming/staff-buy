@@ -3,7 +3,7 @@ import Notice from "../../components/common/Notice";
 import ProductTable from "../../components/staffbuy/purchase/ProductTable";
 import Searchbar from "../../components/common/Searchbar";
 import { useCartStore } from "../../store/useCartStore";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import { useNavigate } from "react-router";
@@ -38,9 +38,15 @@ export const BlockTitle = ({
 );
 
 export default function StaffProductPage() {
+  const [searchkey, setSearchkey] = useState("");
+  const [loading, setLoading] = useState(false);
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
+
   const navigate = useNavigate();
+  const displayProducts = productArr.filter((prd) =>
+    prd.name.includes(searchkey)
+  );
 
   return (
     <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center justify-center gap-[40px] bg-[#FBFBFB]">
@@ -53,14 +59,21 @@ export default function StaffProductPage() {
           <div className="w-full md:w-[740px] inline-block">
             <Notice className="mb-[30px] w-full md:w-auto" />
             <Searchbar
-              className="mb-[30px] md:w-[400px]"
+              className="mb-[30px] md:w-[100%]"
+              placeholder="搜尋員購商品"
               onClickSearch={(searchKey) => {
-
+                setLoading(true);
+                setTimeout(() => {
+                  setSearchkey(searchKey);
+                  setLoading(false);
+                }, 300);
               }}
             />
             <ProductTable
               className="hidden md:inline-block"
-              data={productArr.map((prd) => {
+              isLoading={loading}
+              isNoData={displayProducts.length === 0 && !!searchkey}
+              data={displayProducts.map((prd) => {
                 return {
                   ...prd,
                   quantity: staffCart[prd.id] ? staffCart[prd.id].quantity : 0,
@@ -85,7 +98,9 @@ export default function StaffProductPage() {
             />
             <MobileProductTable
               className="inline-block md:hidden"
-              data={productArr.map((prd) => {
+              isLoading={loading}
+              isNoData={displayProducts.length === 0 && !!searchkey}
+              data={displayProducts.map((prd) => {
                 return {
                   ...prd,
                   quantity: staffCart[prd.id] ? staffCart[prd.id].quantity : 0,
@@ -110,7 +125,7 @@ export default function StaffProductPage() {
             />
           </div>
           <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
-            <CartSummary showDetail/>
+            <CartSummary showDetail />
           </div>
           <MobileCheckoutBar
             btnText="購買商品"

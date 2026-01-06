@@ -1,25 +1,54 @@
 import { useRef } from "react";
+import { GrClose } from "react-icons/gr";
 
 export default function Searchbar({
   className = "",
   onClickSearch,
+  placeholder = "",
 }: {
   className?: string;
   onClickSearch: (searchKey: string) => void;
+  placeholder?: string;
 }) {
-  const searchInputRef = useRef(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className={"flex gap-[10px] " + className}>
-      <input
-        ref={searchInputRef}
-        className="rounded-[5px] border-[#E5E5E5] border-[1px] flex-1 text-[16px] px-[15px] appearance-none bg-transparent p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
-         [&::-webkit-outer-spin-button]:appearance-none
-         [&::-webkit-inner-spin-button]:appearance-none"
-      />
+      <div className="relative flex-1 group">
+        <input
+          placeholder={placeholder}
+          ref={searchInputRef}
+          className="rounded-[5px] w-full h-full border-[#E5E5E5] border-[1px]  text-[16px] px-[15px] appearance-none bg-transparent p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
+          [&::-webkit-outer-spin-button]:appearance-none
+          [&::-webkit-inner-spin-button]:appearance-none"
+          onChange={(e) => {
+            if (e.target.value.length === 0) {
+              onClickSearch("");
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onClickSearch(searchInputRef?.current?.value || "");
+            }
+          }}
+        />
+        <GrClose
+          className="w-3 cursor-pointer absolute right-2.5 top-[50%] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          onClick={() => {
+            if (!searchInputRef?.current?.value) return;
+            if (searchInputRef.current) searchInputRef.current.value = "";
+            onClickSearch("");
+          }}
+        />
+      </div>
       <div
         className="flex items-center gap-[10px] bg-staffbuy-primary text-[white] rounded-[10px] px-[20px] py-[5px] text-center cursor-pointer"
-        onClick={() => onClickSearch(searchInputRef?.current || "")}
+        onClick={() => {
+          if (!searchInputRef?.current?.value) {
+            return;
+          }
+          onClickSearch(searchInputRef?.current?.value || "");
+        }}
       >
         <div className="w-[16px] flex items-center">
           <svg

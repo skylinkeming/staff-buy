@@ -19,7 +19,7 @@ export default function StaffCheckoutPage() {
     if (formErrors.shipping || formErrors.invoice) {
       await AppAlert({
         title: "資訊錯誤",
-        message: "請檢查填寫欄位資訊是否有誤",
+        message: "請檢查填寫資訊是否有誤",
         okText: "確定",
         hideCancel: true,
       });
