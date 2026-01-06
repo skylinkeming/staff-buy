@@ -42,7 +42,15 @@ export default function CheckoutItems() {
                   className="ml-5 flex justify-center"
                   variant="stepper"
                   inputNumber={cartItem.quantity}
-                  onChange={(qty) => {
+                  onChange={async (qty) => {
+                    if (qty === 0) {
+                      const res = await AppAlert({
+                        message: "確認刪除品項?",
+                      });
+                      if (res === "cancel") {
+                        return;
+                      }
+                    }
                     updateCart(
                       CART_TYPE,
                       {

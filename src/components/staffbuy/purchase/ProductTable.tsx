@@ -1,3 +1,4 @@
+import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
 
 interface TableRowData {
@@ -11,11 +12,11 @@ interface TableRowData {
 
 export default function ProductTable({
   data,
-  onChange,
+  onChangeQty,
   className = "",
 }: {
   data?: TableRowData[];
-  onChange: (prod: TableRowData, qty: number) => void;
+  onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
 }) {
   return (
@@ -52,7 +53,13 @@ export default function ProductTable({
                   variant={"stepper"}
                   inputNumber={item.quantity}
                   onChange={(val) => {
-                    onChange(item, val);
+                    if (val > item.stock) {
+                      AppAlert({
+                        message: "超過現有庫存數量",
+                      });
+                      return;
+                    }
+                    onChangeQty(item, val);
                   }}
                 />
               </td>

@@ -16,7 +16,7 @@ const productArr = (() => {
       id: i.toString(),
       name: "小籠包",
       price: 50,
-      stock: 100,
+      stock: 5,
     });
   }
 
@@ -54,7 +54,9 @@ export default function StaffProductPage() {
             <Notice className="mb-[30px] w-full md:w-auto" />
             <Searchbar
               className="mb-[30px] md:w-[400px]"
-              onClickSearch={(searchKey) => {}}
+              onClickSearch={(searchKey) => {
+
+              }}
             />
             <ProductTable
               className="hidden md:inline-block"
@@ -67,7 +69,7 @@ export default function StaffProductPage() {
                     : 0,
                 };
               })}
-              onChange={(item, qty) => {
+              onChangeQty={(item, qty) => {
                 // 打stock api檢查庫存數量
 
                 updateCart(
@@ -92,7 +94,7 @@ export default function StaffProductPage() {
                     : 0,
                 };
               })}
-              onChange={(item, qty) => {
+              onChangeQty={(item, qty) => {
                 // 打stock api檢查庫存數量
 
                 updateCart(
