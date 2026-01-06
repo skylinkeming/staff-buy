@@ -73,7 +73,6 @@ export default function CartSummary({
               message: "請放入商品",
               okText: "確認",
               hideCancel: true,
-              type: "error",
             });
 
             return;

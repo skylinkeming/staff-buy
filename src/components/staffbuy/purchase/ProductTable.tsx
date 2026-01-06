@@ -56,6 +56,7 @@ export default function ProductTable({
                     if (val > item.stock) {
                       AppAlert({
                         message: "超過現有庫存數量",
+                        hideCancel: true,
                       });
                       return;
                     }
