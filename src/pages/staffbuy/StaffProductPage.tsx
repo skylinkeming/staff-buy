@@ -53,6 +53,8 @@ export default function StaffProductPage() {
     staleTime: 0, // 每次進來都要重打刷新剩餘數量
   });
 
+  const cartItems = Object.values(staffCart);
+
   if (isError) {
     AppAlert({
       message: error.message,
@@ -162,7 +164,17 @@ export default function StaffProductPage() {
           <MobileCheckoutBar
             btnText="購買商品"
             className="md:hidden"
-            onClickBtn={() => {
+            onClickBtn={async () => {
+              if (cartItems.length === 0) {
+                await AppAlert({
+                  title: "購物車沒有商品",
+                  message: "請放入商品",
+                  okText: "確認",
+                  hideCancel: true,
+                });
+
+                return;
+              }
               navigate("/staffbuy/checkout");
             }}
           />
