@@ -3,39 +3,44 @@ import { useState } from "react";
 export default function OrderCard() {
   const [openDetail, setOpenDetail] = useState(false);
 
-  const renderDataRow = (key: string, data: string, isPrice?: boolean) => {
+  const renderDataRow = (
+    key: string,
+    data: string,
+    isPrice?: boolean,
+    isLink?: boolean
+  ) => {
+    let textStyle = "text-sm";
+
+    if (isPrice) {
+      textStyle = "text-sm text-[#E5486D] font-bold";
+    }
+    if (isLink) {
+      textStyle = "text-sm text-[blue] font-bold";
+    }
+    
     return (
       <div className="flex justify-between w-full mb-2.5 px-5">
         <span className="text-sm">{key}</span>
-        <span
-          className={isPrice ? "text-[#E5486D] text-sm font-bold" : "text-sm"}
-        >
-          {data}
-        </span>
+        <span className={textStyle}>{data}</span>
       </div>
     );
   };
 
   return (
     <div className="w-full shadow-[1px_2px_4px_0px_rgba(0,0,0,0.25)] mt-5 rounded-[15px] bg-white overflow-hidden">
-      {/* 標題列 */}
       <div className="border-b-[1px] font-bold border-[#D9D9D9] text-[#020202] py-2.5 px-5">
         訂單資訊
       </div>
 
-      {/* 內容區域 */}
       <div className="pt-3">
-        {/* 常駐顯示的欄位 */}
         {renderDataRow("訂單編號", "D20251111001")}
         {renderDataRow("訂單日期", "2025-11-09 11:15")}
         {renderDataRow("訂單情況", "成立")}
         {renderDataRow("取貨方式", "宅配")}
         {renderDataRow("黑貓宅配單號", "907344452512")}
 
-        {/* 根據狀態切換顯示不同的內容 */}
         {!openDetail ? (
-          /* 收合狀態：只顯示總價 */
-          renderDataRow("總價", "$NT 2500", true)
+          renderDataRow("總金額", "$NT 2500", true)
         ) : (
           /* 展開狀態：顯示完整明細 */
           <>

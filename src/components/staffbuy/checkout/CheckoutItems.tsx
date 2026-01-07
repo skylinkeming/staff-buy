@@ -34,7 +34,7 @@ export default function CheckoutItems() {
                 key={cartItem.productId}
                 className="flex justify-around w-full bg-[white] py-[15px] px-[10px] box-border rounded-[10px] items-center max-h-[54px] border-box md:justify-between"
               >
-                <div className="w-35 max-w-[115px] md:max-w-[140px]">
+                <div className="w-35 max-w-[115px] md:max-w-[140px] font-bold">
                   {cartItem.productName}
                 </div>
                 <div className="w-10">${cartItem.price}</div>
@@ -66,7 +66,7 @@ export default function CheckoutItems() {
                   ${cart[cartItem.productId]?.quantity * cartItem.price}
                 </div>
                 <div
-                  className="flex-1 shrink-0 w-8 flex items-center justify-end md:flex-none"
+                  className="flex-none shrink-0 w-8 flex items-center justify-end md:flex-none"
                   onClick={() => handleClickRemoveButton(cartItem.productId)}
                 >
                   <FaRegTrashAlt className="md:hidden" />
