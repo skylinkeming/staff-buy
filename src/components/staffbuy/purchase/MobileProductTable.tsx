@@ -2,6 +2,8 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
+import type { Dispatch, SetStateAction } from "react";
+import SortIcon from "./SortIcon";
 
 interface TableRowData {
   id: string;
@@ -15,11 +17,15 @@ interface TableRowData {
 export default function MobileProductTable({
   data,
   onChangeQty,
+  setDataFunction,
   className = "",
   isNoData,
   isLoading,
 }: {
-  data?: TableRowData[];
+  data: TableRowData[];
+  setDataFunction:
+    | Dispatch<SetStateAction<TableRowData[]>>
+    | ((data: TableRowData[]) => void);
   onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
   isNoData?: boolean;
@@ -106,9 +112,36 @@ export default function MobileProductTable({
       <table className="w-full table-auto border-collapse">
         <thead>
           <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-6 text-[#333333] sticky z-99 top-0">
-            <th className="px-2.5">員購品項</th>
-            <th className="text-center">購買數量</th>
-            <th className="text-center w-15">小計</th>
+            <th className="px-2.5">
+              <div className="flex">
+                員購品項
+                <SortIcon
+                  dataList={data}
+                  dataField={"name"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
+            <th className="text-center">
+              <div className="flex justify-center">
+                購買數量
+                <SortIcon
+                  dataList={data}
+                  dataField={"quantity"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
+            <th className="text-center w-15">
+              <div className="flex">
+                小計
+                <SortIcon
+                  dataList={data}
+                  dataField={"subtotal"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>{renderTableBody()}</tbody>

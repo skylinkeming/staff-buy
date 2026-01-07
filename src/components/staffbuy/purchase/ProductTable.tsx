@@ -2,6 +2,8 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
+import SortIcon from "./SortIcon";
+import type { Dispatch, SetStateAction } from "react";
 
 interface TableRowData {
   id: string;
@@ -13,13 +15,17 @@ interface TableRowData {
 }
 
 export default function ProductTable({
-  data,
+  data = [],
+  setDataFunction,
   onChangeQty,
   className = "",
   isNoData,
   isLoading,
 }: {
-  data?: TableRowData[];
+  data: TableRowData[];
+  setDataFunction:
+    | Dispatch<SetStateAction<TableRowData[]>>
+    | ((data: TableRowData[]) => void);
   onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
   isNoData?: boolean;
@@ -87,11 +93,56 @@ export default function ProductTable({
       <table className="w-full table-auto border-collapse">
         <thead>
           <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-[21px] text-[#333333] sticky top-0 z-99">
-            <th className="text-center">員購品項</th>
-            <th className="text-center">購買價格</th>
-            <th className="text-center">剩餘數量</th>
-            <th className="text-center">購買數量</th>
-            <th className="text-center w-[124px]">小計</th>
+            <th className="text-center">
+              <div className="flex justify-center gap-1 items-center box-border">
+                <span>員購品項</span>{" "}
+                <SortIcon
+                  dataList={data}
+                  dataField={"name"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
+            <th className="text-center">
+              <div className="flex justify-center gap-1 items-center box-border">
+                <span>購買價格</span>{" "}
+                <SortIcon
+                  dataList={data}
+                  dataField={"price"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
+            <th className="text-center">
+              <div className="flex justify-center gap-1 items-center box-border">
+                <span>剩餘數量</span>{" "}
+                <SortIcon
+                  dataList={data}
+                  dataField={"stock"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
+            <th className="text-center">
+              <div className="flex justify-center gap-1 items-center box-border">
+                <span>購買數量</span>{" "}
+                <SortIcon
+                  dataList={data}
+                  dataField={"quantity"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
+            <th className="text-center w-[124px]">
+              <div className="flex justify-center gap-1 items-center box-border">
+                <span>小計</span>{" "}
+                <SortIcon
+                  dataList={data}
+                  dataField={"subtotal"}
+                  setFunction={setDataFunction}
+                />
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>{renderTableBody()}</tbody>

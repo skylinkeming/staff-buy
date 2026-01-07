@@ -1,9 +1,10 @@
+import { useState, type ReactNode } from "react";
+import { Grid } from "antd";
 import CartSummary from "../../components/staffbuy/purchase/CartSummary";
 import Notice from "../../components/common/Notice";
 import ProductTable from "../../components/staffbuy/purchase/ProductTable";
 import Searchbar from "../../components/common/Searchbar";
 import { useCartStore } from "../../store/useCartStore";
-import { useState, type ReactNode } from "react";
 import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import { useNavigate } from "react-router";
@@ -14,9 +15,9 @@ const productArr = (() => {
   for (let i = 0; i < 20; i++) {
     result.push({
       id: i.toString(),
-      name: "小籠包",
-      price: 50,
-      stock: 5,
+      name: i + "小籠包",
+      price: 50 * i,
+      stock: 5 + i,
     });
   }
 
@@ -24,6 +25,7 @@ const productArr = (() => {
 })();
 
 const CART_TYPE = "staff";
+const { useBreakpoint } = Grid;
 
 export const BlockTitle = ({
   children,
@@ -38,15 +40,26 @@ export const BlockTitle = ({
 );
 
 export default function StaffProductPage() {
+  const screens = useBreakpoint();
   const [searchkey, setSearchkey] = useState("");
   const [loading, setLoading] = useState(false);
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
+  const [displayProducts, setDisplayProducts] = useState(productArr);
 
   const navigate = useNavigate();
-  const displayProducts = productArr.filter((prd) =>
-    prd.name.includes(searchkey)
-  );
+
+  const handleSearch = (inputVal: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setSearchkey(inputVal);
+      const copyProductArr = [...productArr];
+      setDisplayProducts(
+        copyProductArr.filter((prd) => prd.name.includes(inputVal))
+      );
+      setLoading(false);
+    }, 200);
+  };
 
   return (
     <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center justify-center gap-[40px] bg-[#FBFBFB]">
@@ -61,68 +74,71 @@ export default function StaffProductPage() {
             <Searchbar
               className="mb-[30px] md:w-[100%]"
               placeholder="搜尋員購商品"
-              onClickSearch={(searchKey) => {
-                setLoading(true);
-                setTimeout(() => {
-                  setSearchkey(searchKey);
-                  setLoading(false);
-                }, 300);
-              }}
+              onClickSearch={handleSearch}
             />
-            <ProductTable
-              className="hidden md:inline-block"
-              isLoading={loading}
-              isNoData={displayProducts.length === 0 && !!searchkey}
-              data={displayProducts.map((prd) => {
-                return {
-                  ...prd,
-                  quantity: staffCart[prd.id] ? staffCart[prd.id].quantity : 0,
-                  subtotal: staffCart[prd.id]
-                    ? staffCart[prd.id]?.quantity * prd.price
-                    : 0,
-                };
-              })}
-              onChangeQty={(item, qty) => {
-                // 打stock api檢查庫存數量
+            {screens.md ? (
+              <ProductTable
+                setDataFunction={setDisplayProducts}
+                className="hidden md:inline-block"
+                isLoading={loading}
+                isNoData={displayProducts.length === 0 && !!searchkey}
+                data={displayProducts.map((prd) => {
+                  return {
+                    ...prd,
+                    quantity: staffCart[prd.id]
+                      ? staffCart[prd.id].quantity
+                      : 0,
+                    subtotal: staffCart[prd.id]
+                      ? staffCart[prd.id]?.quantity * prd.price
+                      : 0,
+                  };
+                })}
+                onChangeQty={(item, qty) => {
+                  // 打stock api檢查庫存數量
 
-                updateCart(
-                  CART_TYPE,
-                  {
-                    productId: item.id,
-                    productName: item.name,
-                    price: item.price,
-                  },
-                  qty
-                );
-              }}
-            />
-            <MobileProductTable
-              className="inline-block md:hidden"
-              isLoading={loading}
-              isNoData={displayProducts.length === 0 && !!searchkey}
-              data={displayProducts.map((prd) => {
-                return {
-                  ...prd,
-                  quantity: staffCart[prd.id] ? staffCart[prd.id].quantity : 0,
-                  subtotal: staffCart[prd.id]
-                    ? staffCart[prd.id]?.quantity * prd.price
-                    : 0,
-                };
-              })}
-              onChangeQty={(item, qty) => {
-                // 打stock api檢查庫存數量
+                  updateCart(
+                    CART_TYPE,
+                    {
+                      productId: item.id,
+                      productName: item.name,
+                      price: item.price,
+                    },
+                    qty
+                  );
+                }}
+              />
+            ) : (
+              <MobileProductTable
+                setDataFunction={setDisplayProducts}
+                className="inline-block md:hidden"
+                isLoading={loading}
+                isNoData={displayProducts.length === 0 && !!searchkey}
+                data={displayProducts.map((prd) => {
+                  return {
+                    ...prd,
+                    quantity: staffCart[prd.id]
+                      ? staffCart[prd.id].quantity
+                      : 0,
+                    subtotal: staffCart[prd.id]
+                      ? staffCart[prd.id]?.quantity * prd.price
+                      : 0,
+                  };
+                })}
+                onChangeQty={(item, qty) => {
+                  // 打stock api檢查庫存數量
 
-                updateCart(
-                  CART_TYPE,
-                  {
-                    productId: item.id,
-                    productName: item.name,
-                    price: item.price,
-                  },
-                  qty
-                );
-              }}
-            />
+                  updateCart(
+                    CART_TYPE,
+                    {
+                      productId: item.id,
+                      productName: item.name,
+                      price: item.price,
+                    },
+                    qty
+                  );
+                }}
+              />
+            )}
           </div>
           <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
             <CartSummary showDetail />
