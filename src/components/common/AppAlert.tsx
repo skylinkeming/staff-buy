@@ -12,8 +12,9 @@ interface AppAlertProps {
   type?: "confirm" | "info" | "success" | "error" | "warning";
 }
 
+let isAlertActive = false;
 /**
- * 
+ *
  */
 export default async function AppAlert({
   title = "系統提示",
@@ -23,6 +24,10 @@ export default async function AppAlert({
   hideCancel = false,
   type = "confirm",
 }: AppAlertProps): Promise<AlertResponse> {
+  if (isAlertActive) return Promise.resolve("cancel");
+
+  isAlertActive = true;
+
   return new Promise((resolve) => {
     const method = Modal[type];
 
