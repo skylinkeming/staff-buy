@@ -18,7 +18,7 @@ export default function Searchbar({
         <input
           placeholder={placeholder}
           ref={searchInputRef}
-          className="rounded-[5px] w-full h-full border-[#E5E5E5] border-[1px]  text-[16px] px-[15px] appearance-none bg-transparent p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
+          className="rounded-[5px] w-full h-full bg-white border-[#E5E5E5] border-[1px]  text-[16px] px-[15px] appearance-none p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
           [&::-webkit-outer-spin-button]:appearance-none
           [&::-webkit-inner-spin-button]:appearance-none"
           onChange={(e) => {

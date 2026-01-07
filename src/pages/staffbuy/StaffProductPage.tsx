@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Grid } from "antd";
 import CartSummary from "../../components/staffbuy/purchase/CartSummary";
 import Notice from "../../components/common/Notice";
@@ -9,20 +9,9 @@ import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTabl
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import { useNavigate } from "react-router";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
-
-const productArr = (() => {
-  const result = [];
-  for (let i = 0; i < 20; i++) {
-    result.push({
-      id: i.toString(),
-      name: i + "小籠包",
-      price: 50 * i,
-      stock: 5 + i,
-    });
-  }
-
-  return result;
-})();
+import { staffbuyApi } from "@/api/staffbuyApi";
+import { useQuery } from "@tanstack/react-query";
+import AppAlert from "@/components/common/AppAlert";
 
 const CART_TYPE = "staff";
 const { useBreakpoint } = Grid;
@@ -45,24 +34,54 @@ export default function StaffProductPage() {
   const [loading, setLoading] = useState(false);
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
-  const [displayProducts, setDisplayProducts] = useState(productArr);
+  const {
+    data: rawProducts,
+    isLoading: fetching,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["staffbuy_products"],
+    queryFn: () => staffbuyApi.getProducts(),
+    select: (res) => {
+      return res.data.map((p) => ({
+        id: p.iD_Product,
+        name: p.cX_ProductName,
+        price: p.nQ_BuyPrice,
+        stock: p.nQ_Quantity,
+      }));
+    },
+    staleTime: 0, // 每次進來都要重打刷新剩餘數量
+  });
+
+  if (isError) {
+    AppAlert({
+      message: error.message,
+    });
+  }
 
   const navigate = useNavigate();
+
+  const displayProducts = useMemo(() => {
+    if (!rawProducts) return [];
+    rawProducts.filter((p) => {
+      return p.name.toLowerCase().includes(searchkey.toLowerCase());
+    });
+    // 根據搜尋字串過濾
+    return rawProducts.filter((p) =>
+      p.name.toLowerCase().includes(searchkey.toLowerCase())
+    );
+  }, [rawProducts, searchkey]);
 
   const handleSearch = (inputVal: string) => {
     setLoading(true);
     setTimeout(() => {
       setSearchkey(inputVal);
-      const copyProductArr = [...productArr];
-      setDisplayProducts(
-        copyProductArr.filter((prd) => prd.name.includes(inputVal))
-      );
       setLoading(false);
     }, 200);
   };
 
   return (
-    <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center justify-center gap-[40px] bg-[#FBFBFB]">
+    <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
       <div>
         <div className="max-w-7xl mx-auto mt-10">
           <Breadcrumbs />
@@ -78,10 +97,9 @@ export default function StaffProductPage() {
             />
             {screens.md ? (
               <ProductTable
-                setDataFunction={setDisplayProducts}
+                key={rawProducts?.length}
                 className="hidden md:inline-block"
-                isLoading={loading}
-                isNoData={displayProducts.length === 0 && !!searchkey}
+                isLoading={loading || fetching}
                 data={displayProducts.map((prd) => {
                   return {
                     ...prd,
@@ -109,10 +127,9 @@ export default function StaffProductPage() {
               />
             ) : (
               <MobileProductTable
-                setDataFunction={setDisplayProducts}
+                key={rawProducts?.length}
                 className="inline-block md:hidden"
                 isLoading={loading}
-                isNoData={displayProducts.length === 0 && !!searchkey}
                 data={displayProducts.map((prd) => {
                   return {
                     ...prd,
@@ -126,7 +143,6 @@ export default function StaffProductPage() {
                 })}
                 onChangeQty={(item, qty) => {
                   // 打stock api檢查庫存數量
-
                   updateCart(
                     CART_TYPE,
                     {

@@ -1,9 +1,7 @@
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Table, ConfigProvider } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
-import type { Dispatch, SetStateAction } from "react";
-import SortIcon from "./SortIcon";
 
 interface TableRowData {
   id: string;
@@ -14,138 +12,104 @@ interface TableRowData {
   subtotal: number;
 }
 
-export default function MobileProductTable({
-  data,
-  onChangeQty,
-  setDataFunction,
-  className = "",
-  isNoData,
-  isLoading,
-}: {
+interface MobileProductTableProps {
   data: TableRowData[];
-  setDataFunction:
-    | Dispatch<SetStateAction<TableRowData[]>>
-    | ((data: TableRowData[]) => void);
   onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
-  isNoData?: boolean;
   isLoading?: boolean;
-}) {
-  const renderTableBody = () => {
-    if (isLoading) {
-      return (
-        <tr>
-          <td className="text-center p-5 h-50" colSpan={5}>
-            <Spin indicator={<LoadingOutlined spin />} size="large" />
-          </td>
-        </tr>
-      );
-    }
+}
 
-    if (isNoData) {
-      return (
-        <tr>
-          <td className="text-center p-5 h-50" colSpan={5}>
-            查無資料
-          </td>
-        </tr>
-      );
-    }
+export default function MobileProductTable({
+  data = [],
+  onChangeQty,
+  className = "",
+  isLoading,
+}: MobileProductTableProps) {
 
-    return data?.map((item) => (
-      <tr
-        key={item.id}
-        className={
-          "hover:bg-[#FFF6E9] border-b-[2px] border-b-[#F5F5F5] " +
-          (item.quantity > 0 ? "bg-[#FFF6E9]" : "")
-        }
-      >
-        <td className="px-2.5 py-2">
-          <div>{item.name}</div>
-          <div className="flex gap-[10px]">
-            <div
-              className={
-                "text-[#6B5E55] text-[14px] " +
-                (item.quantity > 0 ? "" : "bg-[#FBFBFB]")
-              }
-            >
-              價格: {item.price}
+  const columns: ColumnsType<TableRowData> = [
+    {
+      title: "員購品項",
+      key: "name",
+      render: (_, record) => (
+        <div className="">
+          <div className="font-medium text-[#333] mb-1">{record.name}</div>
+          <div className="flex gap-2.5">
+            <div className={`text-[12px] px-1 rounded ${record.quantity > 0 ? "text-[#6B5E55]" : "text-[#999] bg-[#FBFBFB]"}`}>
+              價格: {record.price}
             </div>
-            <div
-              className={
-                "text-[#6B5E55] text-[14px] " +
-                (item.quantity > 0 ? "" : "bg-[#FBFBFB]")
-              }
-            >
-              剩餘: {item.stock}
+            <div className={`text-[12px] px-1 rounded ${record.quantity > 0 ? "text-[#6B5E55]" : "text-[#999] bg-[#FBFBFB]"}`}>
+              剩餘: {record.stock}
             </div>
           </div>
-        </td>
-        <td className="text-center py-[15px] flex justify-center items-center">
+        </div>
+      ),
+      // 雖然顯示多個資訊，但排序仍以名稱為主
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "數量",
+      dataIndex: "quantity",
+      key: "quantity",
+      align: "center",
+      width: 120, // 固定寬度避免 Stepper 擠壓
+      sorter: (a, b) => a.quantity - b.quantity,
+      render: (qty, record) => (
+        <div className="flex justify-center items-center">
           <QuantityInput
             variant={"stepper"}
-            inputNumber={item.quantity}
+            inputNumber={qty}
             onChange={(val) => {
-              if (val > item.stock) {
+              if (val > record.stock) {
                 AppAlert({
                   message: "超過現有庫存數量",
                   hideCancel: true,
                 });
                 return;
               }
-              onChangeQty(item, val);
+              onChangeQty(record, val);
             }}
           />
-        </td>
-        <td className=" text-center w-15">{item.subtotal}</td>
-      </tr>
-    ));
-  };
+        </div>
+      ),
+    },
+    {
+      title: "小計",
+      dataIndex: "subtotal",
+      key: "subtotal",
+      align: "center",
+      width: 70,
+      sorter: (a, b) => a.subtotal - b.subtotal,
+    },
+  ];
 
   return (
-    <div
-      className={
-        "w-[100%] bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] " +
-        className
-      }
-    >
-      <table className="w-full table-auto border-collapse">
-        <thead>
-          <tr className="bg-[#F5F5F5] h-[40px] text-left text-[14px] leading-6 text-[#333333] sticky z-99 top-0">
-            <th className="px-2.5">
-              <div className="flex">
-                員購品項
-                <SortIcon
-                  dataList={data}
-                  dataField={"name"}
-                  setFunction={setDataFunction}
-                />
-              </div>
-            </th>
-            <th className="text-center">
-              <div className="flex justify-center">
-                購買數量
-                <SortIcon
-                  dataList={data}
-                  dataField={"quantity"}
-                  setFunction={setDataFunction}
-                />
-              </div>
-            </th>
-            <th className="text-center w-15">
-              <div className="flex">
-                小計
-                <SortIcon
-                  dataList={data}
-                  dataField={"subtotal"}
-                  setFunction={setDataFunction}
-                />
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>{renderTableBody()}</tbody>
-      </table>
+    <div className={`w-full bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] overflow-hidden ${className}`}>
+      <ConfigProvider
+        theme={{
+          components: {
+            Table: {
+              headerBg: "#F5F5F5",
+              headerColor: "#333333",
+              cellPaddingBlock: 5,
+              cellPaddingInline: 8,      // 減少左右內距，留給內容空間
+            },
+          },
+        }}
+      >
+        <Table
+          dataSource={data}
+          columns={columns}
+          rowKey="id"
+          loading={isLoading}
+          pagination={false}
+          sticky
+          rowClassName={(record) => 
+            record.quantity > 0 ? "bg-[#FFF6E9]" : "border-b-[#F5F5F5]"
+          }
+          locale={{ emptyText: "查無資料" }}
+          bordered={false}
+        />
+      </ConfigProvider>
     </div>
   );
 }
