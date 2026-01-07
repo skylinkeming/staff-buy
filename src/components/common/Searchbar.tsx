@@ -1,14 +1,17 @@
 import { useRef } from "react";
 import { GrClose } from "react-icons/gr";
+import IconButtonDatePicker from "./IconButtonDatePicker";
 
 export default function Searchbar({
   className = "",
   onClickSearch,
   placeholder = "",
+  showDatePickerIcon = false,
 }: {
   className?: string;
   onClickSearch: (searchKey: string) => void;
   placeholder?: string;
+  showDatePickerIcon?: boolean;
 }) {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -18,7 +21,7 @@ export default function Searchbar({
         <input
           placeholder={placeholder}
           ref={searchInputRef}
-          className="rounded-[5px] w-full h-full bg-white border-[#E5E5E5] border-[1px]  text-[16px] px-[15px] appearance-none p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
+          className="rounded-[15px] w-full h-full bg-white border-[#E5E5E5] border-[1px]  text-[16px] px-[15px] appearance-none p-0 m-0 outline-none focus:outline-none focus:ring-0 shadow-none text-inherit
           [&::-webkit-outer-spin-button]:appearance-none
           [&::-webkit-inner-spin-button]:appearance-none"
           onChange={(e) => {
@@ -33,16 +36,17 @@ export default function Searchbar({
           }}
         />
         <GrClose
-          className="w-3 cursor-pointer absolute right-2.5 top-[50%] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          className={"w-3 cursor-pointer absolute right-2.5 top-[50%] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition-opacity duration-200"}
           onClick={() => {
             if (!searchInputRef?.current?.value) return;
             if (searchInputRef.current) searchInputRef.current.value = "";
             onClickSearch("");
           }}
         />
+        {showDatePickerIcon && <IconButtonDatePicker />}
       </div>
       <div
-        className="flex items-center gap-[10px] bg-staffbuy-primary text-[white] rounded-[10px] px-[20px] py-[5px] text-center cursor-pointer"
+        className="flex items-center gap-[10px] bg-staffbuy-primary text-[white] rounded-[15px] px-[20px] py-[5px] text-center cursor-pointer"
         onClick={() => {
           if (!searchInputRef?.current?.value) {
             return;

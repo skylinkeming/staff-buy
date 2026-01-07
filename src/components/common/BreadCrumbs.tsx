@@ -13,7 +13,8 @@ export default function Breadcrumbs() {
     success: "訂購成功",
     products: "Step 1. 商品列表",
     staffbuy: "員購",
-    checkout:"Step 2. 填寫資料"
+    checkout: "Step 2. 填寫資料",
+    myorder: "員購紀錄",
   };
 
   return (
