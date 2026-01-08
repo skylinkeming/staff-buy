@@ -24,7 +24,7 @@ export default function CustomDatePicker({
         disabled={disabled}
         status={status}
         className={"md:w-full " + className}
-        value={value ? dayjs(value) : dayjs()}
+        value={value ? dayjs(value) : undefined}
         onChange={(_, str) => {
           onChange(str || "");
         }}

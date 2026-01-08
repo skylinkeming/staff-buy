@@ -16,11 +16,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => {
     const res = response.data;
-    if (res.code !== 200 && !res.success) {
-      const error = new Error(
-        res.Message +
-          (res.statusCode ? ", statusCode=" + res.statusCode : "") || "系統錯誤"
-      );
+    if (!res.success) {
+      let error = new Error(res.message || "系統錯誤");
+      if (res.statusCode.includes("401")) {
+        error = new Error("登入逾時，請重新登入");
+      }
       return Promise.reject(error);
     }
 
@@ -60,6 +60,30 @@ export interface Option {
   value: string;
 }
 
+export interface CreateOrderRequest {
+  master: {
+    //是否宅配
+    fG_Transport: "Y" | "N";
+    cX_GetDate: string;
+    cX_Tel: string;
+    cX_Address: string;
+    nQ_Bag: number;
+    //載具條碼
+    cX_Invoice_ForWeb: string;
+    //愛心碼
+    cX_Love_Code: string;
+    //收件人姓名
+    cX_Ship_Name: string;
+    cX_Ship_Time: string;
+    //團購主題id 員購不用帶
+    iD_GroupBy?: string;
+  };
+  detail: Array<{
+    iD_Product: number;
+    nQ_BuyQuantity: number;
+  }>;
+}
+
 export const staffbuyApi = {
   login: (body: { qwe: string }) =>
     api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),
@@ -87,32 +111,30 @@ export const staffbuyApi = {
     api
       .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
       .then((res) => res.data),
+  getProductStockList: () =>
+    api
+      .get<ApiResponse<Array<{ iD_Product: string; nQ_StockOty: number }>>>(
+        "/Product/GetProductStockList"
+      )
+      .then((res) => res.data),
   getShipTimeList: () =>
     api
-      .get<
-        ApiResponse<
-          Array<Option>
-        >
-      >("/Common/ShipTimeList")
+      .get<ApiResponse<Array<Option>>>("/Common/ShipTimeList")
       .then((res) => res.data),
   getBagList: () =>
     api
-      .get<
-        ApiResponse<
-          Array<Option>
-        >
-      >("/Common/BagList")
+      .get<ApiResponse<Array<Option>>>("/Common/BagList")
       .then((res) => res.data),
   getInvoicePickupStoreList: () =>
     api
-      .get<
-        ApiResponse<
-          Array<Option>
-        >
-      >("/Common/GetInvoicePickupStoreList")
+      .get<ApiResponse<Array<Option>>>("/Common/GetInvoicePickupStoreList")
       .then((res) => res.data),
   getMyOrders: () =>
     api
       .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
+      .then((res) => res.data),
+  createOrder: (body: CreateOrderRequest) =>
+    api
+      .post<ApiResponse<string>>("/Order/CreateOrder", body)
       .then((res) => res.data),
 };

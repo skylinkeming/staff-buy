@@ -54,7 +54,7 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error.message.includes("401")) {
+      if (error.message.includes("請重新登入")) {
         AppAlert({
           message: "登入已逾時，請重新登入",
           type: "warning",

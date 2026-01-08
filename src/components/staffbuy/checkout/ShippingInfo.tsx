@@ -68,72 +68,76 @@ export default function ShippingInfo({
         required
         variant="select"
         label="取貨方式"
-        value={shippingInfo.pickupMethod}
+        value={shippingInfo.isDelivery}
         optionData={[
-          { value: "0", label: "總管理處" },
-          { value: "1", label: "宅配" },
+          { value: "N", label: "自取" },
+          { value: "Y", label: "宅配" },
         ]}
-        errorMsg={getFieldErrorMsg("pickupMethod")}
+        errorMsg={getFieldErrorMsg("isDelivery")}
         onChange={(val) => {
           updateShippingInfo({
-            pickupMethod: val,
+            isDelivery: val as "Y" | "N",
           });
         }}
       />
-      <FormInput
-        required
-        label="收件人姓名"
-        value={shippingInfo.name}
-        errorMsg={getFieldErrorMsg("name")}
-        onChange={(val) => {
-          updateShippingInfo({
-            name: val,
-          });
-        }}
-      />
-      <FormInput
-        required
-        label="收件人電話"
-        value={shippingInfo.phone}
-        errorMsg={getFieldErrorMsg("phone")}
-        onChange={(val) => {
-          updateShippingInfo({
-            phone: val,
-          });
-        }}
-      />
-      <FormInput
-        required
-        label="到貨地址"
-        value={shippingInfo.address}
-        errorMsg={getFieldErrorMsg("address")}
-        onChange={(val) => {
-          updateShippingInfo({
-            address: val,
-          });
-        }}
-      />
-      <FormInput
-        required
-        variant="select"
-        label="希望到貨時段"
-        value={shippingInfo.deliveryTime}
-        optionData={
-          shiptimeList
-            ? shiptimeList?.map((b) => ({
-                value: b.value,
-                label: b.text,
-                disabled: b.disabled,
-              }))
-            : []
-        }
-        errorMsg={getFieldErrorMsg("deliveryTime")}
-        onChange={(val) => {
-          updateShippingInfo({
-            deliveryTime: val,
-          });
-        }}
-      />
+      {shippingInfo.isDelivery === "Y" && (
+        <>
+          <FormInput
+            required
+            label="收件人姓名"
+            value={shippingInfo.name}
+            errorMsg={getFieldErrorMsg("name")}
+            onChange={(val) => {
+              updateShippingInfo({
+                name: val,
+              });
+            }}
+          />
+          <FormInput
+            required
+            label="收件人電話"
+            value={shippingInfo.phone}
+            errorMsg={getFieldErrorMsg("phone")}
+            onChange={(val) => {
+              updateShippingInfo({
+                phone: val,
+              });
+            }}
+          />
+          <FormInput
+            required
+            label="到貨地址"
+            value={shippingInfo.address}
+            errorMsg={getFieldErrorMsg("address")}
+            onChange={(val) => {
+              updateShippingInfo({
+                address: val,
+              });
+            }}
+          />
+          <FormInput
+            required
+            variant="select"
+            label="希望到貨時段"
+            value={shippingInfo.deliveryTime}
+            optionData={
+              shiptimeList
+                ? shiptimeList?.map((b) => ({
+                    value: b.value,
+                    label: b.text,
+                    disabled: b.disabled,
+                  }))
+                : []
+            }
+            errorMsg={getFieldErrorMsg("deliveryTime")}
+            onChange={(val) => {
+              updateShippingInfo({
+                deliveryTime: val,
+              });
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
@@ -147,27 +151,27 @@ const validateRules = (shippingInfo: Partial<CartState["shippingInfo"]>) => ({
     if (!shippingInfo.bagQty) return "請填寫附提袋數量";
     return "";
   },
-  pickupMethod: () => {
-    if (!shippingInfo.pickupMethod) return "請選擇取件方式";
+  isDelivery: () => {
+    if (!shippingInfo.isDelivery) return "請選擇取件方式";
     return "";
   },
   name: () => {
-    //todo: 加檢查是否宅配才需要檢查宅配資訊
+    if (shippingInfo.isDelivery === "N") return "";
     if (!shippingInfo.name) return "請填寫收件人";
     return "";
   },
   phone: () => {
-    //todo: 加檢查是否宅配才需要檢查宅配資訊
+    if (shippingInfo.isDelivery === "N") return "";
     if (!shippingInfo.phone) return "請填寫收件人電話";
     return "";
   },
   address: () => {
-    //todo: 加檢查是否宅配才需要檢查宅配資訊
+    if (shippingInfo.isDelivery === "N") return "";
     if (!shippingInfo.address) return "請填寫收件人地址";
     return "";
   },
   deliveryTime: () => {
-    //todo: 加檢查是否宅配才需要檢查宅配資訊
+    if (shippingInfo.isDelivery === "N") return "";
     if (!shippingInfo.deliveryTime) return "請填寫希望宅配時間";
     return "";
   },

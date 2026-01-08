@@ -9,13 +9,33 @@ import Breadcrumbs from "@/components/common/BreadCrumbs";
 import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import AppAlert from "@/components/common/AppAlert";
+import { useStaffbuyApi } from "@/api/useStaffbuyApi";
+import type { CreateOrderRequest } from "@/api/staffbuyApi";
 
 export default function StaffCheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const staffCart = useCartStore((state) => state.staffCart);
   const formErrors = useCartStore((state) => state.formErrors);
+  const invoiceInfo = useCartStore((state) => state.invoiceInfo);
+  const shippingInfo = useCartStore((state) => state.shippingInfo);
 
-  const handlePurchase = async () => {
+  const { mutate: handleCreateOrder, isPending } =
+    useStaffbuyApi.useCreateOrderMutation();
+
+  const cartItems = Object.values(staffCart);
+
+  const handleClickPurchaseButton = async () => {
     setIsSubmitting(true);
+
+    if (cartItems.length === 0) {
+      await AppAlert({
+        message: "購物車裡沒有商品",
+        okText: "確定",
+        hideCancel: true,
+      });
+      return;
+    }
+
     if (formErrors.shipping || formErrors.invoice) {
       await AppAlert({
         title: "資訊錯誤",
@@ -25,6 +45,25 @@ export default function StaffCheckoutPage() {
       });
       return;
     }
+
+    const body: CreateOrderRequest = {
+      master: {
+        fG_Transport: shippingInfo.isDelivery,
+        cX_GetDate: shippingInfo.pickupDate,
+        cX_Ship_Name: shippingInfo.name,
+        cX_Tel: shippingInfo.phone,
+        cX_Address: shippingInfo.address,
+        cX_Ship_Time: shippingInfo.deliveryTime,
+        nQ_Bag: parseInt(shippingInfo.bagQty),
+        cX_Invoice_ForWeb: invoiceInfo.carrierId,
+        cX_Love_Code: invoiceInfo.donationCode,
+      },
+      detail: cartItems.map((ci) => ({
+        iD_Product: parseInt(ci.productId),
+        nQ_BuyQuantity: ci.quantity,
+      })),
+    };
+    handleCreateOrder(body);
   };
 
   return (
@@ -43,9 +82,16 @@ export default function StaffCheckoutPage() {
         <InvoiceInfo isSubmitting={isSubmitting} />
       </div>
       <div className="hidden md:inline-block sticky top-[0px] h-[400px] mt-15">
-        <CartSummary onClickPurchaseBtn={handlePurchase} />
+        <CartSummary
+          onClickPurchaseBtn={handleClickPurchaseButton}
+          disableBtn={isPending}
+        />
       </div>
-      <MobileCheckoutBar className="md:hidden" onClickBtn={handlePurchase} />
+      <MobileCheckoutBar
+        disableBtn={isPending}
+        className="md:hidden"
+        onClickBtn={handleClickPurchaseButton}
+      />
     </div>
   );
 }

@@ -6,10 +6,12 @@ export default function CartSummary({
   className = "",
   showDetail = false,
   onClickPurchaseBtn,
+  disableBtn,
 }: {
   className?: string;
   showDetail?: boolean;
   onClickPurchaseBtn?: () => void;
+  disableBtn?: boolean;
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -19,6 +21,25 @@ export default function CartSummary({
     isStaffBuy ? state.staffCart : state.groupCart
   );
   const cartItems = Object.values(cart);
+
+  const handleClickBtn = async () => {
+    if (isCheckoutStage && onClickPurchaseBtn) {
+      onClickPurchaseBtn();
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      await AppAlert({
+        title: "購物車沒有商品",
+        message: "請放入商品",
+        okText: "確認",
+        hideCancel: true,
+      });
+
+      return;
+    }
+    navigate(isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout");
+  };
 
   return (
     <div
@@ -61,25 +82,11 @@ export default function CartSummary({
       </div>
 
       <div
-        onClick={async () => {
-          if (isCheckoutStage && onClickPurchaseBtn) {
-            onClickPurchaseBtn();
-            return;
-          }
-
-          if (cartItems.length === 0) {
-            await AppAlert({
-              title: "購物車沒有商品",
-              message: "請放入商品",
-              okText: "確認",
-              hideCancel: true,
-            });
-
-            return;
-          }
-          navigate(isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout");
-        }}
-        className="bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center hover:text-[white] w-full inline-block underline-offset-[0px] "
+        onClick={handleClickBtn}
+        className={
+          "bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center hover:text-[white] w-full inline-block underline-offset-[0px] " +
+          (disableBtn ? "pointer-events-none opacity-50" : "")
+        }
       >
         購買商品
       </div>

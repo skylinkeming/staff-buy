@@ -17,7 +17,7 @@ export default function OrderCard() {
     if (isLink) {
       textStyle = "text-sm text-[blue] font-bold";
     }
-    
+
     return (
       <div className="flex justify-between w-full mb-2.5 px-5">
         <span className="text-sm">{key}</span>
@@ -38,7 +38,6 @@ export default function OrderCard() {
         {renderDataRow("訂單情況", "成立")}
         {renderDataRow("取貨方式", "宅配")}
         {renderDataRow("黑貓宅配單號", "907344452512")}
-
         {!openDetail ? (
           renderDataRow("總金額", "$NT 2500", true)
         ) : (

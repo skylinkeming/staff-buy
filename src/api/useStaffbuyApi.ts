@@ -1,6 +1,6 @@
-import { staffbuyApi } from "@/api/staffbuyApi";
-import { useQuery } from "@tanstack/react-query";
-
+import { staffbuyApi, type CreateOrderRequest } from "@/api/staffbuyApi";
+import AppAlert from "@/components/common/AppAlert";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useStaffbuyApi = {
   useUserInfoQuery: () =>
@@ -21,6 +21,30 @@ export const useStaffbuyApi = {
       },
       staleTime: 30000,
     }),
+  useProductListQuery: () =>
+    useQuery({
+      queryKey: ["staffbuy_product_list"],
+      queryFn: () => staffbuyApi.getProducts(),
+      select: (res) => {
+        return res.data.map((p) => ({
+          id: p.iD_Product,
+          name: p.cX_ProductName,
+          price: p.nQ_BuyPrice,
+          stock: p.nQ_Quantity,
+        }));
+      },
+      staleTime: 0,
+    }),
+  useAllStockQuery: () =>
+    useQuery({
+      queryKey: ["staffbuy_product_stock_list"],
+      queryFn: () => staffbuyApi.getProductStockList(),
+      select: (res) => {
+        return res.data;
+      },
+      staleTime: 0,
+      gcTime: 0,
+    }),
   useBagListQuery: () =>
     useQuery({
       queryKey: ["staffbuy_bagList"],
@@ -38,6 +62,25 @@ export const useStaffbuyApi = {
       queryKey: ["groupbuy_invoicePickupStoreLIst"],
       queryFn: () => staffbuyApi.getInvoicePickupStoreList(),
       select: (res) => res.data,
-      enabled: enabled
+      enabled: enabled,
+    }),
+  useCreateOrderMutation: () =>
+    useMutation({
+      mutationFn: (body: CreateOrderRequest) => staffbuyApi.createOrder(body),
+      onSuccess: (data) => {
+        console.log("訂單建立成功:", data);
+        AppAlert({
+          message: "訂單建立成功",
+          type: "success",
+        });
+      },
+      onError: (error) => {
+        console.error("建立失敗:", error);
+        AppAlert({
+          title: "訂購失敗",
+          message: error.message,
+          type: "error",
+        });
+      },
     }),
 };

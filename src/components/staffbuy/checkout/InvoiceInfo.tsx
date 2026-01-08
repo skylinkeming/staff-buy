@@ -18,6 +18,22 @@ export default function InvoiceInfo({
   const invoiceInfo = useCartStore((state) => state.invoiceInfo);
   const setFormError = useCartStore((state) => state.setFormError);
 
+  const validateRules = (invoiceInfo: Partial<CartState["invoiceInfo"]>) => ({
+    location: () => {
+      if (isGroupBuy && !invoiceInfo.location) return "請選擇發票領取地點";
+      return "";
+    },
+    carrierId: () => {
+      if (!!invoiceInfo.carrierId && !invoiceInfo.carrierId.startsWith("/"))
+        return "請確認載具格式";
+      return "";
+    },
+    donationCode: () => {
+      // if (!invoiceInfo.donationCode) return "愛心碼";
+      return "";
+    },
+  });
+
   const getFieldErrorMsg: (key: keyof typeof invoiceInfo) => string = (key) => {
     if (!isSubmitting) return "";
     return validateRules(invoiceInfo)[key]();
@@ -77,19 +93,3 @@ export default function InvoiceInfo({
     </div>
   );
 }
-
-const validateRules = (invoiceInfo: Partial<CartState["invoiceInfo"]>) => ({
-  location: () => {
-    if (!invoiceInfo.location) return "請選擇發票領取地點";
-    return "";
-  },
-  carrierId: () => {
-    if (!!invoiceInfo.carrierId && !invoiceInfo.carrierId.startsWith("/"))
-      return "請確認載具格式";
-    return "";
-  },
-  donationCode: () => {
-    // if (!invoiceInfo.donationCode) return "愛心碼";
-    return "";
-  },
-});

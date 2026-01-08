@@ -9,9 +9,8 @@ import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTabl
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import { useNavigate } from "react-router";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
-import { staffbuyApi } from "@/api/staffbuyApi";
-import { useQuery } from "@tanstack/react-query";
 import AppAlert from "@/components/common/AppAlert";
+import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 
 const CART_TYPE = "staff";
 const { useBreakpoint } = Grid;
@@ -29,39 +28,39 @@ export const BlockTitle = ({
 );
 
 export default function StaffProductPage() {
-  const screens = useBreakpoint();
   const [searchkey, setSearchkey] = useState("");
   const [loading, setLoading] = useState(false);
+  const screens = useBreakpoint();
+  const navigate = useNavigate();
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
-  const {
-    data: rawProducts,
-    isLoading: fetching,
-  } = useQuery({
-    queryKey: ["staffbuy_products"],
-    queryFn: () => staffbuyApi.getProducts(),
-    select: (res) => {
-      return res.data.map((p) => ({
-        id: p.iD_Product,
-        name: p.cX_ProductName,
-        price: p.nQ_BuyPrice,
-        stock: p.nQ_Quantity,
-      }));
-    },
-    staleTime: 0, // 每次進來都要重打刷新剩餘數量
-  });
+  const { data: rawProducts, isLoading: fetching } =
+    useStaffbuyApi.useProductListQuery();
+
+  const { data: productStockList, refetch } = useStaffbuyApi.useAllStockQuery();
 
   const cartItems = Object.values(staffCart);
 
-  const navigate = useNavigate();
-
   const displayProducts = useMemo(() => {
     if (!rawProducts) return [];
-    rawProducts.filter((p) => {
-      return p.name.toLowerCase().includes(searchkey.toLowerCase());
-    });
+    let showList = [...rawProducts];
+
+    if (productStockList) {
+      // 更新庫存
+      showList = showList.map((p, idx) => {
+        const updatedStock =
+          productStockList[idx].nQ_StockOty !== undefined
+            ? productStockList[idx].nQ_StockOty
+            : p.stock;
+        return {
+          ...p,
+          stock: updatedStock,
+        };
+      });
+    }
+
     // 根據搜尋字串過濾
-    return rawProducts.filter((p) =>
+    return showList.filter((p) =>
       p.name.toLowerCase().includes(searchkey.toLowerCase())
     );
   }, [rawProducts, searchkey]);
@@ -107,6 +106,7 @@ export default function StaffProductPage() {
                 })}
                 onChangeQty={(item, qty) => {
                   // 打stock api檢查庫存數量
+                  refetch();
 
                   updateCart(
                     CART_TYPE,

@@ -16,7 +16,7 @@ export interface CartState {
     staffId: string;
   };
   shippingInfo: {
-    pickupMethod: string;
+    isDelivery: "Y" | "N";
     pickupDate: string;
     name: string;
     phone: string;
@@ -45,13 +45,14 @@ export interface CartState {
   setFormError: (module: "invoice" | "shipping", hasError: boolean) => void;
 }
 
+// 員購 團購專用的store
 export const useCartStore = create<CartState>((set) => ({
   staffCart: {},
   groupCart: {},
   ordererInfo: {
-    name: "王大名",
-    dept: "資訊部",
-    staffId: "016655",
+    name: "",
+    dept: "",
+    staffId: "",
   },
   shippingInfo: {
     pickupDate: "",
@@ -59,7 +60,7 @@ export const useCartStore = create<CartState>((set) => ({
     phone: "",
     address: "",
     deliveryTime: "",
-    pickupMethod: "2",
+    isDelivery: "N",
     bagQty: "0",
   },
   invoiceInfo: {

@@ -5,10 +5,12 @@ export default function MobileCheckoutBar({
   onClickBtn,
   className = "",
   btnText = "完成訂購",
+  disableBtn,
 }: {
   onClickBtn: () => void;
   className?: string;
   btnText?: string;
+  disableBtn?: boolean;
 }) {
   const location = useLocation();
   const isStaffBuy = location.pathname.includes("staffbuy");
@@ -36,7 +38,10 @@ export default function MobileCheckoutBar({
         </div>
       </div>
       <div
-        className="bg-staffbuy-primary text-[white] w-[130px] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] inline-block underline-offset-0 "
+        className={
+          "bg-staffbuy-primary text-[white] w-[130px] rounded-[15px] py-[5px] text-center cursor-pointer hover:text-[white] inline-block underline-offset-0 " +
+          (disableBtn ? "pointer-events-none opacity-50" : "")
+        }
         onClick={onClickBtn}
       >
         {btnText}
