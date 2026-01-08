@@ -25,19 +25,32 @@ export default function MobileProductTable({
   className = "",
   isLoading,
 }: MobileProductTableProps) {
-
   const columns: ColumnsType<TableRowData> = [
     {
       title: "員購品項",
       key: "name",
       render: (_, record) => (
         <div className="">
-          <div className="font-medium text-[#333] mb-1">{record.name}</div>
+          <div className="font-medium leading-4 text-[#333] mb-1">
+            {record.name}
+          </div>
           <div className="flex gap-2.5">
-            <div className={`text-[12px] px-1 rounded ${record.quantity > 0 ? "text-[#6B5E55]" : "text-[#999] bg-[#FBFBFB]"}`}>
+            <div
+              className={`text-[12px] leading-3 pr-1 rounded ${
+                record.quantity > 0
+                  ? "text-[#6B5E55]"
+                  : "text-[#999] bg-[#FBFBFB]"
+              }`}
+            >
               價格: {record.price}
             </div>
-            <div className={`text-[12px] px-1 rounded ${record.quantity > 0 ? "text-[#6B5E55]" : "text-[#999] bg-[#FBFBFB]"}`}>
+            <div
+              className={`text-[12px] px-1 leading-3 rounded ${
+                record.quantity > 0
+                  ? "text-[#6B5E55]"
+                  : "text-[#999] bg-[#FBFBFB]"
+              }`}
+            >
               剩餘: {record.stock}
             </div>
           </div>
@@ -83,15 +96,17 @@ export default function MobileProductTable({
   ];
 
   return (
-    <div className={`w-full bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] overflow-hidden ${className}`}>
+    <div
+      className={`w-full bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] ${className}`}
+    >
       <ConfigProvider
         theme={{
           components: {
             Table: {
               headerBg: "#F5F5F5",
               headerColor: "#333333",
-              cellPaddingBlock: 5,
-              cellPaddingInline: 8,      // 減少左右內距，留給內容空間
+              cellPaddingBlock: 10,
+              cellPaddingInline: 8, // 減少左右內距，留給內容空間
             },
           },
         }}
@@ -103,7 +118,7 @@ export default function MobileProductTable({
           loading={isLoading}
           pagination={false}
           sticky
-          rowClassName={(record) => 
+          rowClassName={(record) =>
             record.quantity > 0 ? "bg-[#FFF6E9]" : "border-b-[#F5F5F5]"
           }
           locale={{ emptyText: "查無資料" }}

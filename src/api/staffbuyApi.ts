@@ -37,7 +37,20 @@ export interface StaffBuyProduct {
 
 export const staffbuyApi = {
   //   getUsers: () => api.get<UserInfo>("/users"),
+  getAnnouncment: () =>
+    api
+      .get<
+        ApiResponse<{
+          announcement: string;
+          notice: string;
+        }>
+      >("/Common/GetAnnouncement?cx_Code=buy")
+      .then((res) => res.data),
   getProducts: () =>
+    api
+      .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
+      .then((res) => res.data),
+  getMyOrders: () =>
     api
       .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
       .then((res) => res.data),
