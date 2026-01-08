@@ -53,6 +53,13 @@ export interface StaffBuyProduct {
   nQ_OneMayQty: number;
 }
 
+export interface Option {
+  disabled: boolean;
+  selected: boolean;
+  text: string;
+  value: string;
+}
+
 export const staffbuyApi = {
   login: (body: { qwe: string }) =>
     api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),
@@ -84,12 +91,7 @@ export const staffbuyApi = {
     api
       .get<
         ApiResponse<
-          Array<{
-            disabled: boolean;
-            selected: boolean;
-            text: string;
-            value: string;
-          }>
+          Array<Option>
         >
       >("/Common/ShipTimeList")
       .then((res) => res.data),
@@ -97,14 +99,17 @@ export const staffbuyApi = {
     api
       .get<
         ApiResponse<
-          Array<{
-            disabled: boolean;
-            selected: boolean;
-            text: string;
-            value: string;
-          }>
+          Array<Option>
         >
       >("/Common/BagList")
+      .then((res) => res.data),
+  getInvoicePickupStoreList: () =>
+    api
+      .get<
+        ApiResponse<
+          Array<Option>
+        >
+      >("/Common/GetInvoicePickupStoreList")
       .then((res) => res.data),
   getMyOrders: () =>
     api

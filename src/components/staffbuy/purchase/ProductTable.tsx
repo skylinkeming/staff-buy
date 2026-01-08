@@ -63,7 +63,7 @@ export default function ProductTable({
             onChange={(val) => {
               if (val > record.stock) {
                 AppAlert({
-                  message: "超過現有庫存數量",
+                  message: "超過剩餘數量",
                   hideCancel: true,
                 });
                 return;

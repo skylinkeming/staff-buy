@@ -37,8 +37,6 @@ export default function StaffProductPage() {
   const {
     data: rawProducts,
     isLoading: fetching,
-    isError,
-    error,
   } = useQuery({
     queryKey: ["staffbuy_products"],
     queryFn: () => staffbuyApi.getProducts(),
@@ -54,12 +52,6 @@ export default function StaffProductPage() {
   });
 
   const cartItems = Object.values(staffCart);
-
-  if (isError) {
-    AppAlert({
-      message: error.message,
-    });
-  }
 
   const navigate = useNavigate();
 

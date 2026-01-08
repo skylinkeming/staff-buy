@@ -1,12 +1,15 @@
 import { useCartStore, type CartState } from "@/store/useCartStore";
 import FormInput from "../../common/FormInput";
 import { useEffect } from "react";
+import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 
 export default function ShippingInfo({
   isSubmitting,
 }: {
   isSubmitting: boolean;
 }) {
+  const { data: bagList } = useStaffbuyApi.useBagListQuery();
+  const { data: shiptimeList } = useStaffbuyApi.useShiptimeListQuery();
   const updateShippingInfo = useCartStore((state) => state.updateShippingInfo);
   const shippingInfo = useCartStore((state) => state.shippingInfo);
   const setFormError = useCartStore((state) => state.setFormError);
@@ -42,10 +45,19 @@ export default function ShippingInfo({
       />
       <FormInput
         required
-        variant="number"
+        variant="select"
         label="附提袋數"
         value={shippingInfo.bagQty}
         errorMsg={getFieldErrorMsg("bagQty")}
+        optionData={
+          bagList
+            ? bagList?.map((b) => ({
+                value: b.value,
+                label: b.text,
+                disabled: b.disabled,
+              }))
+            : []
+        }
         onChange={(val) => {
           updateShippingInfo({
             bagQty: val,
@@ -58,10 +70,8 @@ export default function ShippingInfo({
         label="取貨方式"
         value={shippingInfo.pickupMethod}
         optionData={[
-          { value: "1", label: "Jack" },
-          { value: "2", label: "Lucy" },
-          { value: "3", label: "yiminghe" },
-          { value: "4", label: "Disabled", disabled: true },
+          { value: "0", label: "總管理處" },
+          { value: "1", label: "宅配" },
         ]}
         errorMsg={getFieldErrorMsg("pickupMethod")}
         onChange={(val) => {
@@ -108,12 +118,15 @@ export default function ShippingInfo({
         variant="select"
         label="希望到貨時段"
         value={shippingInfo.deliveryTime}
-        optionData={[
-          { value: "jack", label: "Jack" },
-          { value: "lucy", label: "Lucy" },
-          { value: "Yiminghe", label: "yiminghe" },
-          { value: "disabled", label: "Disabled", disabled: true },
-        ]}
+        optionData={
+          shiptimeList
+            ? shiptimeList?.map((b) => ({
+                value: b.value,
+                label: b.text,
+                disabled: b.disabled,
+              }))
+            : []
+        }
         errorMsg={getFieldErrorMsg("deliveryTime")}
         onChange={(val) => {
           updateShippingInfo({
