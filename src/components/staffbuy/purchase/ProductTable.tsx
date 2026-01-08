@@ -1,6 +1,5 @@
-import { Table, Spin, ConfigProvider } from "antd";
+import { Table, ConfigProvider } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
 
 interface TableRowData {
@@ -48,12 +47,14 @@ export default function ProductTable({
       key: "stock",
       align: "center",
       sorter: (a, b) => a.stock - b.stock,
+      shouldCellUpdate: (prev, next) => prev.stock !== next.stock,
     },
     {
       title: "購買數量",
       dataIndex: "quantity",
       key: "quantity",
       align: "center",
+      shouldCellUpdate: (prev, next) => prev.quantity !== next.quantity,
       sorter: (a, b) => a.quantity - b.quantity,
       render: (_, record) => (
         <div className="flex justify-center">
@@ -62,10 +63,10 @@ export default function ProductTable({
             inputNumber={record.quantity}
             onChange={(val) => {
               if (val > record.stock) {
-                AppAlert({
-                  message: "超過剩餘數量",
-                  hideCancel: true,
-                });
+                // AppAlert({
+                //   message: "超過剩餘數量",
+                //   hideCancel: true,
+                // });
                 return;
               }
               onChangeQty(record, val);
@@ -80,6 +81,7 @@ export default function ProductTable({
       key: "subtotal",
       align: "center",
       width: 124,
+      shouldCellUpdate: (prev, next) => prev.subtotal !== next.subtotal,
       sorter: (a, b) => a.subtotal - b.subtotal,
     },
   ];
@@ -102,17 +104,18 @@ export default function ProductTable({
         }}
       >
         <Table
+          scroll={{ y: 500 }}
           dataSource={data}
           columns={columns}
           rowKey="id"
           loading={isLoading}
-          pagination={false} // 依照你原本的設計不分頁
-          sticky // 固定的表頭
-          // 當數量大於 0 時畫背景色
+          pagination={false}
+          sticky
           rowClassName={(record) =>
             record.quantity > 0 ? "bg-[#FFF6E9] hover:bg-[#FFF6E9]" : ""
           }
           locale={{ emptyText: "查無資料" }}
+          virtual
         />
       </ConfigProvider>
     </div>

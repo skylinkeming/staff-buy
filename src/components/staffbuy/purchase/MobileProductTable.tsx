@@ -1,6 +1,5 @@
 import { Table, ConfigProvider } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import AppAlert from "@/components/common/AppAlert";
 import QuantityInput from "./QuantityInput";
 
 interface TableRowData {
@@ -56,7 +55,6 @@ export default function MobileProductTable({
           </div>
         </div>
       ),
-      // 雖然顯示多個資訊，但排序仍以名稱為主
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
@@ -64,8 +62,9 @@ export default function MobileProductTable({
       dataIndex: "quantity",
       key: "quantity",
       align: "center",
-      width: 120, // 固定寬度避免 Stepper 擠壓
+      width: 120,
       sorter: (a, b) => a.quantity - b.quantity,
+      shouldCellUpdate: (prev, next) => prev.quantity !== next.quantity,
       render: (qty, record) => (
         <div className="flex justify-center items-center">
           <QuantityInput
@@ -73,10 +72,10 @@ export default function MobileProductTable({
             inputNumber={qty}
             onChange={(val) => {
               if (val > record.stock) {
-                AppAlert({
-                  message: "超過剩餘數量",
-                  hideCancel: true,
-                });
+                // AppAlert({
+                //   message: "超過剩餘數量",
+                //   hideCancel: true,
+                // });
                 return;
               }
               onChangeQty(record, val);
@@ -91,6 +90,7 @@ export default function MobileProductTable({
       key: "subtotal",
       align: "center",
       width: 70,
+      shouldCellUpdate: (prev, next) => prev.subtotal !== next.subtotal,
       sorter: (a, b) => a.subtotal - b.subtotal,
     },
   ];
@@ -106,7 +106,7 @@ export default function MobileProductTable({
               headerBg: "#F5F5F5",
               headerColor: "#333333",
               cellPaddingBlock: 10,
-              cellPaddingInline: 8, // 減少左右內距，留給內容空間
+              cellPaddingInline: 8, 
             },
           },
         }}
@@ -123,6 +123,7 @@ export default function MobileProductTable({
           }
           locale={{ emptyText: "查無資料" }}
           bordered={false}
+          virtual
         />
       </ConfigProvider>
     </div>
