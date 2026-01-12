@@ -21,6 +21,7 @@ const DataRow = ({ field, value, isTotalPrice, link }: any) => {
 
 export default function OrderDesktopTable(props: OrderItem) {
   const [openDetail, setOpenDetail] = useState(false);
+  const isDelivery = props.transport === "Y";
 
   const basicInfo = (
     <>
@@ -59,7 +60,7 @@ export default function OrderDesktopTable(props: OrderItem) {
         </div>
 
         <div className="border-r border-gray-300 text-center flex items-center justify-center leading-3.5">
-          {props.transport ? "宅配" : "自取"}
+          {isDelivery ? "宅配" : "自取"}
         </div>
 
         <div className="border-r border-gray-300 px-2 py-2 text-center flex items-center justify-center leading-3.5">
@@ -105,13 +106,13 @@ export default function OrderDesktopTable(props: OrderItem) {
               <div className="pb-2.5 border-b-[1px] mb-2.5 border-[#C1C1C1] font-bold">
                 購買明細
               </div>
-              <div className="flex flex-col gap-3.5">
+              <div className="flex flex-col gap-2.5">
                 {props.details.map((d) => (
                   <div key={d.prodName} className="flex justify-between pr-5">
-                    <div className="text-[14px] w-50">{d.prodName}</div>
-                    <div className="text-[14px] w-15">{d.price}</div>
-                    <div className="text-[14px] w-10">x {d.qty}</div>
-                    <div className="text-[14px] flex-1 text-right">
+                    <div className="text-[12px] w-50">{d.prodName}</div>
+                    <div className="text-[12px] w-15">{d.price}</div>
+                    <div className="text-[12px] w-10">x {d.qty}</div>
+                    <div className="text-[12px] flex-1 text-right">
                       {d.subTotal}
                     </div>
                   </div>
@@ -120,7 +121,7 @@ export default function OrderDesktopTable(props: OrderItem) {
             </div>
           </div>
           <div className="px-7.5 my-3.5 w-[50%]  max-h-40 overflow-auto">
-            <DataRow field="附提袋數" value="2" />
+            <DataRow field="附提袋數" value={props.shippingInfo.nQ_Bag} />
             {props.invoiceInfo.carrierId && (
               <DataRow field="載具號碼" value={props.invoiceInfo.carrierId} />
             )}
@@ -130,16 +131,16 @@ export default function OrderDesktopTable(props: OrderItem) {
                 value={props.shippingInfo.trackingNumber}
               />
             )}
-            {props.shippingInfo.receiver && (
+            {isDelivery && props.shippingInfo.receiver && (
               <DataRow field="收件人" value={props.shippingInfo.receiver} />
             )}
-            {props.shippingInfo.phone && (
+            {isDelivery && props.shippingInfo.phone && (
               <DataRow field="收件人電話" value={props.shippingInfo.phone} />
             )}
-            {props.shippingInfo.address && (
+            {isDelivery && props.shippingInfo.address && (
               <DataRow field="收件地址" value={props.shippingInfo.address} />
             )}
-            {!!props.shippingInfo.nQ_Transport_Money && (
+            {isDelivery && !!props.shippingInfo.nQ_Transport_Money && (
               <DataRow
                 field="運費"
                 value={"$ " + props.shippingInfo.nQ_Transport_Money}

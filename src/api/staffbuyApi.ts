@@ -81,6 +81,7 @@ export interface OrderItem {
     trackingNumber: string | null;
     fG_Status: string;
     cX_GetDate: string;
+    nQ_Bag:number;
     nQ_Transport_Money: number;
   };
   details: {
@@ -152,12 +153,16 @@ export const staffbuyApi = {
     api
       .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
       .then((res) => res.data),
-  getProductStockList: () =>
-    api
-      .get<ApiResponse<Array<{ iD_Product: string; nQ_StockOty: number }>>>(
-        "/Product/GetProductStockList"
-      )
-      .then((res) => res.data),
+  getProductStockList: (productId?: string) => {
+    console.log({ productId });
+    let url = "/Product/GetProductStockList";
+    if (productId) {
+      url += "?ID_Product=" + productId;
+    }
+    return api
+      .get<ApiResponse<Array<{ iD_Product: string; nQ_StockQty: number }>>>(url)
+      .then((res) => res.data);
+  },
   getShipTimeList: () =>
     api
       .get<ApiResponse<Array<Option>>>("/Common/ShipTimeList")

@@ -25,6 +25,15 @@ export default function OrderSearchGroup({
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
+  const triggerClear = () => {
+    setSearchTerm("");
+    onClickSearchBtn({
+      searchTerm: "",
+      startDate,
+      endDate,
+    });
+  };
+
   return (
     <ConfigProvider locale={zhTW}>
       <div className={"block md:flex md:gap-1.25 " + className}>
@@ -34,6 +43,7 @@ export default function OrderSearchGroup({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           allowClear
+          onClear={triggerClear}
         />
         <RangePicker
           className="w-full md:w-60"

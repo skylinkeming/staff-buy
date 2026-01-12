@@ -35,15 +35,16 @@ export const useStaffbuyApi = {
       },
       staleTime: 0,
     }),
-  useAllStockQuery: () =>
+  useProductStockListQuery: (productId?: string) =>
     useQuery({
-      queryKey: ["staffbuy_product_stock_list"],
-      queryFn: () => staffbuyApi.getProductStockList(),
+      queryKey: ["staffbuy_product_stock_list", productId],
+      queryFn: () => staffbuyApi.getProductStockList(productId),
       select: (res) => {
         return res.data;
       },
       staleTime: 0,
       gcTime: 0,
+      enabled: !!productId,
     }),
   useBagListQuery: () =>
     useQuery({
@@ -116,8 +117,8 @@ export const useStaffbuyApi = {
           endDate,
         }),
       select: (res) => res.data,
-      refetchOnWindowFocus: false, 
-      refetchOnMount: false, 
-      refetchOnReconnect: false, 
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     }),
 };

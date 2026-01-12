@@ -53,11 +53,12 @@ const BuyItem = ({ prodName, qty, price, subTotal }: any) => (
 // 手機版訂單卡片
 export default function OrderCard(props: OrderItem) {
   const [openDetail, setOpenDetail] = useState(false);
+  const isDelivery = props.transport === "Y";
 
   const basicInfo = [
     { field: "訂單編號", value: props.serialNum || props.id.toString() },
     { field: "訂單日期", value: props.date },
-    { field: "取貨方式", value: props.transport === "Y" ? "宅配" : "自取" },
+    { field: "取貨方式", value: isDelivery ? "宅配" : "自取" },
   ];
 
   const buyDetail = (
@@ -77,10 +78,20 @@ export default function OrderCard(props: OrderItem) {
 
   const moreInfo = [
     {
+      field: "附提袋數",
+      value: props.shippingInfo.nQ_Bag,
+      link: "",
+    },
+    {
       field: "發票號碼/日期",
       value: props.invoiceInfo.invoiceNumber
-        ? `${props.invoiceInfo.invoiceNumber} (${props.invoiceInfo.invoiceDate})`
+        ? `${props.invoiceInfo.invoiceNumber} / (${props.invoiceInfo.invoiceDate})`
         : "尚未開立",
+      link: "",
+    },
+    {
+      field: "取貨時間",
+      value: props.shippingInfo.cX_GetDate,
       link: "",
     },
   ];
@@ -100,7 +111,7 @@ export default function OrderCard(props: OrderItem) {
     });
   }
 
-  if (props.transport === "Y" && props.shippingInfo.trackingNumber) {
+  if (isDelivery && props.shippingInfo.trackingNumber) {
     moreInfo.push({
       field: "黑貓宅配單號",
       value: props.shippingInfo.trackingNumber || "",
@@ -110,9 +121,10 @@ export default function OrderCard(props: OrderItem) {
     });
   }
 
-  if (props.transport === "Y") {
+  if (isDelivery) {
     moreInfo.push(
       { field: "收件人", value: props.shippingInfo.receiver, link: "" },
+      { field: "收件人電話", value: props.shippingInfo.phone, link: "" },
       { field: "到貨地址", value: props.shippingInfo.address, link: "" }
     );
   }

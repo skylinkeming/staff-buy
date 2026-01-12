@@ -10,7 +10,7 @@ const { useBreakpoint } = Grid;
 
 export default function StaffOrderHistoryPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [orderFilter, setOrderFilter] = useState<{
     orderId: string;
     startDate: string;
