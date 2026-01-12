@@ -46,6 +46,7 @@ export default function CheckoutItems() {
                     variant="stepper"
                     inputNumber={cartItem.quantity}
                     onChange={async (qty) => {
+                      // setTargetId(cartItem.productId);
                       if (qty === 0) {
                         const res = await AppAlert({
                           message: "確認刪除品項?",

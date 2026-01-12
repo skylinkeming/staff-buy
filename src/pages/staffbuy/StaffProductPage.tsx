@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
 import { Grid } from "antd";
@@ -12,6 +11,7 @@ import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTabl
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
+import { useProductStockSync } from "@/hooks/useProductStockSync";
 
 const CART_TYPE = "staff";
 const { useBreakpoint } = Grid;
@@ -40,14 +40,9 @@ export default function StaffProductPage() {
   const navigate = useNavigate();
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
-  const {
-    data: rawProducts,
-    isLoading: fetching,
-    refetch: refetchProductList,
-  } = useStaffbuyApi.useProductListQuery();
-  const queryClient = useQueryClient();
-
-  const { data: stockInfo } = useStaffbuyApi.useProductStockListQuery(targetId);
+  const { data: rawProducts, isLoading: fetching } =
+    useStaffbuyApi.useProductListQuery();
+  const { isLoading: isStockLoading } = useProductStockSync(targetId);
 
   const cartItems = Object.values(staffCart);
 
@@ -60,23 +55,6 @@ export default function StaffProductPage() {
       p.name.toLowerCase().includes(searchkey.toLowerCase())
     );
   }, [rawProducts, searchkey, targetId]);
-
-  useEffect(() => {
-    //在商品增減數量的時候 順便更新商品庫存數
-    if (stockInfo?.[0] && targetId) {
-      const newStock = stockInfo[0].nQ_StockQty;
-
-      queryClient.setQueryData(["staffbuy_product_list"], (oldRes: any) => {
-        if (!oldRes) return oldRes;
-        return {
-          ...oldRes,
-          data: oldRes.data.map((p: any) =>
-            p.iD_Product === targetId ? { ...p, nQ_Quantity: newStock } : p
-          ),
-        };
-      });
-    }
-  }, [stockInfo, targetId, queryClient]);
 
   const handleSearch = (inputVal: string) => {
     setLoading(true);
@@ -145,8 +123,7 @@ export default function StaffProductPage() {
                   };
                 })}
                 onChangeQty={(item, qty) => {
-                  // 打stock api檢查庫存數量
-                  refetchProductList();
+                  setTargetId(item.id);
                   updateCart(
                     CART_TYPE,
                     {
