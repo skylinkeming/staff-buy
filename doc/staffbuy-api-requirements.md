@@ -158,7 +158,7 @@
 | shippingInfo.deliveryTime | string | 是   | 希望到貨時段                     |
 | invoice                   | object | 否   | 發票資訊                         |
 | invoice.location          | string | 是   | 發票領取地點                     |
-| invoice.donationCode      | string | 否   | 愛心碼                           |
+| invoice.loveCode      | string | 否   | 愛心碼                           |
 | invoice.carrierId         | string | 否   | 載具                             |
 
 ```json
@@ -180,7 +180,7 @@
   },
   "invoice": {
     "location": "",
-    "donationCode": "",
+    "loveCode": "",
     "carrierId": "/ABCD1234"
   }
 }
@@ -250,7 +250,7 @@
       },
       "invoice": {
         "carrierId": "",
-        "donationCode": "",
+        "loveCode": "",
         "invoiceNumber": "VF77576717",
         "invoiceDate": "20251223"
       }

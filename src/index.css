@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 :root {
   font-family: "Noto Sans TC", sans-serif;
   line-height: 1.5;
@@ -9,7 +8,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 
 body {
   margin: 0;
@@ -28,6 +26,14 @@ h1 {
   line-height: 1.1;
 }
 
+/* 手機版range-picker改成直排顯示日曆 */
+@media (max-width: 576px) {
+  .ant-picker-panels {
+    flex-direction: column;
+    overflow-y: scroll; /* Add scroll if needed for height */
+    height: 400px; /* Example height */
+  }
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -42,10 +48,7 @@ h1 {
   }
 }
 
-
-
-
 @theme {
-  --color-staffbuy-primary: rgb(23, 93, 204); 
+  --color-staffbuy-primary: rgb(23, 93, 204);
   --color-staffbuy-secondary: rgb(158, 171, 249);
 }

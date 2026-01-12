@@ -3,6 +3,7 @@ import FormInput from "../../common/FormInput";
 import { useEffect } from "react";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import { useLocation } from "react-router";
+import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
 
 export default function InvoiceInfo({
   isSubmitting,
@@ -28,8 +29,8 @@ export default function InvoiceInfo({
         return "請確認載具格式";
       return "";
     },
-    donationCode: () => {
-      // if (!invoiceInfo.donationCode) return "愛心碼";
+    loveCode: () => {
+      // if (!invoiceInfo.loveCode) return "愛心碼";
       return "";
     },
   });
@@ -47,49 +48,52 @@ export default function InvoiceInfo({
   }, [hasError]);
 
   return (
-    <div className="bg-[white] px-[10px] py-[20px] rounded-[15px] md:w-175 grid grid-cols-1 md:grid-cols-2 gap-2.5">
-      {isGroupBuy && (
+    <>
+      <BlockTitle className="mt-[30px] mb-[10px]">發票資訊</BlockTitle>
+      <div className="bg-[white] px-[10px] py-[20px] rounded-[15px] md:w-175 grid grid-cols-1 md:grid-cols-2 gap-2.5">
+        {isGroupBuy && (
+          <FormInput
+            required
+            variant="select"
+            label="發票領取地點"
+            value={invoiceInfo.location}
+            optionData={
+              invoicePickupStoreList
+                ? invoicePickupStoreList?.map((b) => ({
+                    value: b.value,
+                    label: b.text,
+                    disabled: b.disabled,
+                  }))
+                : []
+            }
+            errorMsg={getFieldErrorMsg("location")}
+            onChange={(val) => {
+              updateInvoiceInfo({
+                location: val,
+              });
+            }}
+          />
+        )}
         <FormInput
-          required
-          variant="select"
-          label="發票領取地點"
-          value={invoiceInfo.location}
-          optionData={
-            invoicePickupStoreList
-              ? invoicePickupStoreList?.map((b) => ({
-                  value: b.value,
-                  label: b.text,
-                  disabled: b.disabled,
-                }))
-              : []
-          }
-          errorMsg={getFieldErrorMsg("location")}
+          label="愛心碼"
+          value={invoiceInfo.loveCode}
           onChange={(val) => {
             updateInvoiceInfo({
-              location: val,
+              loveCode: val,
             });
           }}
         />
-      )}
-      <FormInput
-        label="愛心碼"
-        value={invoiceInfo.donationCode}
-        onChange={(val) => {
-          updateInvoiceInfo({
-            donationCode: val,
-          });
-        }}
-      />
-      <FormInput
-        label="載具編號"
-        value={invoiceInfo.carrierId}
-        errorMsg={getFieldErrorMsg("carrierId")}
-        onChange={(val) => {
-          updateInvoiceInfo({
-            carrierId: val,
-          });
-        }}
-      />
-    </div>
+        <FormInput
+          label="載具編號"
+          value={invoiceInfo.carrierId}
+          errorMsg={getFieldErrorMsg("carrierId")}
+          onChange={(val) => {
+            updateInvoiceInfo({
+              carrierId: val,
+            });
+          }}
+        />
+      </div>
+    </>
   );
 }

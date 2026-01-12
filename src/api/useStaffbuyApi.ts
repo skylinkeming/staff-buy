@@ -83,4 +83,41 @@ export const useStaffbuyApi = {
         });
       },
     }),
+  useOrderListQuery: ({
+    page = 1,
+    pageSize = 10,
+    orderId,
+    startDate,
+    endDate,
+  }: {
+    page: number;
+    pageSize?: number;
+    orderId?: string;
+    startDate?: string;
+    endDate?: string;
+  }) =>
+    useQuery({
+      queryKey: [
+        "staffbuy_orderList",
+        {
+          page,
+          pageSize,
+          orderId,
+          startDate,
+          endDate,
+        },
+      ],
+      queryFn: () =>
+        staffbuyApi.getMyOrders({
+          page,
+          pageSize,
+          orderId,
+          startDate,
+          endDate,
+        }),
+      select: (res) => res.data,
+      refetchOnWindowFocus: false, 
+      refetchOnMount: false, 
+      refetchOnReconnect: false, 
+    }),
 };

@@ -4,7 +4,6 @@ import ShippingInfo from "../../components/staffbuy/checkout/ShippingInfo";
 import InvoiceInfo from "../../components/staffbuy/checkout/InvoiceInfo";
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import CartSummary from "@/components/staffbuy/purchase/CartSummary";
-import { BlockTitle } from "./StaffProductPage";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import { useState } from "react";
 import { useCartStore } from "@/store/useCartStore";
@@ -56,29 +55,25 @@ export default function StaffCheckoutPage() {
         cX_Ship_Time: shippingInfo.deliveryTime,
         nQ_Bag: parseInt(shippingInfo.bagQty),
         cX_Invoice_ForWeb: invoiceInfo.carrierId,
-        cX_Love_Code: invoiceInfo.donationCode,
+        cX_Love_Code: invoiceInfo.loveCode,
       },
       detail: cartItems.map((ci) => ({
         iD_Product: parseInt(ci.productId),
         nQ_BuyQuantity: ci.quantity,
       })),
     };
+
     handleCreateOrder(body);
+
   };
 
   return (
     <div className="w-full p-[15px] bg-[#FBFBFB] pb-[120px] md:flex md:gap-[40px] md:justify-center">
       <div className="">
-        <div className="max-w-7xl mx-auto mt-10">
-          <Breadcrumbs />
-        </div>
-        <BlockTitle className="mt-[28px] mb-[10px]">購買商品</BlockTitle>
+        <Breadcrumbs className="max-w-7xl mx-auto mt-10" />
         <CheckoutItems />
-        <BlockTitle className="mt-[30px] mb-[10px]">訂購資訊</BlockTitle>
         <OrdererInfo />
-        <BlockTitle className="mt-[30px] mb-[10px]">取貨資訊</BlockTitle>
         <ShippingInfo isSubmitting={isSubmitting} />
-        <BlockTitle className="mt-[30px] mb-[10px]">發票資訊</BlockTitle>
         <InvoiceInfo isSubmitting={isSubmitting} />
       </div>
       <div className="hidden md:inline-block sticky top-[0px] h-[400px] mt-15">

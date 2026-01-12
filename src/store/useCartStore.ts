@@ -26,7 +26,7 @@ export interface CartState {
   };
   invoiceInfo: {
     location: string;
-    donationCode: string;
+    loveCode: string;
     carrierId: string;
   };
   formErrors: {
@@ -65,7 +65,7 @@ export const useCartStore = create<CartState>((set) => ({
   },
   invoiceInfo: {
     location: "",
-    donationCode: "",
+    loveCode: "",
     carrierId: "",
   },
   formErrors: {

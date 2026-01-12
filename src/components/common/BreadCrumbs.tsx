@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router";
 import { IoIosArrowForward } from "react-icons/io";
 import { HiHome } from "react-icons/hi";
 
-export default function Breadcrumbs() {
+export default function Breadcrumbs({ className }: { className?: string }) {
   const location = useLocation();
 
   const pathnames = location.pathname.split("/").filter((x) => x);
@@ -19,7 +19,7 @@ export default function Breadcrumbs() {
 
   return (
     <nav
-      className="flex items-center text-gray-500 text-sm mb-6"
+      className={"flex items-center text-gray-500 text-sm mb-6 " + className}
       aria-label="Breadcrumb"
     >
       <ol className="flex items-center space-x-2">

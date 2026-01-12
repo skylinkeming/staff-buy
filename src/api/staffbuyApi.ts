@@ -18,7 +18,7 @@ api.interceptors.response.use(
     const res = response.data;
     if (!res.success) {
       let error = new Error(res.message || "系統錯誤");
-      if (res.statusCode.includes("401")) {
+      if (res.statusCode?.includes("401")) {
         error = new Error("登入逾時，請重新登入");
       }
       return Promise.reject(error);
@@ -58,6 +58,44 @@ export interface Option {
   selected: boolean;
   text: string;
   value: string;
+}
+
+export interface OrderItem {
+  id: number;
+  serialNum: string;
+  date: string;
+  totalPrice: number;
+  //是否宅配
+  transport: "Y" | "N";
+  invoiceInfo: {
+    invoiceNumber: string | null;
+    invoiceDate: string | null;
+    carrierId: string;
+    loveCode: string;
+  };
+  shippingInfo: {
+    receiver: string;
+    phone: string;
+    address: string;
+    shipTime: string;
+    trackingNumber: string | null;
+  };
+  details: {
+    prodName: string;
+    qty: number;
+    price: number;
+    subTotal: number;
+  }[];
+}
+
+export interface OrderListResponse {
+  orderList: Array<OrderItem>;
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export interface CreateOrderRequest {
@@ -129,12 +167,35 @@ export const staffbuyApi = {
     api
       .get<ApiResponse<Array<Option>>>("/Common/GetInvoicePickupStoreList")
       .then((res) => res.data),
-  getMyOrders: () =>
-    api
-      .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
-      .then((res) => res.data),
   createOrder: (body: CreateOrderRequest) =>
     api
       .post<ApiResponse<string>>("/Order/CreateOrder", body)
       .then((res) => res.data),
+  getMyOrders: ({
+    page = 1,
+    pageSize = 10,
+    orderId,
+    startDate,
+    endDate,
+  }: {
+    page: number;
+    pageSize?: number;
+    orderId?: string;
+    startDate?: string;
+    endDate?: string;
+  }) => {
+    let baseUrl = `/Order/GetOrderList?Page=${page}&PageSize=${pageSize}`;
+
+    if (orderId) {
+      baseUrl += `&OrderId=${orderId}`;
+    }
+
+    if (startDate && endDate) {
+      baseUrl += `&StartDate=${startDate}&EndDate=${endDate}`;
+    }
+
+    return api
+      .get<ApiResponse<OrderListResponse>>(baseUrl)
+      .then((res) => res.data);
+  },
 };
