@@ -1,16 +1,17 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCartStore } from "@/store/useCartStore";
+import { useNavigate } from "react-router";
 import { Grid } from "antd";
-import CartSummary from "../../components/staffbuy/purchase/CartSummary";
-import Notice from "../../components/common/Notice";
-import ProductTable from "../../components/staffbuy/purchase/ProductTable";
-import Searchbar from "../../components/common/Searchbar";
-import { useCartStore } from "../../store/useCartStore";
+import { useStaffbuyApi } from "@/api/useStaffbuyApi";
+import CartSummary from "@/components/staffbuy/purchase/CartSummary";
+import Notice from "@/components/common/Notice";
+import ProductTable from "@/components/staffbuy/purchase/ProductTable";
+import KeywordSearchAction from "@/components/common/KeywordSearchAction";
 import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
-import { useNavigate } from "react-router";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
-import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 
 const CART_TYPE = "staff";
 const { useBreakpoint } = Grid;
@@ -22,48 +23,60 @@ export const BlockTitle = ({
   children: ReactNode;
   className?: string;
 }) => (
-  <div className={"text-[24px] font-bold text-[#020202] w-full text-left " + className}>
+  <div
+    className={
+      "text-[20px] font-bold text-[#020202] w-full text-left " + className
+    }
+  >
     {children}
   </div>
 );
 
 export default function StaffProductPage() {
   const [searchkey, setSearchkey] = useState("");
+  const [targetId, setTargetId] = useState("");
   const [loading, setLoading] = useState(false);
   const screens = useBreakpoint();
   const navigate = useNavigate();
   const updateCart = useCartStore((state) => state.updateCart);
   const staffCart = useCartStore((state) => state.staffCart);
-  const { data: rawProducts, isLoading: fetching } =
-    useStaffbuyApi.useProductListQuery();
+  const {
+    data: rawProducts,
+    isLoading: fetching,
+    refetch: refetchProductList,
+  } = useStaffbuyApi.useProductListQuery();
+  const queryClient = useQueryClient();
 
-  const { data: productStockList, refetch } = useStaffbuyApi.useAllStockQuery();
+  const { data: stockInfo } = useStaffbuyApi.useProductStockListQuery(targetId);
 
   const cartItems = Object.values(staffCart);
 
   const displayProducts = useMemo(() => {
     if (!rawProducts) return [];
-    let showList = [...rawProducts];
-
-    if (productStockList) {
-      // 更新庫存
-      showList = showList.map((p, idx) => {
-        const updatedStock =
-          productStockList[idx].nQ_StockOty !== undefined
-            ? productStockList[idx].nQ_StockOty
-            : p.stock;
-        return {
-          ...p,
-          stock: updatedStock,
-        };
-      });
-    }
+    const showList = [...rawProducts];
 
     // 根據搜尋字串過濾
     return showList.filter((p) =>
       p.name.toLowerCase().includes(searchkey.toLowerCase())
     );
-  }, [rawProducts, searchkey]);
+  }, [rawProducts, searchkey, targetId]);
+
+  useEffect(() => {
+    //在商品增減數量的時候 順便更新商品庫存數
+    if (stockInfo?.[0] && targetId) {
+      const newStock = stockInfo[0].nQ_StockQty;
+
+      queryClient.setQueryData(["staffbuy_product_list"], (oldRes: any) => {
+        if (!oldRes) return oldRes;
+        return {
+          ...oldRes,
+          data: oldRes.data.map((p: any) =>
+            p.iD_Product === targetId ? { ...p, nQ_Quantity: newStock } : p
+          ),
+        };
+      });
+    }
+  }, [stockInfo, targetId, queryClient]);
 
   const handleSearch = (inputVal: string) => {
     setLoading(true);
@@ -76,14 +89,12 @@ export default function StaffProductPage() {
   return (
     <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
       <div>
-        <div className="max-w-7xl mx-auto mt-10">
-          <Breadcrumbs />
-        </div>
+        <Breadcrumbs className="max-w-7xl mx-auto mt-10" />
         <BlockTitle className="mb-4">員購</BlockTitle>
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
             <Notice className="mb-[30px] w-full md:w-auto" />
-            <Searchbar
+            <KeywordSearchAction
               className="mb-[30px] md:w-[100%]"
               placeholder="搜尋員購商品"
               onClickSearch={handleSearch}
@@ -105,9 +116,7 @@ export default function StaffProductPage() {
                   };
                 })}
                 onChangeQty={(item, qty) => {
-                  // 打stock api檢查庫存數量
-                  refetch();
-
+                  setTargetId(item.id);
                   updateCart(
                     CART_TYPE,
                     {
@@ -137,6 +146,7 @@ export default function StaffProductPage() {
                 })}
                 onChangeQty={(item, qty) => {
                   // 打stock api檢查庫存數量
+                  refetchProductList();
                   updateCart(
                     CART_TYPE,
                     {
