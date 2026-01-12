@@ -1,17 +1,17 @@
 import { useRef } from "react";
 import { GrClose } from "react-icons/gr";
-import IconButtonDatePicker from "./IconButtonDatePicker";
+import { IoIosSearch } from "react-icons/io";
 
 export default function Searchbar({
   className = "",
   onClickSearch,
   placeholder = "",
-  showDatePickerIcon = false,
 }: {
   className?: string;
   onClickSearch: (searchKey: string) => void;
   placeholder?: string;
   showDatePickerIcon?: boolean;
+  showRangePicker?: boolean;
 }) {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,15 +35,18 @@ export default function Searchbar({
             }
           }}
         />
-        <GrClose
-          className={"w-3 cursor-pointer absolute right-2.5 top-[50%] translate-y-[-50%] opacity-0 group-hover:opacity-100 transition-opacity duration-200"}
-          onClick={() => {
-            if (!searchInputRef?.current?.value) return;
-            if (searchInputRef.current) searchInputRef.current.value = "";
-            onClickSearch("");
-          }}
-        />
-        {showDatePickerIcon && <IconButtonDatePicker />}
+        <div className="absolute right-2.5 top-[50%] translate-y-[-50%] flex items-center z-99">
+          <GrClose
+            className={
+              "w-3 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            }
+            onClick={() => {
+              if (!searchInputRef?.current?.value) return;
+              if (searchInputRef.current) searchInputRef.current.value = "";
+              onClickSearch("");
+            }}
+          />
+        </div>
       </div>
       <div
         className="flex items-center gap-[10px] bg-staffbuy-primary text-[white] rounded-[15px] px-[20px] py-[5px] text-center cursor-pointer"
@@ -54,22 +57,7 @@ export default function Searchbar({
           onClickSearch(searchInputRef?.current?.value || "");
         }}
       >
-        <div className="w-[16px] flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-            />
-          </svg>
-        </div>
+        <IoIosSearch />
         <span className="whitespace-nowrap">搜尋</span>
       </div>
     </div>

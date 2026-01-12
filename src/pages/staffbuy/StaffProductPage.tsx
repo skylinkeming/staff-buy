@@ -22,7 +22,7 @@ export const BlockTitle = ({
   children: ReactNode;
   className?: string;
 }) => (
-  <div className={"text-[20px] text-[#020202] w-full text-left " + className}>
+  <div className={"text-[24px] font-bold text-[#020202] w-full text-left " + className}>
     {children}
   </div>
 );

@@ -79,6 +79,9 @@ export interface OrderItem {
     address: string;
     shipTime: string;
     trackingNumber: string | null;
+    fG_Status: string;
+    cX_GetDate: string;
+    nQ_Transport_Money: number;
   };
   details: {
     prodName: string;
