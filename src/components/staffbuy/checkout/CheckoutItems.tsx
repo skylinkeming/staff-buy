@@ -1,9 +1,11 @@
 import { useLocation } from "react-router";
-import { useCartStore } from "../../../store/useCartStore";
+import { useCartStore, type CartItem } from "@/store/useCartStore";
 import QuantityInput from "../purchase/QuantityInput";
 import { FaRegTrashAlt } from "react-icons/fa";
 import AppAlert from "@/components/common/AppAlert";
 import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
+import { useDebounce } from "@/hooks/useDebounce";
+import { staffbuyApi } from "@/api/staffbuyApi";
 
 export default function CheckoutItems() {
   const location = useLocation();
@@ -23,6 +25,54 @@ export default function CheckoutItems() {
     if (res === "ok") {
       removeFromCart(CART_TYPE, itemId);
     }
+  };
+
+  // 取得庫存數量
+  const debouncedFetchStock = useDebounce(
+    async (cartItem: CartItem, requestedQty: number) => {
+      let realStock = 9999;
+
+      const result = await staffbuyApi.getProductStockList(cartItem.productId);
+      if (result.data.length > 0) realStock = result.data[0].nQ_StockQty;
+
+      if (realStock !== undefined && requestedQty > realStock) {
+        // 發現庫存不足，主動校正購物車數量回庫存最大值
+        AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
+        updateCart(
+          CART_TYPE,
+          {
+            productId: cartItem.productId,
+            productName: cartItem.productName,
+            price: cartItem.price,
+          },
+          realStock
+        );
+      }
+    },
+    500
+  );
+
+  const handleAmountChange = async (cartItem: CartItem, qty: number) => {
+    if (qty === 0) {
+      const res = await AppAlert({
+        message: "確認刪除品項?",
+      });
+      if (res === "cancel") {
+        return;
+      }
+    }
+    updateCart(
+      CART_TYPE,
+      {
+        productId: cartItem.productId,
+        productName: cartItem.productName,
+        price: cartItem.price,
+      },
+      qty
+    );
+
+    // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
+    debouncedFetchStock(cartItem, qty);
   };
 
   return (
@@ -46,24 +96,7 @@ export default function CheckoutItems() {
                     variant="stepper"
                     inputNumber={cartItem.quantity}
                     onChange={async (qty) => {
-                      // setTargetId(cartItem.productId);
-                      if (qty === 0) {
-                        const res = await AppAlert({
-                          message: "確認刪除品項?",
-                        });
-                        if (res === "cancel") {
-                          return;
-                        }
-                      }
-                      updateCart(
-                        CART_TYPE,
-                        {
-                          productId: cartItem.productId,
-                          productName: cartItem.productName,
-                          price: cartItem.price,
-                        },
-                        qty
-                      );
+                      handleAmountChange(cartItem, qty);
                     }}
                   />
                   <div className="w-10 shrink-0 text-right pr-[5px] ml-[20px] md:ml-0 md:pr-0">

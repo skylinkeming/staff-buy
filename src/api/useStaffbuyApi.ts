@@ -30,13 +30,13 @@ export const useStaffbuyApi = {
           id: p.iD_Product,
           name: p.cX_ProductName,
           price: p.nQ_BuyPrice,
-          stock: p.nQ_Quantity,
+          stock: p.nQ_StockQty,
         }));
       },
       staleTime: 0,
     }),
-  useProductStockListQuery: (productId?: string) =>
-    useQuery({
+  useProductStockListQuery: (productId?: string) => {
+    return useQuery({
       queryKey: ["staffbuy_product_stock_list", productId],
       queryFn: () => staffbuyApi.getProductStockList(productId),
       select: (res) => {
@@ -45,7 +45,8 @@ export const useStaffbuyApi = {
       staleTime: 0,
       gcTime: 0,
       enabled: !!productId,
-    }),
+    });
+  },
   useBagListQuery: () =>
     useQuery({
       queryKey: ["staffbuy_bagList"],

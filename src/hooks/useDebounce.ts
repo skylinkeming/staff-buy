@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
-export function useDebounce<T>(value: T, delay: number = 500): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+export function useDebounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
+  const timeoutRef = useRef<any>(null);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
+  return useCallback((...args: Parameters<T>) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      fn(...args);
     }, delay);
-
-    // 如果 value 在 delay 時間內改變，就會清除前一個 timer，重新計時
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
+  }, [fn, delay]); 
 }

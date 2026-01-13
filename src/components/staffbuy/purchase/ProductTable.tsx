@@ -2,7 +2,7 @@ import { Table, ConfigProvider } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import QuantityInput from "./QuantityInput";
 
-interface TableRowData {
+export interface TableRowData {
   id: string;
   name: string;
   price: number;
@@ -67,6 +67,7 @@ export default function ProductTable({
                 //   message: "超過剩餘數量",
                 //   hideCancel: true,
                 // });
+                onChangeQty(record, record.stock);
                 return;
               }
               onChangeQty(record, val);

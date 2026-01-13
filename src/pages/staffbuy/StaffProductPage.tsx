@@ -5,13 +5,16 @@ import { Grid } from "antd";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import CartSummary from "@/components/staffbuy/purchase/CartSummary";
 import Notice from "@/components/common/Notice";
-import ProductTable from "@/components/staffbuy/purchase/ProductTable";
+import ProductTable, {
+  type TableRowData,
+} from "@/components/staffbuy/purchase/ProductTable";
 import KeywordSearchAction from "@/components/common/KeywordSearchAction";
 import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
-import { useProductStockSync } from "@/hooks/useProductStockSync";
+import { useDebounce } from "@/hooks/useDebounce";
+import { staffbuyApi } from "@/api/staffbuyApi";
 
 const CART_TYPE = "staff";
 const { useBreakpoint } = Grid;
@@ -34,7 +37,6 @@ export const BlockTitle = ({
 
 export default function StaffProductPage() {
   const [searchkey, setSearchkey] = useState("");
-  const [targetId, setTargetId] = useState("");
   const [loading, setLoading] = useState(false);
   const screens = useBreakpoint();
   const navigate = useNavigate();
@@ -42,7 +44,6 @@ export default function StaffProductPage() {
   const staffCart = useCartStore((state) => state.staffCart);
   const { data: rawProducts, isLoading: fetching } =
     useStaffbuyApi.useProductListQuery();
-  const { isLoading: isStockLoading } = useProductStockSync(targetId);
 
   const cartItems = Object.values(staffCart);
 
@@ -54,7 +55,7 @@ export default function StaffProductPage() {
     return showList.filter((p) =>
       p.name.toLowerCase().includes(searchkey.toLowerCase())
     );
-  }, [rawProducts, searchkey, targetId]);
+  }, [rawProducts, searchkey]);
 
   const handleSearch = (inputVal: string) => {
     setLoading(true);
@@ -62,6 +63,46 @@ export default function StaffProductPage() {
       setSearchkey(inputVal);
       setLoading(false);
     }, 200);
+  };
+
+  // 取得庫存數量
+  const debouncedFetchStock = useDebounce(
+    async (item: TableRowData, requestedQty: number) => {
+      let realStock = 9999;
+
+      const result = await staffbuyApi.getProductStockList(item.id);
+      if (result?.data?.length > 0) realStock = result.data[0].nQ_StockQty;
+
+      if (realStock !== undefined && requestedQty > realStock) {
+        // 發現庫存不足，主動校正購物車數量回庫存最大值
+        AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
+        updateCart(
+          CART_TYPE,
+          {
+            productId: item.id,
+            productName: item.name,
+            price: item.price,
+          },
+          realStock
+        );
+      }
+    },
+    500
+  );
+
+  const handleAmountChange = (item: TableRowData, qty: number) => {
+    updateCart(
+      CART_TYPE,
+      {
+        productId: item.id,
+        productName: item.name,
+        price: item.price,
+      },
+      qty
+    );
+
+    // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
+    debouncedFetchStock(item, qty);
   };
 
   return (
@@ -93,18 +134,7 @@ export default function StaffProductPage() {
                       : 0,
                   };
                 })}
-                onChangeQty={(item, qty) => {
-                  setTargetId(item.id);
-                  updateCart(
-                    CART_TYPE,
-                    {
-                      productId: item.id,
-                      productName: item.name,
-                      price: item.price,
-                    },
-                    qty
-                  );
-                }}
+                onChangeQty={handleAmountChange}
               />
             ) : (
               <MobileProductTable
@@ -122,18 +152,7 @@ export default function StaffProductPage() {
                       : 0,
                   };
                 })}
-                onChangeQty={(item, qty) => {
-                  setTargetId(item.id);
-                  updateCart(
-                    CART_TYPE,
-                    {
-                      productId: item.id,
-                      productName: item.name,
-                      price: item.price,
-                    },
-                    qty
-                  );
-                }}
+                onChangeQty={handleAmountChange}
               />
             )}
           </div>

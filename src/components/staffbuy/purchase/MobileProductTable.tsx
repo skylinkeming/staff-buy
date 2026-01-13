@@ -76,6 +76,7 @@ export default function MobileProductTable({
                 //   message: "超過剩餘數量",
                 //   hideCancel: true,
                 // });
+                onChangeQty(record, record.stock);
                 return;
               }
               onChangeQty(record, val);

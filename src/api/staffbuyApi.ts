@@ -51,6 +51,7 @@ export interface StaffBuyProduct {
   nQ_Less: number;
   iD_GroupBy_Item: number;
   nQ_OneMayQty: number;
+  nQ_StockQty: number;
 }
 
 export interface Option {
@@ -81,7 +82,7 @@ export interface OrderItem {
     trackingNumber: string | null;
     fG_Status: string;
     cX_GetDate: string;
-    nQ_Bag:number;
+    nQ_Bag: number;
     nQ_Transport_Money: number;
   };
   details: {
@@ -154,7 +155,8 @@ export const staffbuyApi = {
       .get<ApiResponse<Array<StaffBuyProduct>>>("/Product/GetProductList")
       .then((res) => res.data),
   getProductStockList: (productId?: string) => {
-    console.log({ productId });
+    if (!productId) return Promise.reject("No ID provided");
+
     let url = "/Product/GetProductStockList";
     if (productId) {
       url += "?ID_Product=" + productId;
