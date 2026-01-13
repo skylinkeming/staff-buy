@@ -19,7 +19,7 @@ export const useStaffbuyApi = {
       select: (res) => {
         return res.data;
       },
-      staleTime: 30000,
+      staleTime: 3000,
     }),
   useProductListQuery: () =>
     useQuery({

@@ -44,7 +44,7 @@ export default function CartSummary({
   return (
     <div
       className={
-        "border border-[#D9D9D9] p-[20px] w-[280px] rounded-[10px] " + className
+        "border border-[#D9D9D9] p-[20px] w-[280px] rounded-[10px] bg-white " + className
       }
     >
       {cartItems.length > 0 && showDetail && (

@@ -63,7 +63,7 @@ const queryClient = new QueryClient({
         });
         return;
       }
-      console.error(error)
+      console.error(error);
       AppAlert({
         message: error.message || "系統發生錯誤",
         type: "error",

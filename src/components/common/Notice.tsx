@@ -1,10 +1,23 @@
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
+import AppAlert from "./AppAlert";
 
 export default function Notice({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(true);
   const { data } = useStaffbuyApi.useAnnouncementQuery();
+
+  useEffect(() => {
+    if (data) {
+      AppAlert({
+        title: "員購公告",
+        message: (
+          <div dangerouslySetInnerHTML={{ __html: data.announcement }}></div>
+        ),
+        hideCancel: true,
+      });
+    }
+  }, [data]);
 
   return (
     <div
@@ -37,10 +50,10 @@ export default function Notice({ className = "" }: { className?: string }) {
             isOpen ? "max-h-[1000px]" : "max-h-[90px]"
           }`}
         >
-          {data?.announcement && (
+          {data?.notice && (
             <div
               className="py-[15px] px-[20px] whitespace-pre-line text-sm text-gray-700 leading-relaxed pb-8"
-              dangerouslySetInnerHTML={{ __html: data?.announcement }}
+              dangerouslySetInnerHTML={{ __html: data?.notice }}
             />
           )}
         </div>
