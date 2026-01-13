@@ -25,10 +25,9 @@ export default function OrderSearchGroup({
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  const triggerClear = () => {
-    setSearchTerm("");
+  const handleSearch = () => {
     onClickSearchBtn({
-      searchTerm: "",
+      searchTerm,
       startDate,
       endDate,
     });
@@ -43,13 +42,30 @@ export default function OrderSearchGroup({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           allowClear
-          onClear={triggerClear}
+          onClear={() => {
+            onClickSearchBtn({
+              searchTerm: "",
+              startDate,
+              endDate,
+            });
+          }}
+          onPressEnter={handleSearch}
         />
         <RangePicker
           className="w-full md:w-60"
           onChange={(_, dates) => {
-            setStartDate(dates[0]);
-            setEndDate(dates[1]);
+            if (dates) {
+              setStartDate(dates[0]);
+              setEndDate(dates[1]);
+            } else {
+              setStartDate("");
+              setEndDate("");
+              onClickSearchBtn({
+                searchTerm,
+                startDate: "",
+                endDate: "",
+              });
+            }
           }}
           value={[
             startDate ? dayjs(startDate) : undefined,
@@ -61,13 +77,7 @@ export default function OrderSearchGroup({
           type="primary"
           icon={<SearchOutlined />}
           className="w-full bg-staffbuy-primary! border-bg-staffbuy-primary! hover:opacity-90! mt-2.5 md:mt-0 md:max-w-25"
-          onClick={() => {
-            onClickSearchBtn({
-              searchTerm,
-              startDate,
-              endDate,
-            });
-          }}
+          onClick={handleSearch}
         >
           搜尋
         </Button>

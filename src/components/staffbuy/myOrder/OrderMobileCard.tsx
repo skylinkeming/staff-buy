@@ -10,7 +10,7 @@ const DataRow = ({
 }: any) => {
   let textStyle = "text-sm text-[#20232C]";
   if (isTotalPrice) {
-    textStyle = `text-[#E5486D] font-bold ${
+    textStyle = `text-staffbuy-primary font-bold ${
       openDetail ? "text-md" : "text-sm"
     }`;
   }
@@ -41,7 +41,7 @@ const DataRow = ({
 };
 
 const BuyItem = ({ prodName, qty, price, subTotal }: any) => (
-  <div className="flex justify-between w-full mb-2.5">
+  <div className="flex justify-between w-full mb-2.5 px-1.25">
     <span className="text-sm w-45">{prodName}</span>
     <span className="text-sm w-15">
       {price} x {qty}
@@ -62,17 +62,20 @@ export default function OrderCard(props: OrderItem) {
   ];
 
   const buyDetail = (
-    <div className="pt-2.5 mb-5 mt-1">
-      <div className="text-[#020202] mb-3">購物明細</div>
+    <div className="pt-2.5 mb-5 mt-1 ">
+      <div className="text-[#020202] mb-3 border-b-[1px] pb-1.25 border-[#D9D9D9] pl-1.25">
+        購物明細
+      </div>
       {props.details.map((d) => (
         <BuyItem key={d.prodName} {...d} />
       ))}
-      <DataRow
-        field="總金額"
-        value={`NT$ ${props.totalPrice.toLocaleString()}`}
-        isTotalPrice
-        openDetail
-      />
+      <div></div>
+      <div className={"flex justify-between w-full mt-3.5 px-1.25 items-end"}>
+        <span className={"text-sm"}>{"總金額"}</span>
+        <span className={"text-staffbuy-primary font-bold"}>
+          NT$ {props.totalPrice}
+        </span>
+      </div>
     </div>
   );
 
@@ -150,10 +153,10 @@ export default function OrderCard(props: OrderItem) {
         </div>
         {openDetail && (
           <>
-            <div className="px-5 border-t-[1px] border-[#D9D9D9]">
+            <div className="px-2.5 bg-[#FBFBFB] pb-2.5 mx-2.5 rounded-[1px] max-h-75 overflow-auto ">
               {buyDetail}
             </div>
-            <div className="px-5 border-t-[1px] py-3.5 border-[#D9D9D9] ">
+            <div className="px-5 py-3.5  ">
               {moreInfo.map((item) => (
                 <DataRow
                   key={item.field}

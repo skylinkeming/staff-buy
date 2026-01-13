@@ -56,7 +56,7 @@ export default function OrderDesktopTable(props: OrderItem) {
               openDetail ? "rotate-90" : ""
             }`}
           />
-          {props.id}
+          {props.serialNum}
         </div>
 
         <div className="border-r border-gray-300 text-center flex items-center justify-center leading-3.5">

@@ -51,7 +51,7 @@ export default function StaffOrderHistoryPage() {
         <>{screens.md ? <OrderDesktopTable {...o} /> : <OrderCard {...o} />}</>
       ))}
       {data?.orderList.length === 0 && (
-        <div className="w-full flex justify-center border-[1px] border-[#ccc] items-center h-80 rounded-[15px]">
+        <div className="w-full flex justify-center bg-gray-100 items-center h-60 rounded-[15px]">
           無購買紀錄
         </div>
       )}
