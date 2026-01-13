@@ -10,13 +10,16 @@ import { useCartStore } from "@/store/useCartStore";
 import AppAlert from "@/components/common/AppAlert";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import type { CreateOrderRequest } from "@/api/staffbuyApi";
+import { useNavigate } from "react-router";
 
 export default function StaffCheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const staffCart = useCartStore((state) => state.staffCart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const formErrors = useCartStore((state) => state.formErrors);
   const invoiceInfo = useCartStore((state) => state.invoiceInfo);
   const shippingInfo = useCartStore((state) => state.shippingInfo);
+  const navigate = useNavigate();
 
   const { mutate: handleCreateOrder, isPending } =
     useStaffbuyApi.useCreateOrderMutation();
@@ -63,8 +66,26 @@ export default function StaffCheckoutPage() {
       })),
     };
 
-    handleCreateOrder(body);
+    handleCreateOrder(body, {
+      onSuccess: async (data) => {
+        console.log("訂單建立成功:", data);
+        await AppAlert({
+          message: "訂單建立成功",
+          type: "success",
+        });
 
+        clearCart("staff");
+        navigate("/staffbuy/myorder");
+      },
+      onError: (error) => {
+        console.error("建立失敗:", error);
+        AppAlert({
+          title: "訂購失敗",
+          message: (error as any).response?.data?.message || error.message,
+          type: "error",
+        });
+      },
+    });
   };
 
   return (

@@ -69,21 +69,6 @@ export const useStaffbuyApi = {
   useCreateOrderMutation: () =>
     useMutation({
       mutationFn: (body: CreateOrderRequest) => staffbuyApi.createOrder(body),
-      onSuccess: (data) => {
-        console.log("訂單建立成功:", data);
-        AppAlert({
-          message: "訂單建立成功",
-          type: "success",
-        });
-      },
-      onError: (error) => {
-        console.error("建立失敗:", error);
-        AppAlert({
-          title: "訂購失敗",
-          message: error.message,
-          type: "error",
-        });
-      },
     }),
   useOrderListQuery: ({
     page = 1,

@@ -153,7 +153,7 @@ export default function OrderCard(props: OrderItem) {
         </div>
         {openDetail && (
           <>
-            <div className="px-2.5 bg-[#FBFBFB] pb-2.5 mx-2.5 rounded-[1px] max-h-75 overflow-auto ">
+            <div className="px-2.5 bg-[#FBFBFB] pb-2.5 mx-2.5 rounded-[15px] max-h-75 overflow-auto ">
               {buyDetail}
             </div>
             <div className="px-5 py-3.5  ">
@@ -170,7 +170,7 @@ export default function OrderCard(props: OrderItem) {
         )}
       </div>
 
-      <div className="bg-[#F5F5F5] py-2 px-3.5 text-right">
+      <div className="bg-gray-100 py-2 px-3.5 text-right">
         <div
           className="border-[1px] text-sm border-[#20232C] text-[#20232C] py-1.25 px-7.5 inline-block rounded-[5px] cursor-pointer"
           onClick={() => setOpenDetail(!openDetail)}

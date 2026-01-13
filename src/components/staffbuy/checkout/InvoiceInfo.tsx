@@ -25,12 +25,18 @@ export default function InvoiceInfo({
       return "";
     },
     carrierId: () => {
-      if (!!invoiceInfo.carrierId && !invoiceInfo.carrierId.startsWith("/"))
+      if (!!invoiceInfo.carrierId && !invoiceInfo.carrierId.startsWith("/")) {
         return "請確認載具格式";
+      }
+      if (!!invoiceInfo.carrierId && !!invoiceInfo.loveCode) {
+        return "載具跟愛心碼只能填一個";
+      }
       return "";
     },
     loveCode: () => {
-      // if (!invoiceInfo.loveCode) return "愛心碼";
+      if (!!invoiceInfo.carrierId && !!invoiceInfo.loveCode) {
+        return "載具跟愛心碼只能填一個";
+      }
       return "";
     },
   });
@@ -43,6 +49,7 @@ export default function InvoiceInfo({
   const hasError = Object.values(validateRules(invoiceInfo)).some(
     (rule) => rule() !== ""
   );
+
   useEffect(() => {
     setFormError("invoice", hasError);
   }, [hasError]);

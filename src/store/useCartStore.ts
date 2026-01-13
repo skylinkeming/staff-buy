@@ -39,6 +39,7 @@ export interface CartState {
     targetQuantity: number
   ) => void;
   removeFromCart: (type: "staff" | "group", productId: string) => void;
+  clearCart: (type: "staff" | "group") => void;
   updateShippingInfo: (info: Partial<CartState["shippingInfo"]>) => void;
   updateInvoiceInfo: (info: Partial<CartState["invoiceInfo"]>) => void;
   updateOrdererInfo: (info: Partial<CartState["ordererInfo"]>) => void;
@@ -92,6 +93,32 @@ export const useCartStore = create<CartState>((set) => ({
       delete newCart[productId];
 
       return { [cartKey]: newCart };
+    }),
+  clearCart: (type) =>
+    set(() => {
+      const cartKey = type === "staff" ? "staffCart" : "groupCart";
+
+      return {
+        [cartKey]: {},
+        shippingInfo: {
+          pickupDate: "",
+          name: "",
+          phone: "",
+          address: "",
+          deliveryTime: "",
+          isDelivery: "N",
+          bagQty: "0",
+        },
+        invoiceInfo: {
+          location: "",
+          loveCode: "",
+          carrierId: "",
+        },
+        formErrors: {
+          shipping: true,
+          invoice: true,
+        },
+      };
     }),
   updateShippingInfo: (info) =>
     set((state) => ({
