@@ -3,9 +3,9 @@ import { Pagination, ConfigProvider, Spin, Grid } from "antd";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import { BlockTitle } from "./StaffProductPage";
-import OrderCard from "@/components/staffbuy/myOrder/OrderMobileCard";
+import OrderCard from "@/components/staffbuy/orders/OrderMobileCard";
 import OrderSearchGroup from "@/components/common/OrderSearchGroup";
-import OrderDesktopTable from "@/components/staffbuy/myOrder/OrderDesktopTable";
+import OrderDesktopTable from "@/components/staffbuy/orders/OrderDesktopTable";
 const { useBreakpoint } = Grid;
 
 export default function StaffOrderHistoryPage() {

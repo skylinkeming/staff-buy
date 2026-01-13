@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       { path: "/staffbuy", element: <StaffProductPage /> },
       { path: "/staffbuy/checkout", element: <StaffCheckoutPage /> },
       {
-        path: "/staffbuy/myorder",
+        path: "/staffbuy/orders",
         element: <StaffOrderOrderHistoryPage />,
       },
       {

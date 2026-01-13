@@ -75,7 +75,7 @@ export default function StaffCheckoutPage() {
         });
 
         clearCart("staff");
-        navigate("/staffbuy/myorder");
+        navigate("/staffbuy/orders");
       },
       onError: (error) => {
         console.error("建立失敗:", error);

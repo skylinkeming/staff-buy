@@ -14,7 +14,7 @@ export default function Breadcrumbs({ className }: { className?: string }) {
     products: "Step 1. 商品列表",
     staffbuy: "員購",
     checkout: "Step 2. 填寫資料",
-    myorder: "員購紀錄",
+    orders: "員購紀錄",
   };
 
   return (
