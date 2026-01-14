@@ -107,7 +107,7 @@ export default function ProductTable({
         }}
       >
         <Table
-          className="border border-[#E5E5E5] rounded-[10px] overflow-hidden no-padding-title"
+          className="border border-[#E5E5E5] rounded-[5px] overflow-hidden no-padding-title"
           {...(title && { title: () => title })}
           size="large"
           scroll={{ y: 500 }}

@@ -22,8 +22,7 @@ export default function Notice({ className = "" }: { className?: string }) {
   return (
     <div
       className={
-        "w-full bg-white border-[#E5E5E5] border-1 overflow-hidden " +
-        (isOpen ? "rounded-[10px] " : "") +
+        "w-full bg-white border-[#E5E5E5] border-1 overflow-hidden rounded-[5px] " +
         className
       }
     >
