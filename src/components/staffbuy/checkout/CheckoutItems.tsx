@@ -71,8 +71,10 @@ export default function CheckoutItems() {
       qty
     );
 
-    // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
-    debouncedFetchStock(cartItem, qty);
+    if (isStaffBuy) {
+      // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
+      debouncedFetchStock(cartItem, qty);
+    }
   };
 
   return (

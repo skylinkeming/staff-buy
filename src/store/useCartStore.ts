@@ -8,6 +8,12 @@ export interface CartItem {
 }
 
 export interface CartState {
+  selectedGroup: {
+    id: string;
+    name: string;
+    canBuyFrom: string;
+    canBuyTo: string;
+  };
   staffCart: Record<string, CartItem>;
   groupCart: Record<string, CartItem>;
   ordererInfo: {
@@ -33,6 +39,12 @@ export interface CartState {
     shipping: boolean;
     invoice: boolean;
   };
+  updateSelectedGroup: (params: {
+    id: string;
+    name: string;
+    canBuyFrom: string;
+    canBuyTo: string;
+  }) => void;
   updateCart: (
     type: "staff" | "group",
     product: Omit<CartItem, "quantity">,
@@ -46,8 +58,14 @@ export interface CartState {
   setFormError: (module: "invoice" | "shipping", hasError: boolean) => void;
 }
 
-// 員購 團購專用的store
+// 員購 團購 專用的store
 export const useCartStore = create<CartState>((set) => ({
+  selectedGroup: {
+    id: "",
+    name: "",
+    canBuyFrom: "",
+    canBuyTo: "",
+  },
   staffCart: {},
   groupCart: {},
   ordererInfo: {
@@ -73,6 +91,15 @@ export const useCartStore = create<CartState>((set) => ({
     shipping: true,
     invoice: true,
   },
+  updateSelectedGroup: (params: {
+    id: string;
+    name: string;
+    canBuyFrom: string;
+    canBuyTo: string;
+  }) =>
+    set((state) => {
+      return { ...state, selectedGroup: { ...params } };
+    }),
   updateCart: (type, product, targetQuantity) =>
     set((state) => {
       const cartKey = type === "staff" ? "staffCart" : "groupCart";
@@ -100,6 +127,7 @@ export const useCartStore = create<CartState>((set) => ({
 
       return {
         [cartKey]: {},
+        selectedGroupbuyId: "",
         shippingInfo: {
           pickupDate: "",
           name: "",

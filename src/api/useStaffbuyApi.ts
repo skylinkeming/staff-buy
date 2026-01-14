@@ -1,5 +1,4 @@
 import { staffbuyApi, type CreateOrderRequest } from "@/api/staffbuyApi";
-import AppAlert from "@/components/common/AppAlert";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useStaffbuyApi = {
@@ -103,8 +102,5 @@ export const useStaffbuyApi = {
           endDate,
         }),
       select: (res) => res.data,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
     }),
 };

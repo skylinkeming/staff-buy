@@ -1,6 +1,7 @@
 import { Table, ConfigProvider } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import QuantityInput from "./QuantityInput";
+import type { ReactNode } from "react";
 
 export interface TableRowData {
   id: string;
@@ -16,6 +17,7 @@ interface ProductTableProps {
   onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
   isLoading?: boolean;
+  title?: ReactNode;
 }
 
 export default function ProductTable({
@@ -23,6 +25,7 @@ export default function ProductTable({
   onChangeQty,
   className = "",
   isLoading,
+  title,
 }: ProductTableProps) {
   // 定義欄位設定
   const columns: ColumnsType<TableRowData> = [
@@ -97,14 +100,18 @@ export default function ProductTable({
             Table: {
               headerBg: "#F5F5F5",
               headerColor: "#333333",
+              cellPaddingBlock: 10,
               headerBorderRadius: 10,
-
+              colorBorderSecondary: "transparent",
               bodySortBg: "#FAFAFA",
+              rowHoverBg: "#FFF6E9",
+              borderRadius: 8,
             },
           },
         }}
       >
         <Table
+          {...(title && { title: () => title })}
           scroll={{ y: 500 }}
           dataSource={data}
           columns={columns}

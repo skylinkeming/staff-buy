@@ -14,6 +14,8 @@ import StaffCheckoutPage from "./pages/staffbuy/StaffCheckoutPage.tsx";
 import StaffOrderOrderHistoryPage from "./pages/staffbuy/StaffOrderHistoryPage.tsx";
 import AppAlert from "./components/common/AppAlert.tsx";
 import AuthWrapper from "./components/AuthWrapper.tsx";
+import GroupBuyProductPage from "./pages/groupbuy/GroupProductPage.tsx";
+import GroupCheckoutPage from "./pages/groupbuy/GroupCheckoutPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <App /> },
       { path: "/staffbuy", element: <StaffProductPage /> },
+      { path: "/staffbuy/purchase", element: <StaffProductPage /> },
       { path: "/staffbuy/checkout", element: <StaffCheckoutPage /> },
       {
         path: "/staffbuy/orders",
@@ -28,12 +31,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/groupbuy",
-        element: (
-          <>
-            <h1>團購頁面</h1>
-          </>
-        ),
+        element: <GroupBuyProductPage />,
       },
+      {
+        path: "/groupbuy/purchase",
+        element: <GroupBuyProductPage />,
+      },
+      { path: "/groupbuy/checkout", element: <GroupCheckoutPage /> },
+
       {
         path: "/partyup",
         element: (

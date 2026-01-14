@@ -47,7 +47,7 @@ export default function Notice({ className = "" }: { className?: string }) {
       >
         <div
           className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${
-            isOpen ? "max-h-[1000px]" : "max-h-[90px]"
+            isOpen ? "max-h-[1000px]" : "max-h-0"
           }`}
         >
           {data?.notice && (

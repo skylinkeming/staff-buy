@@ -11,8 +11,9 @@ export default function Breadcrumbs({ className }: { className?: string }) {
     cart: "購物車",
     shipping: "填寫配送資訊",
     success: "訂購成功",
-    products: "Step 1. 商品列表",
+    purchase: "Step 1. 商品列表",
     staffbuy: "員購",
+    groupbuy: "團購",
     checkout: "Step 2. 填寫資料",
     orders: "員購紀錄",
   };

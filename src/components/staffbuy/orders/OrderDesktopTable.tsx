@@ -102,8 +102,8 @@ export default function OrderDesktopTable(props: OrderItem) {
         <div className="flex relative border-[1px] border-gray-300 pr-2.5 rounded-bl-[10px] rounded-br-[10px] bg-white">
           <div className="border-l-[12px] border-[rgba(232,200,69,0.36)] absolute left-0 top-0 h-full"></div>
           <div className="pr-2.5 w-[50%] border-r-[1px] border-[#C1C1C1] ">
-            <div className="px-10 my-3.5 pb-2.5 max-h-40 overflow-auto">
-              <div className="pb-2.5 border-b-[1px] mb-2.5 border-[#C1C1C1] font-bold sticky top-0 bg-white">
+            <div className="px-10 my-3.5 pb-2.5 max-h-40 overflow-auto min-h-25">
+              <div className="pb-2.5 text-[14px] border-b-[1px] mb-2.5 border-[#C1C1C1] font-bold sticky top-0 bg-white">
                 購買明細
               </div>
               <div className="flex flex-col gap-2.5">
