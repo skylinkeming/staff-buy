@@ -1,6 +1,7 @@
 import { Table, ConfigProvider } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import QuantityInput from "./QuantityInput";
+import type { ReactNode } from "react";
 
 interface TableRowData {
   id: string;
@@ -16,6 +17,7 @@ interface MobileProductTableProps {
   onChangeQty: (prod: TableRowData, qty: number) => void;
   className?: string;
   isLoading?: boolean;
+  title?: ReactNode;
 }
 
 export default function MobileProductTable({
@@ -23,6 +25,7 @@ export default function MobileProductTable({
   onChangeQty,
   className = "",
   isLoading,
+  title,
 }: MobileProductTableProps) {
   const columns: ColumnsType<TableRowData> = [
     {
@@ -107,12 +110,13 @@ export default function MobileProductTable({
               headerBg: "#F5F5F5",
               headerColor: "#333333",
               cellPaddingBlock: 10,
-              cellPaddingInline: 8, 
+              cellPaddingInline: 8,
             },
           },
         }}
       >
         <Table
+          {...(title && { title: () => title })}
           dataSource={data}
           columns={columns}
           rowKey="id"
