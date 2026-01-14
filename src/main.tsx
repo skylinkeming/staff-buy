@@ -9,17 +9,19 @@ import "./index.css";
 import App from "./App.tsx";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import StaffProductPage from "./pages/staffbuy/StaffProductPage.tsx";
-import StaffCheckoutPage from "./pages/staffbuy/StaffCheckoutPage.tsx";
-import StaffOrderOrderHistoryPage from "./pages/staffbuy/StaffOrderHistoryPage.tsx";
-import AppAlert from "./components/common/AppAlert.tsx";
-import AuthWrapper from "./components/AuthWrapper.tsx";
-import GroupBuyProductPage from "./pages/groupbuy/GroupProductPage.tsx";
-import GroupCheckoutPage from "./pages/groupbuy/GroupCheckoutPage.tsx";
+import StaffProductPage from "@/pages/staffbuy/StaffProductPage.tsx";
+import StaffCheckoutPage from "@/pages/staffbuy/StaffCheckoutPage.tsx";
+import StaffOrderOrderHistoryPage from "@/pages/staffbuy/StaffOrderHistoryPage.tsx";
+import AppAlert from "@/components/common/AppAlert.tsx";
+import AuthWrapper from "@/components/AuthWrapper.tsx";
+import GroupBuyProductPage from "@/pages/groupbuy/GroupProductPage.tsx";
+import GroupCheckoutPage from "@/pages/groupbuy/GroupCheckoutPage.tsx";
+import ErrorPage from "@/pages/ErrorPage.tsx";
 
 const router = createBrowserRouter([
   {
     element: <AuthWrapper />,
+    errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <App /> },
       { path: "/staffbuy", element: <StaffProductPage /> },
