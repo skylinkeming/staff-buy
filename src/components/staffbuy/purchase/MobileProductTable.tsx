@@ -101,7 +101,7 @@ export default function MobileProductTable({
 
   return (
     <div
-      className={`w-full bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] ${className}`}
+      className={`no-padding-title w-full bg-white border-[#F5F5F5] border-[2px] rounded-[10px] mb-[40px] ${className}`}
     >
       <ConfigProvider
         theme={{

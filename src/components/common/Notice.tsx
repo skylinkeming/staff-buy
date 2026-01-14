@@ -28,7 +28,7 @@ export default function Notice({ className = "" }: { className?: string }) {
       }
     >
       <div
-        className="bg-staffbuy-primary flex items-center justify-center text-white h-[32px] relative cursor-pointer z-20"
+        className="bg-staffbuy-primary flex items-center pl-3.5 text-white h-[32px] relative cursor-pointer z-20"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="font-medium">注意事項</span>
@@ -53,7 +53,7 @@ export default function Notice({ className = "" }: { className?: string }) {
         >
           {data?.notice && (
             <div
-              className="py-[15px] px-[20px] whitespace-pre-line text-sm text-gray-700 leading-relaxed pb-8"
+              className="py-[15px] px-[15px] whitespace-pre-line text-sm text-gray-700 leading-relaxed pb-8"
               dangerouslySetInnerHTML={{ __html: data?.notice }}
             />
           )}

@@ -3,7 +3,6 @@ import type { ColumnsType } from "antd/es/table";
 import QuantityInput from "./QuantityInput";
 import type { ReactNode } from "react";
 
-
 export interface TableRowData {
   id: string;
   name: string;
@@ -28,61 +27,6 @@ export default function ProductTable({
   isLoading,
   title,
 }: ProductTableProps) {
-  // 1. 定義通用的搜尋配置函數
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
-      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
-        <Input
-          ref={searchInput}
-          placeholder={`搜尋 ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => confirm()}
-          style={{ marginBottom: 8, display: "block" }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => confirm()}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            搜尋
-          </Button>
-          <Button
-            onClick={() => {
-              clearFilters();
-              confirm(); // 立即清除並重整
-            }}
-            size="small"
-            style={{ width: 90 }}
-          >
-            重置
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-    ),
-    // 2. 這是核心邏輯：如何比對資料
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-  });
   // 定義欄位設定
   const columns: ColumnsType<TableRowData> = [
     {
@@ -122,10 +66,6 @@ export default function ProductTable({
             inputNumber={record.quantity}
             onChange={(val) => {
               if (val > record.stock) {
-                // AppAlert({
-                //   message: "超過剩餘數量",
-                //   hideCancel: true,
-                // });
                 onChangeQty(record, record.stock);
                 return;
               }
@@ -157,17 +97,19 @@ export default function ProductTable({
               headerBg: "#F5F5F5",
               headerColor: "#333333",
               cellPaddingBlock: 10,
-              headerBorderRadius: 10,
+              // headerBorderRadius: 10,
               colorBorderSecondary: "transparent",
               bodySortBg: "#FAFAFA",
               rowHoverBg: "#FFF6E9",
-              borderRadius: 8,
+              // borderRadius: 8,
             },
           },
         }}
       >
         <Table
+          className="border border-[#E5E5E5] rounded-[10px] overflow-hidden no-padding-title"
           {...(title && { title: () => title })}
+          size="large"
           scroll={{ y: 500 }}
           dataSource={data}
           columns={columns}

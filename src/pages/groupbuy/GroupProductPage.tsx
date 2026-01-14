@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
-import { data, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { Grid, Select } from "antd";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import CartSummary from "@/components/staffbuy/purchase/CartSummary";
@@ -59,7 +59,6 @@ export default function GroupBuyProductPage() {
 
   const groupSelect = (
     <>
-      {/* <div className="mb-2.5">選擇團購主題</div> */}
       <Select
         className={"w-full"}
         value={
@@ -98,11 +97,11 @@ export default function GroupBuyProductPage() {
 
   const tableTitle =
     selectedGroup.id && selectedGroup.canBuyFrom ? (
-      <div className="bg-[#e6f4ff] p-2.5">
-        <div className="text-center text-[#0958d9] text-[16px] mb-2.5">
+      <div className="bg-[#e6f4ff] p-3.5 border-b border-[#91d5ff]">
+        <div className="text-center text-[#0958d9] md:text-left text-[16px] mb-2.5 font-bold">
           {selectedGroup.name}
         </div>
-        <div className="text-[#1E1E1E] flex flex-col justify-center gap-2.5 md:flex-row">
+        <div className="text-[#1E1E1E] flex flex-col justify-center md:justify-start gap-2.5 md:flex-row ">
           <div className="flex justify-center">
             <div className="">{"開放購買日期: "}</div>
             <div className="font-bold">{selectedGroup.canBuyFrom}</div>
@@ -188,10 +187,10 @@ export default function GroupBuyProductPage() {
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
             {groupSelect}
-            <Notice className="mt-2.5 mb-5 w-full md:w-auto" />
+            <Notice className="mt-5 mb-5 w-full md:w-auto" />
             <KeywordSearchAction
               key={selectedGroup?.id}
-              className="w-full mb-2.5"
+              className="w-full mb-5"
               placeholder="搜尋此團購的商品"
               onClickSearch={handleSearch}
             />
