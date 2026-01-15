@@ -58,7 +58,7 @@ export default function CartSummary({
                 <div className="w-35 shrink-0 font-bold text-[14px]">
                   {cartItem.productName}
                 </div>
-                <div className="w-[40px] shrink-0 text-[14px]">
+                <div className="w-[40px] shrink-0 text-[14px] text-right">
                   x {cartItem.quantity}
                 </div>
                 <div className="w-[25px] shrink-0 flex-1 text-right pr-[5px] text-[14px]">

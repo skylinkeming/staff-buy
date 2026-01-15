@@ -29,6 +29,9 @@ h1 {
 .no-padding-title .ant-table-title {
   padding: 0 !important;
 }
+.no-padding-title .ant-table-footer {
+  padding: 0 !important;
+}
 
 /* 手機版range-picker改成直排顯示日曆 */
 @media (max-width: 576px) {

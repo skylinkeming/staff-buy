@@ -56,56 +56,58 @@ export default function GroupBuyProductPage() {
 
   const cartItems = Object.values(groupCart);
 
+  //團購主題選取器
   const groupSelect = (
-    <>
-      <Select
-        className={"w-full"}
-        value={
-          selectedGroup?.id
-            ? selectedGroup?.id
-            : groupbuyList?.length
-            ? groupbuyList[0].iD_GroupBy.toString()
-            : ""
-        }
-        popupMatchSelectWidth={false}
-        onChange={(val) => {
-          const targetGroup = groupbuyList?.find(
-            (g) => g.iD_GroupBy.toString() == val
-          );
-          if (!targetGroup) return;
-          updateSelectedGroup({
-            name: targetGroup.cX_GroupBy_Name,
-            id: targetGroup?.iD_GroupBy.toString(),
-            canBuyFrom: targetGroup?.dT_CanBuyFrom,
-            canBuyTo: targetGroup?.dT_CanBuyTo,
-          });
-          setSearchkey("");
-        }}
-        options={
-          groupbuyList
-            ? groupbuyList.map((g) => ({
-                value: g.iD_GroupBy.toString(),
-                label: g.cX_GroupBy_Name,
-                // disabled: g.,
-              }))
-            : []
-        }
-      />
-    </>
+    <Select
+      className={
+        "w-full h-8 " +
+        (selectedGroup?.id ? "" : "")
+      }
+      value={
+        selectedGroup?.id
+          ? selectedGroup?.id
+          : groupbuyList?.length
+          ? groupbuyList[0].iD_GroupBy.toString()
+          : ""
+      }
+      popupMatchSelectWidth={false}
+      onChange={(val) => {
+        const targetGroup = groupbuyList?.find(
+          (g) => g.iD_GroupBy.toString() == val
+        );
+        if (!targetGroup) return;
+        updateSelectedGroup({
+          name: targetGroup.cX_GroupBy_Name,
+          id: targetGroup?.iD_GroupBy.toString(),
+          canBuyFrom: targetGroup?.dT_CanBuyFrom,
+          canBuyTo: targetGroup?.dT_CanBuyTo,
+        });
+        setSearchkey("");
+      }}
+      options={
+        groupbuyList
+          ? groupbuyList.map((g) => ({
+              value: g.iD_GroupBy.toString(),
+              label: g.cX_GroupBy_Name,
+              // disabled: g.,
+            }))
+          : []
+      }
+    />
   );
 
   const tableTitle =
     selectedGroup.id && selectedGroup.canBuyFrom ? (
       <div className="bg-[#e6f4ff] p-3.5 border-b border-[#91d5ff]">
-        <div className="text-center text-[#0958d9] md:text-left text-[16px] mb-2.5 font-bold">
-          {selectedGroup.name}
+        <div className="text-[#0958d9] text-center text-[16px] mb-2.5 font-bold">
+          團購主題: {selectedGroup.name}
         </div>
-        <div className="text-[#1E1E1E] flex flex-col justify-center md:justify-start gap-2.5 md:flex-row ">
-          <div className="flex justify-center">
-            <div className="">{"開放購買日期: "}</div>
+        <div className="text-[#1E1E1E] flex flex-col justify-center gap-2.5 md:flex-row ">
+          <div className="flex justify-center gap-2.5">
+            <div className="">{"開放購買日期:"}</div>
             <div className="font-bold">{selectedGroup.canBuyFrom}</div>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-2.5">
             <div>{" ~  截止購買日期: "}</div>
             <div className="font-bold">{selectedGroup.canBuyTo}</div>
           </div>
@@ -130,6 +132,31 @@ export default function GroupBuyProductPage() {
       subtotal: groupCart[prd.id] ? groupCart[prd.id]?.quantity * prd.price : 0,
     };
   });
+
+  const renderProductTable = () => {
+    if (!selectedGroup?.id)
+      return <></>;
+
+    return screens.md ? (
+      <ProductTable
+        key={rawProducts?.length}
+        className="hidden md:inline-block"
+        isLoading={loading || fetching}
+        data={tableData}
+        onChangeQty={handleAmountChange}
+        title={tableTitle}
+      />
+    ) : (
+      <MobileProductTable
+        key={rawProducts?.length}
+        className="inline-block md:hidden"
+        isLoading={loading}
+        data={tableData}
+        onChangeQty={handleAmountChange}
+        title={tableTitle}
+      />
+    );
+  };
 
   const handleSearch = (inputVal: string) => {
     setLoading(true);
@@ -185,33 +212,17 @@ export default function GroupBuyProductPage() {
         <BlockTitle className="mb-4">團購</BlockTitle>
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
-            {groupSelect}
-            <Notice className="mt-5 mb-5 w-full md:w-auto" />
-            <KeywordSearchAction
-              key={selectedGroup?.id}
-              className="w-full mb-5"
-              placeholder="搜尋此團購的商品"
-              onClickSearch={handleSearch}
-            />
-            {screens.md ? (
-              <ProductTable
-                key={rawProducts?.length}
-                className="hidden md:inline-block"
-                isLoading={loading || fetching}
-                data={tableData}
-                onChangeQty={handleAmountChange}
-                title={tableTitle}
+            <Notice className="mb-5 w-full md:w-auto" />
+            <div className="flex flex-col md:flex-row gap-2.5 mb-5">
+              {groupSelect}
+              <KeywordSearchAction
+                key={selectedGroup?.id}
+                className={"w-full " + (selectedGroup?.id ? "" : "hidden")}
+                placeholder="搜尋此團購的商品"
+                onClickSearch={handleSearch}
               />
-            ) : (
-              <MobileProductTable
-                key={rawProducts?.length}
-                className="inline-block md:hidden"
-                isLoading={loading}
-                data={tableData}
-                onChangeQty={handleAmountChange}
-                title={tableTitle}
-              />
-            )}
+            </div>
+            {renderProductTable()}
           </div>
           <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
             <CartSummary showDetail />
