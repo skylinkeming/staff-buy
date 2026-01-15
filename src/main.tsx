@@ -17,6 +17,7 @@ import AuthWrapper from "@/components/AuthWrapper.tsx";
 import GroupBuyProductPage from "@/pages/groupbuy/GroupProductPage.tsx";
 import GroupCheckoutPage from "@/pages/groupbuy/GroupCheckoutPage.tsx";
 import ErrorPage from "@/pages/ErrorPage.tsx";
+import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +41,10 @@ const router = createBrowserRouter([
         element: <GroupBuyProductPage />,
       },
       { path: "/groupbuy/checkout", element: <GroupCheckoutPage /> },
-
+      {
+        path: "/groupbuy/orders",
+        element: <GroupOrderHistoryPage />,
+      },
       {
         path: "/partyup",
         element: (

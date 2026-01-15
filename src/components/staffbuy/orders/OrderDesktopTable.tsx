@@ -12,6 +12,9 @@ const DataRow = ({ field, value, isTotalPrice, link }: any) => {
       className={
         "flex w-full mb-2.5 " + (isTotalPrice ? "mt-3.5 items-end" : "")
       }
+      onClick={() => {
+        if (link) window.open(link);
+      }}
     >
       <span className={"text-sm w-35 font-bold"}>{field}</span>
       <span className={textStyle}>{value}</span>

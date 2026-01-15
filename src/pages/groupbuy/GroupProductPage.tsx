@@ -13,8 +13,7 @@ import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTabl
 import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
-import { useDebounce } from "@/hooks/useDebounce";
-import { staffbuyApi } from "@/api/staffbuyApi";
+// import { useDebounce } from "@/hooks/useDebounce";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 
 const CART_TYPE = "group";
@@ -141,28 +140,28 @@ export default function GroupBuyProductPage() {
   };
 
   // 取得庫存數量
-  const debouncedFetchStock = useDebounce(
-    async (item: TableRowData, requestedQty: number) => {
-      let realStock = 9999;
+  // const debouncedFetchStock = useDebounce(
+  //   async (item: TableRowData, requestedQty: number) => {
+  //     let realStock = 9999;
 
-      const result = await staffbuyApi.getProductStockList(item.id);
-      if (result?.data?.length > 0) realStock = result.data[0].nQ_StockQty;
-      if (realStock !== undefined && requestedQty > realStock) {
-        // 發現庫存不足，主動校正購物車數量回庫存最大值
-        AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
-        updateCart(
-          CART_TYPE,
-          {
-            productId: item.id,
-            productName: item.name,
-            price: item.price,
-          },
-          realStock
-        );
-      }
-    },
-    500
-  );
+  //     const result = await staffbuyApi.getProductStockList(item.id);
+  //     if (result?.data?.length > 0) realStock = result.data[0].nQ_StockQty;
+  //     if (realStock !== undefined && requestedQty > realStock) {
+  //       // 發現庫存不足，主動校正購物車數量回庫存最大值
+  //       AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
+  //       updateCart(
+  //         CART_TYPE,
+  //         {
+  //           productId: item.id,
+  //           productName: item.name,
+  //           price: item.price,
+  //         },
+  //         realStock
+  //       );
+  //     }
+  //   },
+  //   500
+  // );
 
   const handleAmountChange = (item: TableRowData, qty: number) => {
     updateCart(

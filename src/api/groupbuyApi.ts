@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
 });
 
@@ -16,13 +16,13 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => {
     const res = response.data;
-    // if (!res.success) {
-    //   let error = new Error(res.message || "系統錯誤");
-    //   if (res.statusCode?.includes("401")) {
-    //     error = new Error("登入逾時，請重新登入");
-    //   }
-    //   return Promise.reject(error);
-    // }
+    if (!res.success) {
+      let error = new Error(res.message || "系統錯誤");
+      if (res.statusCode?.includes("401")) {
+        error = new Error("登入逾時，請重新登入");
+      }
+      return Promise.reject(error);
+    }
 
     return response;
   },

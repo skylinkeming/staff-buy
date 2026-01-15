@@ -22,7 +22,7 @@ export default function QuantityInput({
     onChange(inputNumber - 1);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     onChange(parseInt(e.target.value ? e.target.value : "0"));
   };
 
