@@ -62,7 +62,7 @@ export interface GroupBuyData {
 
 export interface GroupByResponse {
   master: GroupByMaster;
-  detail: GroupByDetail[];
+  detail: GroupBuyProduct[];
 }
 
 export interface GroupByMaster {
@@ -78,7 +78,7 @@ export interface GroupByMaster {
   iD_GroupBy: number;
 }
 
-export interface GroupByDetail {
+export interface GroupBuyProduct {
   iD_Product: number;
   cX_ProductName: string;
   nQ_BuyQuantity: number;
@@ -87,6 +87,20 @@ export interface GroupByDetail {
   nQ_Total: number;
   nQ_Less: number;
   iD_GroupBy_Item: number;
+}
+
+export interface Option {
+  disabled: boolean;
+  selected: boolean;
+  text: string;
+  value: string;
+}
+
+export interface StockInfo {
+  iD_GroupBy_Item: number;
+  cX_ProductName: string;
+  nQ_Less: number;
+  nQ_OneMayQty: number;
 }
 
 export interface CreateOrderRequest {
@@ -111,8 +125,18 @@ export interface CreateOrderRequest {
   };
   detail: Array<{
     iD_Product: number;
+    iD_GroupBy_Item: number;
     nQ_BuyQuantity: number;
   }>;
+}
+
+export interface ShipPlace {
+  cX_Creater: string;
+  cX_IP: string;
+  cX_ShipPlace: string;
+  dT_Create: string;
+  iD_GroupBy: number;
+  iD_GroupByNavigation: any | null;
 }
 
 export const groupbuyApi = {
@@ -126,8 +150,47 @@ export const groupbuyApi = {
         "/GroupBuy/GetGroupBuyData?id=" + groupBuyId
       )
       .then((res) => res.data),
+  getStock: (groupItemId: string) =>
+    api
+      .get<ApiResponse<StockInfo>>("/GroupBuy/GetStock?id=" + groupItemId)
+      .then((res) => res.data),
+  getInvoicePickupStoreList: () =>
+    api
+      .get<ApiResponse<Array<Option>>>("/Common/GetInvoicePickupStoreList")
+      .then((res) => res.data),
+  getPickupPlaceByGroupId: (groupId: string) =>
+    api
+      .get<ApiResponse<Array<ShipPlace>>>(
+        "/Common/GetPickupPlaceByGroupBuyId?id_group=" + groupId
+      )
+      .then((res) => res.data),
   createOrder: (body: CreateOrderRequest) =>
     api
       .post<ApiResponse<string>>("/GroupBuy/Create", body)
       .then((res) => res.data),
+  getMyOrders: ({
+    page = 1,
+    pageSize = 10,
+    orderId,
+    startDate,
+    endDate,
+  }: {
+    page: number;
+    pageSize?: number;
+    orderId?: string;
+    startDate?: string;
+    endDate?: string;
+  }) => {
+    let baseUrl = `/Order/GetOrderList?Page=${page}&PageSize=${pageSize}`;
+
+    if (orderId) {
+      baseUrl += `&OrderId=${orderId}`;
+    }
+
+    if (startDate && endDate) {
+      baseUrl += `&StartDate=${startDate}&EndDate=${endDate}`;
+    }
+
+    return api.get<ApiResponse<any>>(baseUrl).then((res) => res.data);
+  },
 };

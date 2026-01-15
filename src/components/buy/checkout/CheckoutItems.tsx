@@ -4,10 +4,12 @@ import QuantityInput from "../purchase/QuantityInput";
 import { FaRegTrashAlt } from "react-icons/fa";
 import AppAlert from "@/components/common/AppAlert";
 import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
-import { useDebounce } from "@/hooks/useDebounce";
-import { staffbuyApi } from "@/api/staffbuyApi";
 
-export default function CheckoutItems() {
+export default function CheckoutItems({
+  onAmountChange,
+}: {
+  onAmountChange: (cartItem: CartItem, qty: number) => void;
+}) {
   const location = useLocation();
   const isStaffBuy = location.pathname.includes("staffbuy");
   const cart = useCartStore((state) =>
@@ -26,31 +28,6 @@ export default function CheckoutItems() {
       removeFromCart(CART_TYPE, itemId);
     }
   };
-
-  // 取得庫存數量
-  const debouncedFetchStock = useDebounce(
-    async (cartItem: CartItem, requestedQty: number) => {
-      let realStock = 9999;
-
-      const result = await staffbuyApi.getProductStockList(cartItem.productId);
-      if (result.data.length > 0) realStock = result.data[0].nQ_StockQty;
-
-      if (realStock !== undefined && requestedQty > realStock) {
-        // 發現庫存不足，主動校正購物車數量回庫存最大值
-        AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
-        updateCart(
-          CART_TYPE,
-          {
-            productId: cartItem.productId,
-            productName: cartItem.productName,
-            price: cartItem.price,
-          },
-          realStock
-        );
-      }
-    },
-    500
-  );
 
   const handleAmountChange = async (cartItem: CartItem, qty: number) => {
     if (qty === 0) {
@@ -71,10 +48,7 @@ export default function CheckoutItems() {
       qty
     );
 
-    if (isStaffBuy) {
-      // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
-      debouncedFetchStock(cartItem, qty);
-    }
+    onAmountChange(cartItem, qty);
   };
 
   return (

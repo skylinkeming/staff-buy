@@ -3,14 +3,14 @@ import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
 import { Grid } from "antd";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
-import CartSummary from "@/components/staffbuy/purchase/CartSummary";
+import CartSummary from "@/components/buy/purchase/CartSummary";
 import Notice from "@/components/common/Notice";
 import ProductTable, {
   type TableRowData,
-} from "@/components/staffbuy/purchase/ProductTable";
+} from "@/components/buy/purchase/ProductTable";
 import KeywordSearchAction from "@/components/common/KeywordSearchAction";
-import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
-import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
+import MobileProductTable from "@/components/buy/purchase/MobileProductTable";
+import MobileCheckoutBar from "@/components/buy/purchase/MobileCheckoutBar";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
 import { useDebounce } from "@/hooks/useDebounce";

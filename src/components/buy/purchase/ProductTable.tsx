@@ -10,6 +10,7 @@ export interface TableRowData {
   stock: number;
   quantity: number;
   subtotal: number;
+  groupBuyItemId?: string;
 }
 
 interface ProductTableProps {
@@ -122,7 +123,7 @@ export default function ProductTable({
           }
           locale={{ emptyText: "查無資料" }}
           virtual
-          footer={()=><div className="bg-white h-6"></div>}
+          footer={() => <div className="bg-white h-6"></div>}
         />
       </ConfigProvider>
     </div>

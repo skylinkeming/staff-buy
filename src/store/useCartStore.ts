@@ -5,6 +5,8 @@ export interface CartItem {
   productName: string;
   price: number;
   quantity: number;
+  //團購才會用到
+  groupItemId?: string;
 }
 
 export interface CartState {
@@ -24,6 +26,7 @@ export interface CartState {
   shippingInfo: {
     isDelivery: "Y" | "N";
     pickupDate: string;
+    location: string;
     name: string;
     phone: string;
     address: string;
@@ -81,6 +84,7 @@ export const useCartStore = create<CartState>((set) => ({
     deliveryTime: "",
     isDelivery: "N",
     bagQty: "0",
+    location: "",
   },
   invoiceInfo: {
     location: "",
@@ -124,10 +128,14 @@ export const useCartStore = create<CartState>((set) => ({
   clearCart: (type) =>
     set(() => {
       const cartKey = type === "staff" ? "staffCart" : "groupCart";
-
       return {
         [cartKey]: {},
-        selectedGroupbuyId: "",
+        selectedGroup: {
+          id: "",
+          name: "",
+          canBuyFrom: "",
+          canBuyTo: "",
+        },
         shippingInfo: {
           pickupDate: "",
           name: "",
@@ -136,6 +144,7 @@ export const useCartStore = create<CartState>((set) => ({
           deliveryTime: "",
           isDelivery: "N",
           bagQty: "0",
+          location: "",
         },
         invoiceInfo: {
           location: "",

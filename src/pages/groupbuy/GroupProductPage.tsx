@@ -2,19 +2,19 @@ import { useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
 import { Grid, Select } from "antd";
-import { useStaffbuyApi } from "@/api/useStaffbuyApi";
-import CartSummary from "@/components/staffbuy/purchase/CartSummary";
+import CartSummary from "@/components/buy/purchase/CartSummary";
 import Notice from "@/components/common/Notice";
 import ProductTable, {
   type TableRowData,
-} from "@/components/staffbuy/purchase/ProductTable";
+} from "@/components/buy/purchase/ProductTable";
 import KeywordSearchAction from "@/components/common/KeywordSearchAction";
-import MobileProductTable from "@/components/staffbuy/purchase/MobileProductTable";
-import MobileCheckoutBar from "@/components/staffbuy/purchase/MobileCheckoutBar";
+import MobileProductTable from "@/components/buy/purchase/MobileProductTable";
+import MobileCheckoutBar from "@/components/buy/purchase/MobileCheckoutBar";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
-// import { useDebounce } from "@/hooks/useDebounce";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
+import { groupbuyApi } from "@/api/groupbuyApi";
 
 const CART_TYPE = "group";
 const { useBreakpoint } = Grid;
@@ -47,32 +47,26 @@ export default function GroupBuyProductPage() {
   const updateCart = useCartStore((state) => state.updateCart);
   const groupCart = useCartStore((state) => state.groupCart);
 
-  const { data: rawProducts, isLoading: fetching } =
-    useStaffbuyApi.useProductListQuery();
-  const { data: groupbuyList } = useGroupbuyApi.useGroupBuyListQuery();
-  const { data: groupbuyItems } = useGroupbuyApi.useGroupBuyDataQuery(
-    selectedGroup.id
-  );
+  const { data: groupbuyTopicList } = useGroupbuyApi.useGroupBuyListQuery();
+  const { data: groupbuyProducts, isLoading: isFetching } =
+    useGroupbuyApi.useGroupBuyProductListQuery(selectedGroup.id);
 
   const cartItems = Object.values(groupCart);
 
   //團購主題選取器
   const groupSelect = (
     <Select
-      className={
-        "w-full h-8 " +
-        (selectedGroup?.id ? "" : "")
-      }
+      className={"w-full h-8 " + (selectedGroup?.id ? "" : "")}
       value={
         selectedGroup?.id
           ? selectedGroup?.id
-          : groupbuyList?.length
-          ? groupbuyList[0].iD_GroupBy.toString()
+          : groupbuyTopicList?.length
+          ? groupbuyTopicList[0].iD_GroupBy.toString()
           : ""
       }
       popupMatchSelectWidth={false}
       onChange={(val) => {
-        const targetGroup = groupbuyList?.find(
+        const targetGroup = groupbuyTopicList?.find(
           (g) => g.iD_GroupBy.toString() == val
         );
         if (!targetGroup) return;
@@ -85,8 +79,8 @@ export default function GroupBuyProductPage() {
         setSearchkey("");
       }}
       options={
-        groupbuyList
-          ? groupbuyList.map((g) => ({
+        groupbuyTopicList
+          ? groupbuyTopicList.map((g) => ({
               value: g.iD_GroupBy.toString(),
               label: g.cX_GroupBy_Name,
               // disabled: g.,
@@ -96,6 +90,7 @@ export default function GroupBuyProductPage() {
     />
   );
 
+  // 商品表格title資訊
   const tableTitle =
     selectedGroup.id && selectedGroup.canBuyFrom ? (
       <div className="bg-[#e6f4ff] p-3.5 border-b border-[#91d5ff]">
@@ -115,15 +110,15 @@ export default function GroupBuyProductPage() {
       </div>
     ) : null;
 
+  // 根據搜尋字串過濾
   const filteredProducts = useMemo(() => {
-    if (!groupbuyItems) return [];
-    const showList = [...groupbuyItems];
+    if (!groupbuyProducts) return [];
+    const showList = [...groupbuyProducts];
 
-    // 根據搜尋字串過濾
     return showList.filter((p) =>
       p.name.toLowerCase().includes(searchkey.toLowerCase())
     );
-  }, [groupbuyItems, searchkey]);
+  }, [groupbuyProducts, searchkey]);
 
   const tableData = filteredProducts.map((prd) => {
     return {
@@ -134,21 +129,20 @@ export default function GroupBuyProductPage() {
   });
 
   const renderProductTable = () => {
-    if (!selectedGroup?.id)
-      return <></>;
+    if (!selectedGroup?.id) return <></>;
 
     return screens.md ? (
       <ProductTable
-        key={rawProducts?.length}
+        key={groupbuyProducts?.length}
         className="hidden md:inline-block"
-        isLoading={loading || fetching}
+        isLoading={loading || isFetching}
         data={tableData}
         onChangeQty={handleAmountChange}
         title={tableTitle}
       />
     ) : (
       <MobileProductTable
-        key={rawProducts?.length}
+        key={groupbuyProducts?.length}
         className="inline-block md:hidden"
         isLoading={loading}
         data={tableData}
@@ -167,34 +161,38 @@ export default function GroupBuyProductPage() {
   };
 
   // 取得庫存數量
-  // const debouncedFetchStock = useDebounce(
-  //   async (item: TableRowData, requestedQty: number) => {
-  //     let realStock = 9999;
+  const debouncedFetchStock = useDebounce(
+    async (item: TableRowData, requestedQty: number) => {
+      let realStock = 9999;
 
-  //     const result = await staffbuyApi.getProductStockList(item.id);
-  //     if (result?.data?.length > 0) realStock = result.data[0].nQ_StockQty;
-  //     if (realStock !== undefined && requestedQty > realStock) {
-  //       // 發現庫存不足，主動校正購物車數量回庫存最大值
-  //       AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
-  //       updateCart(
-  //         CART_TYPE,
-  //         {
-  //           productId: item.id,
-  //           productName: item.name,
-  //           price: item.price,
-  //         },
-  //         realStock
-  //       );
-  //     }
-  //   },
-  //   500
-  // );
+      //PS: 查庫存要用groupBuyItemId, 但建立訂單要用id
+      const result = await groupbuyApi.getStock(item.groupBuyItemId!);
+      if (!result) return;
+
+      realStock = result.data.nQ_Less;
+      if (realStock !== undefined && requestedQty > realStock) {
+        // 發現庫存不足，主動校正購物車數量回庫存最大值
+        AppAlert({ message: `庫存不足，目前剩餘 ${realStock}` });
+        updateCart(
+          CART_TYPE,
+          {
+            productId: item.id,
+            productName: item.name,
+            price: item.price,
+          },
+          realStock
+        );
+      }
+    },
+    500
+  );
 
   const handleAmountChange = (item: TableRowData, qty: number) => {
     updateCart(
       CART_TYPE,
       {
         productId: item.id,
+        groupItemId: item.groupBuyItemId!,
         productName: item.name,
         price: item.price,
       },
@@ -202,7 +200,7 @@ export default function GroupBuyProductPage() {
     );
 
     // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
-    // debouncedFetchStock(item, qty);
+    debouncedFetchStock(item, qty);
   };
 
   return (

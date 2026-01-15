@@ -3,14 +3,22 @@ import FormInput from "../../common/FormInput";
 import { useEffect } from "react";
 import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
+import { useGroupbuyApi } from "@/api/useGroupbuyApi";
+import { useLocation } from "react-router";
 
 export default function ShippingInfo({
   isSubmitting,
 }: {
   isSubmitting: boolean;
 }) {
+  const location = useLocation();
+  const isGroupBuy = location.pathname.includes("groupbuy");
   const { data: bagList } = useStaffbuyApi.useBagListQuery();
   const { data: shiptimeList } = useStaffbuyApi.useShiptimeListQuery();
+  const selectedGroup = useCartStore((state) => state.selectedGroup);
+  const { data: pickupStoreList } = useGroupbuyApi.usePickupStoreListQuery(
+    selectedGroup?.id
+  );
   const updateShippingInfo = useCartStore((state) => state.updateShippingInfo);
   const shippingInfo = useCartStore((state) => state.shippingInfo);
   const setFormError = useCartStore((state) => state.setFormError);
@@ -19,10 +27,11 @@ export default function ShippingInfo({
     key
   ) => {
     if (!isSubmitting) return "";
-    return validateRules(shippingInfo)[key]();
+
+    return validateRules(shippingInfo, isGroupBuy)[key]();
   };
 
-  const hasError = Object.values(validateRules(shippingInfo)).some(
+  const hasError = Object.values(validateRules(shippingInfo, isGroupBuy)).some(
     (rule) => rule() !== ""
   );
 
@@ -67,22 +76,45 @@ export default function ShippingInfo({
             });
           }}
         />
-        <FormInput
-          required
-          variant="select"
-          label="取貨方式"
-          value={shippingInfo.isDelivery}
-          optionData={[
-            { value: "N", label: "自取" },
-            { value: "Y", label: "宅配" },
-          ]}
-          errorMsg={getFieldErrorMsg("isDelivery")}
-          onChange={(val) => {
-            updateShippingInfo({
-              isDelivery: val as "Y" | "N",
-            });
-          }}
-        />
+        {pickupStoreList ? (
+          <FormInput
+            required
+            variant="select"
+            label="取貨方式"
+            value={shippingInfo.location}
+            optionData={
+              pickupStoreList
+                ? pickupStoreList?.map((b) => ({
+                    value: b.cX_ShipPlace,
+                    label: b.cX_ShipPlace,
+                  }))
+                : []
+            }
+            errorMsg={getFieldErrorMsg("location")}
+            onChange={(val) => {
+              updateShippingInfo({
+                location: val,
+              });
+            }}
+          />
+        ) : (
+          <FormInput
+            required
+            variant="select"
+            label="取貨方式"
+            value={shippingInfo.isDelivery}
+            optionData={[
+              { value: "N", label: "自取" },
+              { value: "Y", label: "宅配" },
+            ]}
+            errorMsg={getFieldErrorMsg("isDelivery")}
+            onChange={(val) => {
+              updateShippingInfo({
+                isDelivery: val as "Y" | "N",
+              });
+            }}
+          />
+        )}
         {shippingInfo.isDelivery === "Y" && (
           <>
             <FormInput
@@ -146,7 +178,10 @@ export default function ShippingInfo({
   );
 }
 
-const validateRules = (shippingInfo: Partial<CartState["shippingInfo"]>) => ({
+const validateRules = (
+  shippingInfo: Partial<CartState["shippingInfo"]>,
+  isGroupBuy?: boolean
+) => ({
   pickupDate: () => {
     if (!shippingInfo.pickupDate) return "請選擇取件日期";
     return "";
@@ -177,6 +212,11 @@ const validateRules = (shippingInfo: Partial<CartState["shippingInfo"]>) => ({
   deliveryTime: () => {
     if (shippingInfo.isDelivery === "N") return "";
     if (!shippingInfo.deliveryTime) return "請填寫希望宅配時間";
+    return "";
+  },
+  location: () => {
+    if (!isGroupBuy || shippingInfo.location) return "";
+    if (!shippingInfo.location) return "請選擇取貨方式";
     return "";
   },
 });

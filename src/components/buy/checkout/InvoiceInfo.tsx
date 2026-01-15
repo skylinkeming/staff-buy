@@ -15,10 +15,12 @@ export default function InvoiceInfo({
   const { data: invoicePickupStoreList } =
     useStaffbuyApi.useInvoicePickStoreListQuery(isGroupBuy);
 
+
   const updateInvoiceInfo = useCartStore((state) => state.updateInvoiceInfo);
   const invoiceInfo = useCartStore((state) => state.invoiceInfo);
   const setFormError = useCartStore((state) => state.setFormError);
 
+  // 驗證表單資訊
   const validateRules = (invoiceInfo: Partial<CartState["invoiceInfo"]>) => ({
     location: () => {
       if (isGroupBuy && !invoiceInfo.location) return "請選擇發票領取地點";
@@ -41,6 +43,7 @@ export default function InvoiceInfo({
     },
   });
 
+  // 取得欄位錯誤訊息
   const getFieldErrorMsg: (key: keyof typeof invoiceInfo) => string = (key) => {
     if (!isSubmitting) return "";
     return validateRules(invoiceInfo)[key]();
