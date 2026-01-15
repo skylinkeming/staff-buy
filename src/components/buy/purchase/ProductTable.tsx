@@ -37,6 +37,11 @@ export default function ProductTable({
       align: "left",
       width: 180,
       sorter: (a, b) => a.name.localeCompare(b.name),
+      render: (_, record) => (
+        <div className={"flex justify-center "}>
+          {record.name + (record.stock === 0 ? "(剩餘:0)" : "")}
+        </div>
+      ),
     },
     {
       title: "購買價格",
@@ -61,18 +66,22 @@ export default function ProductTable({
       shouldCellUpdate: (prev, next) => prev.quantity !== next.quantity,
       sorter: (a, b) => a.quantity - b.quantity,
       render: (_, record) => (
-        <div className="flex justify-center">
-          <QuantityInput
-            variant={"stepper"}
-            inputNumber={record.quantity}
-            onChange={(val) => {
-              if (val > record.stock) {
-                onChangeQty(record, record.stock);
-                return;
-              }
-              onChangeQty(record, val);
-            }}
-          />
+        <div className={"flex justify-center"}>
+          {record.stock === 0 ? (
+            0
+          ) : (
+            <QuantityInput
+              variant={"stepper"}
+              inputNumber={record.quantity}
+              onChange={(val) => {
+                if (val > record.stock) {
+                  onChangeQty(record, record.stock);
+                  return;
+                }
+                onChangeQty(record, val);
+              }}
+            />
+          )}
         </div>
       ),
     },
@@ -118,9 +127,15 @@ export default function ProductTable({
           loading={isLoading}
           pagination={false}
           sticky
-          rowClassName={(record) =>
-            record.quantity > 0 ? "bg-[#FFF6E9] hover:bg-[#FFF6E9]" : ""
-          }
+          rowClassName={(record) => {
+            if (record.quantity > 0) {
+              return "bg-[#FFF6E9] hover:bg-[#FFF6E9]";
+            }
+            if (record.stock === 0) {
+              return "row-disabled";
+            }
+            return "";
+          }}
           locale={{ emptyText: "查無資料" }}
           virtual
           footer={() => <div className="bg-white h-6"></div>}

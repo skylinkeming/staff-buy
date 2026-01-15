@@ -33,6 +33,12 @@ h1 {
   padding: 0 !important;
 }
 
+.row-disabled {
+  color: #b6b6b6 !important; 
+  background-color:white; 
+  pointer-events: none;
+}
+
 /* 手機版range-picker改成直排顯示日曆 */
 @media (max-width: 576px) {
   .ant-picker-panels {

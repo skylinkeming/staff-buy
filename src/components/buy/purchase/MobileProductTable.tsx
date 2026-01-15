@@ -33,7 +33,12 @@ export default function MobileProductTable({
       key: "name",
       render: (_, record) => (
         <div className="">
-          <div className="font-medium leading-4 text-[#333] mb-1">
+          <div
+            className={
+              "font-medium leading-4 text-[#333] mb-1 " +
+              (record.stock === 0 ? "row-disabled" : "")
+            }
+          >
             {record.name}
           </div>
           <div className="flex gap-2.5">
@@ -68,23 +73,23 @@ export default function MobileProductTable({
       width: 120,
       sorter: (a, b) => a.quantity - b.quantity,
       shouldCellUpdate: (prev, next) => prev.quantity !== next.quantity,
-      render: (qty, record) => (
-        <div className="flex justify-center items-center">
-          <QuantityInput
-            variant={"stepper"}
-            inputNumber={qty}
-            onChange={(val) => {
-              if (val > record.stock) {
-                // AppAlert({
-                //   message: "超過剩餘數量",
-                //   hideCancel: true,
-                // });
-                onChangeQty(record, record.stock);
-                return;
-              }
-              onChangeQty(record, val);
-            }}
-          />
+      render: (_, record) => (
+        <div className={"flex justify-center"}>
+          {record.stock === 0 ? (
+            0
+          ) : (
+            <QuantityInput
+              variant={"stepper"}
+              inputNumber={record.quantity}
+              onChange={(val) => {
+                if (val > record.stock) {
+                  onChangeQty(record, record.stock);
+                  return;
+                }
+                onChangeQty(record, val);
+              }}
+            />
+          )}
         </div>
       ),
     },
@@ -123,9 +128,15 @@ export default function MobileProductTable({
           loading={isLoading}
           pagination={false}
           sticky
-          rowClassName={(record) =>
-            record.quantity > 0 ? "bg-[#FFF6E9]" : "border-b-[#F5F5F5]"
-          }
+          rowClassName={(record) => {
+            if (record.quantity > 0) {
+              return "bg-[#FFF6E9] hover:bg-[#FFF6E9]";
+            }
+            if (record.stock === 0) {
+              return "row-disabled";
+            }
+            return "";
+          }}
           locale={{ emptyText: "查無資料" }}
           bordered={false}
           virtual
