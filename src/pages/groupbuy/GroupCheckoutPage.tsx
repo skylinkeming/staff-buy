@@ -15,7 +15,7 @@ import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 export default function GroupCheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const groupCart = useCartStore((state) => state.groupCart);
-  const selectedGroupbuyId = useCartStore((state) => state.selectedGroupbuyId);
+  const selectedGroup = useCartStore((state) => state.selectedGroup);
   const clearCart = useCartStore((state) => state.clearCart);
   const formErrors = useCartStore((state) => state.formErrors);
   const invoiceInfo = useCartStore((state) => state.invoiceInfo);
@@ -60,7 +60,8 @@ export default function GroupCheckoutPage() {
         nQ_Bag: parseInt(shippingInfo.bagQty),
         cX_Invoice_ForWeb: invoiceInfo.carrierId,
         cX_Love_Code: invoiceInfo.loveCode,
-        iD_GroupBy: selectedGroupbuyId,
+        iD_GroupBy: selectedGroup.id,
+        cX_Invoice_Store: invoiceInfo.location,
       },
       detail: cartItems.map((ci) => ({
         iD_Product: parseInt(ci.productId),
@@ -77,7 +78,7 @@ export default function GroupCheckoutPage() {
         });
 
         clearCart("staff");
-        navigate("/staffbuy/orders");
+        navigate("/groupbuy/orders");
       },
       onError: (error) => {
         console.error("建立失敗:", error);

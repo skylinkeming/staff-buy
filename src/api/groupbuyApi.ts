@@ -106,6 +106,8 @@ export interface CreateOrderRequest {
     cX_Ship_Time: string;
     //團購主題id
     iD_GroupBy: string;
+    //發票領取地點
+    cX_Invoice_Store?: string;
   };
   detail: Array<{
     iD_Product: number;
