@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-query"; // 1. 引入
 import "./index.css";
 import App from "./App.tsx";
-import { createBrowserRouter } from "react-router";
+import { createHashRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import StaffProductPage from "@/pages/staffbuy/StaffProductPage.tsx";
 import StaffCheckoutPage from "@/pages/staffbuy/StaffCheckoutPage.tsx";
@@ -19,7 +19,7 @@ import GroupCheckoutPage from "@/pages/groupbuy/GroupCheckoutPage.tsx";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     element: <AuthWrapper />,
     errorElement: <ErrorPage />,

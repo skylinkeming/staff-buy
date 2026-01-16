@@ -35,10 +35,10 @@ export default function ProductTable({
       dataIndex: "name",
       key: "name",
       align: "left",
-      width: 180,
+      width: 220,
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (_, record) => (
-        <div className={"flex justify-center "}>
+        <div className={"flex justify-start "}>
           {record.name + (record.stock === 0 ? "(剩餘:0)" : "")}
         </div>
       ),
