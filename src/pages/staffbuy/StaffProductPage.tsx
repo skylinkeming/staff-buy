@@ -15,6 +15,7 @@ import Breadcrumbs from "@/components/common/BreadCrumbs";
 import AppAlert from "@/components/common/AppAlert";
 import { useDebounce } from "@/hooks/useDebounce";
 import { staffbuyApi } from "@/api/staffbuyApi";
+import UserDropdown from "@/components/common/UserDropdown";
 
 const CART_TYPE = "staff";
 const { useBreakpoint } = Grid;
@@ -115,8 +116,9 @@ export default function StaffProductPage() {
 
   return (
     <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
-      <div>
+      <div className="relative">
         <Breadcrumbs className="max-w-7xl mx-auto mt-10" />
+        <UserDropdown/>
         <BlockTitle className="mb-4">員購</BlockTitle>
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">

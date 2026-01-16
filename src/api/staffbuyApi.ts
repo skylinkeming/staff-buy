@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -6,7 +7,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = useAuthStore.getState().token;
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -18,12 +20,12 @@ api.interceptors.response.use(
     const res = response.data;
     if (!res.success) {
       const error: any = new Error(res.message || "系統錯誤");
-      
+
       if (res.statusCode?.includes("401") || res.code === 401) {
-        error.name = "AuthError"; 
+        error.name = "AuthError";
         error.message = "登入逾時，請重新登入";
       }
-      
+
       return Promise.reject(error);
     }
     return response;
