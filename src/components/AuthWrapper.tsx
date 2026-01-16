@@ -6,8 +6,10 @@ import { Spin } from "antd"; // 假設你用 antd 顯示加載中
 
 export default function AuthWrapper() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const qweValue = searchParams.get("qwe");
+  const nativeParams = new URLSearchParams(window.location.search);
+  const qweValue = nativeParams.get("qwe");
 
+  
   const { mutate: autoLogin, isPending } = useMutation({
     mutationFn: (qwe: string) => staffbuyApi.login({ qwe }),
     onSuccess: (res) => {
@@ -25,7 +27,6 @@ export default function AuthWrapper() {
       autoLogin(qweValue);
     }
   }, []);
-
 
   if (qweValue && isPending) {
     return (
