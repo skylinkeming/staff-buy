@@ -1,7 +1,7 @@
 import CheckoutItems from "../../components/buy/checkout/CheckoutItems";
 import OrdererInfo from "../../components/buy/checkout/OrdererInfo";
 import ShippingInfo from "../../components/buy/checkout/ShippingInfo";
-import InvoiceInfo from "../../components/buy/checkout/InvoiceInfo";
+import InvoiceInfo from "../../components/buy/checkout/Invoice";
 import MobileCheckoutBar from "@/components/buy/purchase/MobileCheckoutBar";
 import CartSummary from "@/components/buy/purchase/CartSummary";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
@@ -110,13 +110,14 @@ export default function GroupCheckoutPage() {
 
     handleCreateOrder(body, {
       onSuccess: async (data) => {
+        setIsSubmitting(false);
         console.log("訂單建立成功:", data);
         await AppAlert({
           message: "訂單建立成功",
           type: "success",
         });
 
-        clearCart("staff");
+        clearCart("group");
         navigate("/groupbuy/orders");
       },
       onError: (error) => {

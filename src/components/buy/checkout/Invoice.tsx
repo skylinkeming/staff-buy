@@ -15,7 +15,6 @@ export default function InvoiceInfo({
   const { data: invoicePickupStoreList } =
     useStaffbuyApi.useInvoicePickStoreListQuery(isGroupBuy);
 
-
   const updateInvoiceInfo = useCartStore((state) => state.updateInvoiceInfo);
   const invoiceInfo = useCartStore((state) => state.invoiceInfo);
   const setFormError = useCartStore((state) => state.setFormError);
@@ -27,7 +26,7 @@ export default function InvoiceInfo({
       return "";
     },
     carrierId: () => {
-      if (!!invoiceInfo.carrierId && !invoiceInfo.carrierId.startsWith("/")) {
+      if (!!invoiceInfo.carrierId && invoiceInfo.carrierId.length !== 8) {
         return "請確認載具格式";
       }
       if (!!invoiceInfo.carrierId && !!invoiceInfo.loveCode) {
@@ -98,6 +97,7 @@ export default function InvoiceInfo({
           value={invoiceInfo.carrierId}
           errorMsg={getFieldErrorMsg("carrierId")}
           onChange={(val) => {
+            if (val.length > 0 && !val.includes("/")) val = "/" + val;
             updateInvoiceInfo({
               carrierId: val,
             });

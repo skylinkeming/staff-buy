@@ -76,7 +76,7 @@ export default function ShippingInfo({
             });
           }}
         />
-        {pickupStoreList ? (
+        {pickupStoreList && isGroupBuy ? (
           <FormInput
             required
             variant="select"
