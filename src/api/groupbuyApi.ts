@@ -17,19 +17,20 @@ api.interceptors.response.use(
   (response) => {
     const res = response.data;
     if (!res.success) {
-      let error = new Error(res.message || "系統錯誤");
-      if (res.statusCode?.includes("401")) {
-        error = new Error("登入逾時，請重新登入");
+      const error: any = new Error(res.message || "系統錯誤");
+      
+      if (res.statusCode?.includes("401") || res.code === 401) {
+        error.name = "AuthError"; 
+        error.message = "登入逾時，請重新登入";
       }
+      
       return Promise.reject(error);
     }
-
     return response;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
+
 
 export interface ApiResponse<T> {
   data: T;

@@ -65,15 +65,19 @@ const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error.message.includes("請重新登入")) {
-        AppAlert({
-          message: "登入已逾時，請重新登入",
-          type: "warning",
-        }).then(() => {
-          // window.location.href = "/login"; // 或是使用 navigate
+      const isAuthError =
+        error.name === "AuthError" || error.message.includes("請重新登入");
+
+      if (isAuthError) {
+        queryClient.clear();
+        localStorage.removeItem("token");
+
+        AppAlert({ message: error.message, type: "warning" }).then(() => {
+          window.location.href = "/";
         });
         return;
       }
+
       console.error(error);
       AppAlert({
         message: error.message || "系統發生錯誤",
