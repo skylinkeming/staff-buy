@@ -8,7 +8,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
-  
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -132,13 +132,114 @@ export interface CreateOrderRequest {
   }>;
 }
 
-export interface ShipPlace {
-  cX_Creater: string;
-  cX_IP: string;
-  cX_ShipPlace: string;
-  dT_Create: string;
+interface ProductNavigation {
+  iD_Product: number;
+  cX_ProductName: string;
+  nQ_Quantity: number;
+  nQ_Original_Price: number | null;
+  nQ_Price: number;
+  cX_Unit: string;
+  nQ_Sort: number | null;
+  fG_IsUse: boolean | null;
+  cX_ItemNo: string | null;
+  dT_Create: string | null;
+  dT_Modify: string | null;
+  cX_ProductName_Shot: string | null;
+  nQ_StockQty: number | null;
+  fG_IsCal: boolean;
+  buyDs: any[];
+  cX_UnitNavigation: any | null;
+  groupBies: any[];
+  groupByItems: any[];
+  orderDs: any[];
+}
+
+interface GroupByItem {
+  iD_GroupBy_Item: number;
   iD_GroupBy: number;
+  iD_Product: number;
+  nQ_MaxQty: number;
+  nQ_OneMayQty: number;
+  buyDs: any[];
   iD_GroupByNavigation: any | null;
+  iD_ProductNavigation: ProductNavigation | null;
+}
+interface BuyD {
+  iD_BuyD: number;
+  iD_BuyM: number;
+  iD_GroupBy: number;
+  iD_GroupBy_Item: number;
+  iD_Product: number;
+  nQ_BuyQuantity: number;
+  dT_Create: string;
+  iD_BuyMNavigation: any | null;
+  iD_GroupByNavigation: any | null;
+  iD_GroupBy_ItemNavigation: GroupByItem;
+  iD_ProductNavigation: ProductNavigation;
+}
+
+interface ShipPlace {
+  iD_GroupBy: number;
+  cX_ShipPlace: string;
+  cX_Creater: string;
+  dT_Create: string;
+  cX_IP: string;
+  iD_GroupByNavigation: any | null;
+}
+
+interface GroupByNavigation {
+  iD_GroupBy: number;
+  iD_Product: number;
+  cX_GroupBy_Name: string;
+  nQ_GroupBy_Total_Quantity: number;
+  fG_Status: string;
+  cX_GetDate: string | null;
+  staff_PID: string | null;
+  dT_Create: string;
+  dT_Modify: string | null;
+  fG_IsTranning: boolean;
+  dT_CanBuyFrom: string;
+  dT_CanBuyTo: string;
+  buyDs: any[];
+  buyMs: any[];
+  groupByItems: GroupByItem[];
+  iD_ProductNavigation: any | null;
+  orderMs: any[];
+  shipPlaces: ShipPlace[];
+}
+
+export interface OrderItem {
+  iD_BuyM: number;
+  iD_GroupBy: number;
+  cX_Serialnumber: string | null;
+  cX_Name: string;
+  cX_PID: string;
+  fG_Transport: string; // "N" or "Y"
+  cX_Tel: string;
+  cX_Address: string;
+  cX_Ship_Name: string;
+  cX_Ship_Time: string;
+  cX_BuyIP: string | null;
+  dT_Create: string;
+  dT_Modify: string | null;
+  cX_Sender_Name: string | null;
+  cX_Sender_Tel: string | null;
+  cX_Invoice_Store: string;
+  cX_Invoice_ForWeb: string;
+  cX_Love_Code: string;
+  buyDs: BuyD[];
+  iD_GroupByNavigation: GroupByNavigation;
+  orderMs: any[];
+}
+
+export interface OrderListResponse {
+  list: Array<OrderItem>;
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 export const groupbuyApi = {
@@ -170,7 +271,7 @@ export const groupbuyApi = {
     api
       .post<ApiResponse<string>>("/GroupBuy/Create", body)
       .then((res) => res.data),
-  getMyOrders: ({
+  getMyOrders: async ({
     page = 1,
     pageSize = 10,
     orderId,
@@ -180,19 +281,52 @@ export const groupbuyApi = {
     page: number;
     pageSize?: number;
     orderId?: string;
-    startDate?: string;
-    endDate?: string;
+    startDate?: string | null;
+    endDate?: string | null;
   }) => {
-    let baseUrl = `/Order/GetOrderList?Page=${page}&PageSize=${pageSize}`;
-
-    if (orderId) {
-      baseUrl += `&OrderId=${orderId}`;
+    if (!startDate && !endDate) {
+      startDate = null;
+      endDate = null;
     }
+    const data = {
+      page,
+      pageSize,
+      orderId,
+      startDate,
+      endDate,
+    };
 
-    if (startDate && endDate) {
-      baseUrl += `&StartDate=${startDate}&EndDate=${endDate}`;
+    return api
+      .post<ApiResponse<OrderListResponse>>("/GroupBuy/GetMyGroupBuyList", data)
+      .then((res) => res.data);
+  },
+  deleteOrder: async ({
+    page = 1,
+    pageSize = 10,
+    orderId,
+    startDate,
+    endDate,
+  }: {
+    page: number;
+    pageSize?: number;
+    orderId?: string;
+    startDate?: string | null;
+    endDate?: string | null;
+  }) => {
+    if (!startDate && !endDate) {
+      startDate = null;
+      endDate = null;
     }
+    const data = {
+      page,
+      pageSize,
+      orderId,
+      startDate,
+      endDate,
+    };
 
-    return api.get<ApiResponse<any>>(baseUrl).then((res) => res.data);
+    return api
+      .post<ApiResponse<OrderListResponse>>("/GroupBuy/Delete", data)
+      .then((res) => res.data);
   },
 };

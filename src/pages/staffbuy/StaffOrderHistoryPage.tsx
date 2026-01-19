@@ -46,7 +46,7 @@ export default function StaffOrderHistoryPage() {
   }
 
   orderlistContainer = (
-    <div className="w-full px-3.5 flex flex-col gap-5">
+    <div className="w-full flex flex-col gap-5">
       {data?.orderList.map((o) => (
         <>{screens.md ? <OrderDesktopTable {...o} /> : <OrderCard {...o} />}</>
       ))}
@@ -61,7 +61,7 @@ export default function StaffOrderHistoryPage() {
   return (
     <div className="w-full flex flex-col items-center bg-[#fbfbfb]">
       <div className="w-full flex flex-col items-center md:w-250">
-        <div className="w-full px-3.5 py-5">
+        <div className="w-full py-5">
           <Breadcrumbs />
           <BlockTitle className="w-full text-left mb-5">員購紀錄</BlockTitle>
           <OrderSearchGroup

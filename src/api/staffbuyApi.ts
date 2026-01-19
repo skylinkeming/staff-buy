@@ -93,6 +93,11 @@ export interface OrderItem {
     price: number;
     subTotal: number;
   }[];
+  
+  //團購用
+  groupBuyId?: string;
+  groupBuyName?: string;
+  purchasePeriod?: string;
 }
 
 export interface OrderListResponse {

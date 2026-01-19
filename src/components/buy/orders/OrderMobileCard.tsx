@@ -8,7 +8,7 @@ const DataRow = ({
   openDetail,
   link = "",
 }: any) => {
-  let textStyle = "text-sm text-[#20232C]";
+  let textStyle = "text-sm text-[#20232C] max-w-50";
   if (isTotalPrice) {
     textStyle = `text-staffbuy-primary font-bold ${
       openDetail ? "text-md" : "text-sm"
@@ -54,11 +54,15 @@ const BuyItem = ({ prodName, qty, price, subTotal }: any) => (
 export default function OrderCard(props: OrderItem) {
   const [openDetail, setOpenDetail] = useState(false);
   const isDelivery = props.transport === "Y";
+  let deliveryMethod = isDelivery ? "宅配" : "自取";
+  if (props.groupBuyName && !isDelivery && props.shippingInfo.address) {
+    deliveryMethod = props.shippingInfo.address;
+  }
 
   const basicInfo = [
     { field: "訂單編號", value: props.serialNum || props.id.toString() },
     { field: "訂單日期", value: props.date },
-    { field: "取貨方式", value: isDelivery ? "宅配" : "自取" },
+    { field: "取貨方式", value: deliveryMethod },
   ];
 
   const buyDetail = (
@@ -80,11 +84,15 @@ export default function OrderCard(props: OrderItem) {
   );
 
   const moreInfo = [
-    {
-      field: "附提袋數",
-      value: props.shippingInfo.nQ_Bag,
-      link: "",
-    },
+    props.shippingInfo.nQ_Bag
+      ? {
+          ...{
+            field: "附提袋數",
+            value: props.shippingInfo.nQ_Bag,
+            link: "",
+          },
+        }
+      : { ...{} },
     {
       field: "發票號碼/日期",
       value: props.invoiceInfo.invoiceNumber
@@ -92,17 +100,27 @@ export default function OrderCard(props: OrderItem) {
         : "尚未開立",
       link: "",
     },
-    {
-      field: "取貨時間",
-      value: props.shippingInfo.cX_GetDate,
-      link: "",
-    },
+    props.shippingInfo.cX_GetDate
+      ? {
+          ...{
+            field: "取貨時間",
+            value: props.shippingInfo.cX_GetDate,
+            link: "",
+          },
+        }
+      : { ...{} },
   ];
-
+  if (props.groupBuyName) {
+    moreInfo.push({
+      field: "團購主題",
+      value: props.groupBuyName,
+      link: "",
+    });
+  }
   if (props.invoiceInfo.carrierId) {
     moreInfo.push({
       field: "載具號碼",
-      value: props.invoiceInfo.carrierId || "無",
+      value: props.invoiceInfo.carrierId,
       link: "",
     });
   }
@@ -153,7 +171,7 @@ export default function OrderCard(props: OrderItem) {
         </div>
         {openDetail && (
           <>
-            <div className="px-2.5 bg-[#FBFBFB] pb-2.5 mx-2.5 rounded-[15px] max-h-75 overflow-auto ">
+            <div className="px-2.5 bg-[#EFF9FF] pb-2.5 mx-2.5 rounded-[15px] max-h-75 overflow-auto ">
               {buyDetail}
             </div>
             <div className="px-5 py-3.5  ">

@@ -107,7 +107,7 @@ export const useCartStore = create<CartState>((set) => ({
   updateCart: (type, product, targetQuantity) =>
     set((state) => {
       const cartKey = type === "staff" ? "staffCart" : "groupCart";
-      const newCart = { ...state[cartKey] };
+      const newCart = { ...state[cartKey] };  
 
       if (targetQuantity <= 0) {
         delete newCart[product.productId];

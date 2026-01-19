@@ -55,27 +55,29 @@ export default function ShippingInfo({
             });
           }}
         />
-        <FormInput
-          required
-          variant="select"
-          label="附提袋數"
-          value={shippingInfo.bagQty}
-          errorMsg={getFieldErrorMsg("bagQty")}
-          optionData={
-            bagList
-              ? bagList?.map((b) => ({
-                  value: b.value,
-                  label: b.text,
-                  disabled: b.disabled,
-                }))
-              : []
-          }
-          onChange={(val) => {
-            updateShippingInfo({
-              bagQty: val,
-            });
-          }}
-        />
+        {!isGroupBuy && (
+          <FormInput
+            required
+            variant="select"
+            label="附提袋數"
+            value={shippingInfo.bagQty}
+            errorMsg={getFieldErrorMsg("bagQty")}
+            optionData={
+              bagList
+                ? bagList?.map((b) => ({
+                    value: b.value,
+                    label: b.text,
+                    disabled: b.disabled,
+                  }))
+                : []
+            }
+            onChange={(val) => {
+              updateShippingInfo({
+                bagQty: val,
+              });
+            }}
+          />
+        )}
         {pickupStoreList && isGroupBuy ? (
           <FormInput
             required
@@ -86,15 +88,23 @@ export default function ShippingInfo({
               pickupStoreList
                 ? pickupStoreList?.map((b) => ({
                     value: b.cX_ShipPlace,
-                    label: b.cX_ShipPlace,
+                    label: b.cX_ShipPlace === "Y" ? "宅配" : b.cX_ShipPlace,
                   }))
                 : []
             }
             errorMsg={getFieldErrorMsg("location")}
             onChange={(val) => {
-              updateShippingInfo({
-                location: val,
-              });
+              if (val === "Y") {
+                updateShippingInfo({
+                  isDelivery: val as "Y" | "N",
+                  location: "宅配",
+                });
+              } else {
+                updateShippingInfo({
+                  location: val,
+                  isDelivery: "N",
+                });
+              }
             }}
           />
         ) : (

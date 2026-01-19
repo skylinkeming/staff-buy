@@ -86,7 +86,6 @@ export default function GroupCheckoutPage() {
       });
       return;
     }
-
     const body: CreateOrderRequest = {
       master: {
         fG_Transport: shippingInfo.isDelivery,
