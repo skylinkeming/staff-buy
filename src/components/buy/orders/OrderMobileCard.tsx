@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { OrderItem } from "@/api/staffbuyApi";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const DataRow = ({
   field,
@@ -51,17 +52,31 @@ const BuyItem = ({ prodName, qty, price, subTotal }: any) => (
 );
 
 // 手機版訂單卡片
-export default function OrderCard(props: OrderItem) {
+export default function OrderCard(props: {
+  orderItem: OrderItem;
+  onClickDeleteBtn: (idBuyM: number) => void;
+}) {
+  const { orderItem, onClickDeleteBtn } = props;
   const [openDetail, setOpenDetail] = useState(false);
-  const isDelivery = props.transport === "Y";
+
+  if (!orderItem) return <></>;
+
+  const isDelivery = orderItem?.transport === "Y";
   let deliveryMethod = isDelivery ? "宅配" : "自取";
-  if (props.groupBuyName && !isDelivery && props.shippingInfo.address) {
-    deliveryMethod = props.shippingInfo.address;
+  if (
+    orderItem?.groupBuyName &&
+    !isDelivery &&
+    orderItem?.shippingInfo.address
+  ) {
+    deliveryMethod = orderItem?.shippingInfo.address;
   }
 
   const basicInfo = [
-    { field: "訂單編號", value: props.serialNum || props.id.toString() },
-    { field: "訂單日期", value: props.date },
+    {
+      field: "訂單編號",
+      value: orderItem.serialNum || orderItem.id.toString(),
+    },
+    { field: "訂單日期", value: orderItem.date },
     { field: "取貨方式", value: deliveryMethod },
   ];
 
@@ -70,90 +85,97 @@ export default function OrderCard(props: OrderItem) {
       <div className="text-[#020202] mb-3 border-b-[1px] pb-1.25 border-[#D9D9D9] pl-1.25">
         購物明細
       </div>
-      {props.details.map((d) => (
+      {orderItem.details.map((d) => (
         <BuyItem key={d.prodName} {...d} />
       ))}
       <div></div>
       <div className={"flex justify-between w-full mt-3.5 px-1.25 items-end"}>
         <span className={"text-sm"}>{"總金額"}</span>
         <span className={"text-staffbuy-primary font-bold"}>
-          NT$ {props.totalPrice}
+          NT$ {orderItem.totalPrice}
         </span>
       </div>
     </div>
   );
 
   const moreInfo = [
-    props.shippingInfo.nQ_Bag
+    orderItem.shippingInfo.nQ_Bag
       ? {
           ...{
             field: "附提袋數",
-            value: props.shippingInfo.nQ_Bag,
+            value: orderItem.shippingInfo.nQ_Bag,
             link: "",
           },
         }
       : { ...{} },
     {
       field: "發票號碼/日期",
-      value: props.invoiceInfo.invoiceNumber
-        ? `${props.invoiceInfo.invoiceNumber} / (${props.invoiceInfo.invoiceDate})`
+      value: orderItem.invoiceInfo.invoiceNumber
+        ? `${orderItem.invoiceInfo.invoiceNumber} / (${orderItem.invoiceInfo.invoiceDate})`
         : "尚未開立",
       link: "",
     },
-    props.shippingInfo.cX_GetDate
+    orderItem.shippingInfo.cX_GetDate
       ? {
           ...{
             field: "取貨時間",
-            value: props.shippingInfo.cX_GetDate,
+            value: orderItem.shippingInfo.cX_GetDate,
             link: "",
           },
         }
       : { ...{} },
   ];
-  if (props.groupBuyName) {
+  if (orderItem.groupBuyName) {
     moreInfo.push({
       field: "團購主題",
-      value: props.groupBuyName,
+      value: orderItem.groupBuyName,
       link: "",
     });
   }
-  if (props.invoiceInfo.carrierId) {
+  if (orderItem.invoiceInfo.carrierId) {
     moreInfo.push({
       field: "載具號碼",
-      value: props.invoiceInfo.carrierId,
+      value: orderItem.invoiceInfo.carrierId,
       link: "",
     });
   }
-  if (props.invoiceInfo.loveCode) {
+  if (orderItem.invoiceInfo.loveCode) {
     moreInfo.push({
       field: "愛心碼",
-      value: props.invoiceInfo.loveCode,
+      value: orderItem.invoiceInfo.loveCode,
       link: "",
     });
   }
 
-  if (isDelivery && props.shippingInfo.trackingNumber) {
+  if (isDelivery && orderItem.shippingInfo.trackingNumber) {
     moreInfo.push({
       field: "黑貓宅配單號",
-      value: props.shippingInfo.trackingNumber || "",
+      value: orderItem.shippingInfo.trackingNumber || "",
       link:
         "https://www.t-cat.com.tw/Inquire/Trace.aspx?method=result&billID=" +
-        props.shippingInfo.trackingNumber,
+        orderItem.shippingInfo.trackingNumber,
     });
   }
 
   if (isDelivery) {
     moreInfo.push(
-      { field: "收件人", value: props.shippingInfo.receiver, link: "" },
-      { field: "收件人電話", value: props.shippingInfo.phone, link: "" },
-      { field: "到貨地址", value: props.shippingInfo.address, link: "" }
+      { field: "收件人", value: orderItem.shippingInfo.receiver, link: "" },
+      { field: "收件人電話", value: orderItem.shippingInfo.phone, link: "" },
+      { field: "到貨地址", value: orderItem.shippingInfo.address, link: "" }
     );
   }
 
   return (
     <div className="w-full shadow-[1px_2px_4px_0px_rgba(0,0,0,0.25)] rounded-[15px] bg-white overflow-hidden">
-      <div className="border-b-[1px] font-[600] border-[#D9D9D9] text-[#020202] py-2.5 px-5">
+      <div className="border-b font-[600] border-[#D9D9D9] text-[#020202] py-2.5 px-5 flex justify-between items-center">
         訂單資訊
+        {orderItem.groupBuyName && orderItem.serialNum === "尚未成單" && (
+          <FaRegTrashAlt
+            onClick={() => {
+              onClickDeleteBtn(orderItem.idBuyM!);
+            }}
+          />
+        )}
       </div>
 
       <div className="pt-3">
@@ -164,7 +186,7 @@ export default function OrderCard(props: OrderItem) {
           {!openDetail && (
             <DataRow
               field="總金額"
-              value={`NT$ ${props.totalPrice.toLocaleString()}`}
+              value={`NT$ ${orderItem.totalPrice.toLocaleString()}`}
               isTotalPrice
             />
           )}

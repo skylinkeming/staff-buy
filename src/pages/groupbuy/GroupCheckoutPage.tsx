@@ -27,6 +27,7 @@ export default function GroupCheckoutPage() {
   const { mutate: handleCreateOrder, isPending } =
     useGroupbuyApi.useCreateOrderMutation();
 
+
   const cartItems = Object.values(groupCart);
 
   // 取得庫存數量

@@ -300,33 +300,9 @@ export const groupbuyApi = {
       .post<ApiResponse<OrderListResponse>>("/GroupBuy/GetMyGroupBuyList", data)
       .then((res) => res.data);
   },
-  deleteOrder: async ({
-    page = 1,
-    pageSize = 10,
-    orderId,
-    startDate,
-    endDate,
-  }: {
-    page: number;
-    pageSize?: number;
-    orderId?: string;
-    startDate?: string | null;
-    endDate?: string | null;
-  }) => {
-    if (!startDate && !endDate) {
-      startDate = null;
-      endDate = null;
-    }
-    const data = {
-      page,
-      pageSize,
-      orderId,
-      startDate,
-      endDate,
-    };
-
+  deleteOrder: async (idBuyM: number) => {
     return api
-      .post<ApiResponse<OrderListResponse>>("/GroupBuy/Delete", data)
+      .post<ApiResponse<any>>("/GroupBuy/Delete?iD_BuyM=" + idBuyM)
       .then((res) => res.data);
   },
 };

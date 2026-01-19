@@ -93,8 +93,9 @@ export interface OrderItem {
     price: number;
     subTotal: number;
   }[];
-  
+
   //團購用
+  idBuyM?: number;
   groupBuyId?: string;
   groupBuyName?: string;
   purchasePeriod?: string;

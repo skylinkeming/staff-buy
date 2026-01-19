@@ -48,7 +48,13 @@ export default function StaffOrderHistoryPage() {
   orderlistContainer = (
     <div className="w-full flex flex-col gap-5">
       {data?.orderList.map((o) => (
-        <>{screens.md ? <OrderDesktopTable {...o} /> : <OrderCard {...o} />}</>
+        <>
+          {screens.md ? (
+            <OrderDesktopTable orderItem={{ ...o }} />
+          ) : (
+            <OrderCard {...o} />
+          )}
+        </>
       ))}
       {data?.orderList.length === 0 && (
         <div className="w-full flex justify-center bg-gray-100 items-center h-60 rounded-[15px]">

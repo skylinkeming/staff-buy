@@ -1,7 +1,9 @@
 import { useState } from "react";
 import type { OrderItem } from "@/api/staffbuyApi";
 import { FaPlay } from "react-icons/fa";
+import AppAlert from "@/components/common/AppAlert";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 
 const DataRow = ({ field, value, isHighlight, link }: any) => {
   let textStyle = "text-sm text-[#20232C]";
@@ -21,20 +23,25 @@ const DataRow = ({ field, value, isHighlight, link }: any) => {
   );
 };
 
-export default function OrderDesktopTable(props: OrderItem) {
+export default function OrderDesktopTable(props: {
+  orderItem: OrderItem;
+  onClickDeleteBtn: (idBuyM: number) => void;
+}) {
+  const { onClickDeleteBtn, orderItem } = props;
   const [openDetail, setOpenDetail] = useState(false);
-  const isOrderConfirmed = props.serialNum !== "尚未成單";
-  const isDelivery = props.transport === "Y";
+  const isOrderConfirmed = orderItem.serialNum !== "尚未成單";
+  const isDelivery = orderItem.transport === "Y";
   let deliveryMethod = isDelivery ? "宅配" : "自取";
-  if (props.groupBuyName && !isDelivery && props.shippingInfo.address) {
-    deliveryMethod = props.shippingInfo.address;
+
+  if (orderItem.groupBuyName && !isDelivery && orderItem.shippingInfo.address) {
+    deliveryMethod = orderItem.shippingInfo.address;
   }
 
   const basicInfo = (
     <>
       <div
         className={`grid grid-cols-${
-          props.groupBuyName ? "6" : "7"
+          orderItem.groupBuyName ? "6" : "7"
         } bg-gray-100 border-b border-gray-300 font-medium text-gray-700`}
       >
         <div className="border-r border-gray-300 px-2 py-2 text-center">
@@ -43,7 +50,7 @@ export default function OrderDesktopTable(props: OrderItem) {
         <div className="border-r border-gray-300 px-2 py-2 text-center">
           取貨方式
         </div>
-        {props.shippingInfo.fG_Status && (
+        {orderItem.shippingInfo.fG_Status && (
           <div className="border-r border-gray-300 px-2 py-2 text-center">
             訂單情況
           </div>
@@ -51,7 +58,7 @@ export default function OrderDesktopTable(props: OrderItem) {
         <div className="border-r border-gray-300 px-2 py-2 text-center">
           訂單日期
         </div>
-        {!props.groupBuyName && (
+        {!orderItem.groupBuyName && (
           <div className="border-r border-gray-300 px-2 py-2 text-center">
             取貨日期
           </div>
@@ -60,7 +67,7 @@ export default function OrderDesktopTable(props: OrderItem) {
           商品總價
         </div>
         <div className="px-2 py-2 text-center">發票日期</div>
-        {props.groupBuyName && (
+        {orderItem.groupBuyName && (
           <div className="border-l border-gray-300 px-2 py-2 text-center">
             功能
           </div>
@@ -68,7 +75,7 @@ export default function OrderDesktopTable(props: OrderItem) {
       </div>
       <div
         className={`grid grid-cols-${
-          props.groupBuyName ? "6" : "7"
+          orderItem.groupBuyName ? "6" : "7"
         } hover:bg-gray-50 transition-colors`}
       >
         <div
@@ -80,49 +87,51 @@ export default function OrderDesktopTable(props: OrderItem) {
               openDetail ? "rotate-90" : ""
             }`}
           />
-          {props.serialNum}
+          {orderItem.serialNum}
         </div>
 
         <div className="border-r border-gray-300 text-center flex items-center justify-center leading-3.5">
           {deliveryMethod}
         </div>
 
-        {props.shippingInfo.fG_Status && (
+        {orderItem.shippingInfo.fG_Status && (
           <div className="border-r border-gray-300 px-2 py-2 text-center flex items-center justify-center leading-3.5">
-            {props.shippingInfo.fG_Status}
+            {orderItem.shippingInfo.fG_Status}
           </div>
         )}
 
         <div className="border-r border-gray-300 px-2 py-2 text-center flex items-center justify-center leading-3.5">
-          {props.date}
+          {orderItem.date}
         </div>
 
-        {!props.groupBuyName && (
+        {!orderItem.groupBuyName && (
           <div className="border-r border-gray-300 px-2 py-2 text-center flex items-center justify-center leading-3.5">
-            {props.shippingInfo.cX_GetDate}
+            {orderItem.shippingInfo.cX_GetDate}
           </div>
         )}
 
         <div className="border-r border-gray-300 px-2 py-2 text-center flex items-center justify-center font-bold text-staffbuy-primary leading-3.5">
-          $ {props.totalPrice}
+          $ {orderItem.totalPrice}
         </div>
 
         <div className="px-2 py-2 text-center flex items-center justify-center leading-3.5">
-          {props.invoiceInfo.invoiceNumber
-            ? props.invoiceInfo.invoiceNumber
+          {orderItem.invoiceInfo.invoiceNumber
+            ? orderItem.invoiceInfo.invoiceNumber
             : "尚未開立"}
         </div>
 
-        {props.groupBuyName && (
+        {orderItem.groupBuyName && (
           <div className="border-l border-gray-300 px-2 py-2 text-center flex items-center justify-center font-bold text-staffbuy-primary leading-3.5">
-            {/* {isOrderConfirmed ? "" : "刪除"} */}
             <div
               className={
-                "md:grid grid-cols-[20px_35px] shrink-0 items-center bg-[#ff4d4f] px-2.5 py-1.25 rounded-[5px] " +
+                "md:grid grid-cols-[20px_35px] shrink-0 items-center bg-[#69b1ff] px-2.5 py-1.25 rounded-[5px] " +
                 (isOrderConfirmed
                   ? "pointer-none bg-gray-300"
                   : "cursor-pointer")
               }
+              onClick={() => {
+                onClickDeleteBtn(orderItem.idBuyM!)
+              }}
             >
               <FaRegTrashAlt color={"white"} />
               <div className="text-white">刪除</div>
@@ -152,7 +161,7 @@ export default function OrderDesktopTable(props: OrderItem) {
                 購買明細
               </div>
               <div className="flex flex-col gap-2.5">
-                {props.details.map((d) => (
+                {orderItem.details.map((d) => (
                   <div key={d.prodName} className="flex justify-between pr-5">
                     <div className="text-[12px] w-50">{d.prodName}</div>
                     <div className="text-[12px] w-15">{d.price}</div>
@@ -166,41 +175,50 @@ export default function OrderDesktopTable(props: OrderItem) {
             </div>
           </div>
           <div className="px-7.5 my-3.5 w-[50%]  max-h-40 overflow-auto">
-            {props.shippingInfo.nQ_Bag && (
-              <DataRow field="附提袋數" value={props.shippingInfo.nQ_Bag} />
+            {orderItem.shippingInfo.nQ_Bag && (
+              <DataRow field="附提袋數" value={orderItem.shippingInfo.nQ_Bag} />
             )}
-            {props.purchasePeriod && (
-              <DataRow field="團購期間" value={props.purchasePeriod} />
+            {orderItem.purchasePeriod && (
+              <DataRow field="團購期間" value={orderItem.purchasePeriod} />
             )}
-            {props.groupBuyName && (
+            {orderItem.groupBuyName && (
               <DataRow
                 field="團購主題"
-                value={props.groupBuyName}
+                value={orderItem.groupBuyName}
                 isHighlight
               />
             )}
-            {props.invoiceInfo.carrierId && (
-              <DataRow field="載具號碼" value={props.invoiceInfo.carrierId} />
-            )}
-            {props.shippingInfo.trackingNumber && (
+            {orderItem.invoiceInfo.carrierId && (
               <DataRow
-                field="黑貓宅配單號"
-                value={props.shippingInfo.trackingNumber}
+                field="載具號碼"
+                value={orderItem.invoiceInfo.carrierId}
               />
             )}
-            {isDelivery && props.shippingInfo.receiver && (
-              <DataRow field="收件人" value={props.shippingInfo.receiver} />
+            {orderItem.shippingInfo.trackingNumber && (
+              <DataRow
+                field="黑貓宅配單號"
+                value={orderItem.shippingInfo.trackingNumber}
+              />
             )}
-            {isDelivery && props.shippingInfo.phone && (
-              <DataRow field="收件人電話" value={props.shippingInfo.phone} />
+            {isDelivery && orderItem.shippingInfo.receiver && (
+              <DataRow field="收件人" value={orderItem.shippingInfo.receiver} />
             )}
-            {isDelivery && props.shippingInfo.address && (
-              <DataRow field="收件地址" value={props.shippingInfo.address} />
+            {isDelivery && orderItem.shippingInfo.phone && (
+              <DataRow
+                field="收件人電話"
+                value={orderItem.shippingInfo.phone}
+              />
             )}
-            {isDelivery && !!props.shippingInfo.nQ_Transport_Money && (
+            {isDelivery && orderItem.shippingInfo.address && (
+              <DataRow
+                field="收件地址"
+                value={orderItem.shippingInfo.address}
+              />
+            )}
+            {isDelivery && !!orderItem.shippingInfo.nQ_Transport_Money && (
               <DataRow
                 field="運費"
-                value={"$ " + props.shippingInfo.nQ_Transport_Money}
+                value={"$ " + orderItem.shippingInfo.nQ_Transport_Money}
               />
             )}
           </div>

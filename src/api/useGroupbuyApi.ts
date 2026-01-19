@@ -72,11 +72,10 @@ export const useGroupbuyApi = {
       select: (res) => {
         console.log(res.data.list);
 
-        // return res.data;
-
         return {
           orderList: res.data.list.map((o) => {
             return {
+              idBuyM: o.iD_BuyM,
               serialNum: o.cX_Serialnumber ? o.cX_Serialnumber : "尚未成單",
               groupBuyName: o.iD_GroupByNavigation.cX_GroupBy_Name,
               groupBuyId: o.iD_GroupBy,
@@ -124,7 +123,10 @@ export const useGroupbuyApi = {
           pagination: res.data.pagination,
         };
       },
-      // placeholderData: (previousData) => previousData,
     });
   },
+  useDeleteOrderMutation: () =>
+    useMutation({
+      mutationFn: (idBuyM: number) => groupbuyApi.deleteOrder(idBuyM),
+    }),
 };

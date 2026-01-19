@@ -6,6 +6,7 @@ import OrderSearchGroup from "@/components/common/OrderSearchGroup";
 import OrderDesktopTable from "@/components/buy/orders/OrderDesktopTable";
 import { BlockTitle } from "./GroupProductPage";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
+import AppAlert from "@/components/common/AppAlert";
 const { useBreakpoint } = Grid;
 
 export default function GroupOrderHistoryPage() {
@@ -20,13 +21,20 @@ export default function GroupOrderHistoryPage() {
     startDate: "",
     endDate: "",
   });
-  const { data, isLoading } = useGroupbuyApi.useOrderListQuery({
+  const {
+    data,
+    isLoading,
+    refetch: refetchOrders,
+  } = useGroupbuyApi.useOrderListQuery({
     page: currentPage,
     pageSize: pageSize,
     orderId: orderFilter.orderId,
     startDate: orderFilter.startDate,
     endDate: orderFilter.endDate,
   });
+  const { mutate: handleDeleteOrder, isPending: isDeleting } =
+    useGroupbuyApi.useDeleteOrderMutation();
+
   const screens = useBreakpoint();
 
   const onPageChange = (page: number, size: number) => {
@@ -45,10 +53,54 @@ export default function GroupOrderHistoryPage() {
     );
   }
 
+  const handleClickDeleteBtn = async (idBuyM: number) => {
+    const res = await AppAlert({
+      message: "確定要刪除團購訂單?",
+    });
+
+    if (res !== "ok" || !idBuyM) {
+      return;
+    }
+
+    handleDeleteOrder(idBuyM, {
+      onSuccess: async (data) => {
+        // setIsSubmitting(false);
+        console.log("訂單刪除成功:", data);
+        await AppAlert({
+          message: "訂單刪除成功",
+          type: "success",
+        });
+        refetchOrders();
+        // clearCart("staff");
+        // navigate("/staffbuy/orders");
+      },
+      onError: (error) => {
+        console.error("建立失敗:", error);
+        AppAlert({
+          title: "訂單刪除失敗",
+          message: (error as any).response?.data?.message || error.message,
+          type: "error",
+        });
+      },
+    });
+  };
+
   orderlistContainer = (
     <div className="w-full flex flex-col gap-5">
       {data?.orderList.map((o) => (
-        <>{screens.md ? <OrderDesktopTable {...o} /> : <OrderCard {...o} />}</>
+        <>
+          {screens.md ? (
+            <OrderDesktopTable
+              orderItem={{ id: o.idBuyM, ...o }}
+              onClickDeleteBtn={handleClickDeleteBtn}
+            />
+          ) : (
+            <OrderCard
+              orderItem={{ id: o.idBuyM, ...o }}
+              onClickDeleteBtn={handleClickDeleteBtn}
+            />
+          )}
+        </>
       ))}
       {data?.orderList.length === 0 && (
         <div className="w-full flex justify-center bg-gray-100 items-center h-60 rounded-[15px]">
