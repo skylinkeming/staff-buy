@@ -134,7 +134,7 @@ export default function GroupCheckoutPage() {
   return (
     <div className="w-full p-[15px] bg-[#FBFBFB] pb-[120px] md:flex md:gap-[40px] md:justify-center">
       <div className="">
-        <Breadcrumbs className="max-w-7xl mx-auto mt-10" />
+        <Breadcrumbs className="max-w-7xl mx-auto " />
         <CheckoutItems onAmountChange={handleAmountChange} />
         <OrdererInfo />
         <ShippingInfo isSubmitting={isSubmitting} />

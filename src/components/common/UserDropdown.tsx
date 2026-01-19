@@ -13,7 +13,7 @@ import { useNavigate } from "react-router";
 export default function UserDropdown() {
   const { user, clearAuth } = useAuthStore();
   const queryClient = useQueryClient();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const onLogout = async () => {
@@ -55,7 +55,7 @@ export default function UserDropdown() {
 
   return (
     <div
-      className="absolute top-3.5 right-0 z-50"
+      className=""
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >

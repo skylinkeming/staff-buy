@@ -18,40 +18,46 @@ import GroupBuyProductPage from "@/pages/groupbuy/GroupProductPage.tsx";
 import GroupCheckoutPage from "@/pages/groupbuy/GroupCheckoutPage.tsx";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
+import MainLayout from "./components/layout/MainLayout.tsx";
 
 const router = createHashRouter([
   {
     element: <AuthWrapper />,
     errorElement: <ErrorPage />,
     children: [
-      { path: "/", element: <App /> },
-      { path: "/staffbuy", element: <StaffProductPage /> },
-      { path: "/staffbuy/purchase", element: <StaffProductPage /> },
-      { path: "/staffbuy/checkout", element: <StaffCheckoutPage /> },
       {
-        path: "/staffbuy/orders",
-        element: <StaffOrderOrderHistoryPage />,
-      },
-      {
-        path: "/groupbuy",
-        element: <GroupBuyProductPage />,
-      },
-      {
-        path: "/groupbuy/purchase",
-        element: <GroupBuyProductPage />,
-      },
-      { path: "/groupbuy/checkout", element: <GroupCheckoutPage /> },
-      {
-        path: "/groupbuy/orders",
-        element: <GroupOrderHistoryPage />,
-      },
-      {
-        path: "/partyup",
-        element: (
-          <>
-            <h1>揪團頁面</h1>
-          </>
-        ),
+        element: <MainLayout />,
+        children: [
+          { path: "/", element: <App /> },
+          { path: "/staffbuy", element: <StaffProductPage /> },
+          { path: "/staffbuy/purchase", element: <StaffProductPage /> },
+          { path: "/staffbuy/checkout", element: <StaffCheckoutPage /> },
+          {
+            path: "/staffbuy/orders",
+            element: <StaffOrderOrderHistoryPage />,
+          },
+          {
+            path: "/groupbuy",
+            element: <GroupBuyProductPage />,
+          },
+          {
+            path: "/groupbuy/purchase",
+            element: <GroupBuyProductPage />,
+          },
+          { path: "/groupbuy/checkout", element: <GroupCheckoutPage /> },
+          {
+            path: "/groupbuy/orders",
+            element: <GroupOrderHistoryPage />,
+          },
+          {
+            path: "/partyup",
+            element: (
+              <>
+                <h1>揪團頁面</h1>
+              </>
+            ),
+          },
+        ],
       },
     ],
   },
