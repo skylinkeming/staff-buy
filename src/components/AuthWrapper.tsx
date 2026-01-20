@@ -1,12 +1,11 @@
 import { useEffect } from "react";
-import { Outlet, useSearchParams } from "react-router";
+import { Outlet } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { staffbuyApi } from "@/api/staffbuyApi";
 import { Spin } from "antd";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export default function AuthWrapper() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { setToken, setUser, user } = useAuthStore();
   const nativeParams = new URLSearchParams(window.location.search);
   const qweValue = nativeParams.get("qwe");
@@ -24,10 +23,12 @@ export default function AuthWrapper() {
             setUser(result);
           });
       }
-      // 清除網址上的參數
-      const newParams = new URLSearchParams(searchParams);
-      newParams.delete("qwe");
-      setSearchParams(newParams, { replace: true });
+
+      // 清除網址上的qwe
+      const url = new URL(window.location.href);
+      url.searchParams.delete("qwe");
+
+      window.history.replaceState({}, "", url.pathname + url.search + url.hash);
     },
   });
 
@@ -41,6 +42,7 @@ export default function AuthWrapper() {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <Spin size="large" tip="自動登入中..." />
+        自動登入中...
       </div>
     );
   }
