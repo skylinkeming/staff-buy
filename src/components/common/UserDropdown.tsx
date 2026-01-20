@@ -3,15 +3,15 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   LogoutOutlined,
-  UserOutlined,
   ShoppingOutlined,
-  TeamOutlined,
+  LoginOutlined,
+  // TeamOutlined,
 } from "@ant-design/icons";
 import AppAlert from "@/components/common/AppAlert"; // 假設你的 AppAlert 路徑
 import { useNavigate } from "react-router";
 
 export default function UserDropdown() {
-  const { user, clearAuth } = useAuthStore();
+  const { token, user, clearAuth } = useAuthStore();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -77,29 +77,43 @@ export default function UserDropdown() {
         `}
       >
         {/* 選單列表 */}
-        <div className="mt-1">
-          {menuItems.map((item, index) => (
+        {!token ? (
+          <div className="mt-1 w-40">
             <div
-              key={index}
-              onClick={item.onClick}
-              className="whitespace-nowrap w-full flex bg-white! justify-start  items-center gap-2 px-8 py-2 text-sm text-gray-600 hover:bg-[#f0f2f5]! hover:text-[#1890ff] transition-colors cursor-pointer"
+              onClick={()=>{
+                //登入轉址
+              }}
+              className="w-full bg-white! justify-start flex items-center gap-3 px-8 py-2.5 text-sm text-blue-500 hover:bg-red-50 transition-colors cursor-pointer"
             >
-              <span className="text-lg">{item.icon}</span>
-              {item.label}
+              <LoginOutlined className="text-lg" />
+              <span>登入系統</span>
             </div>
-          ))}
-
-          <div className="my-1 border-t border-gray-100"></div>
-
-          {/* 登出按鈕 */}
-          <div
-            onClick={onLogout}
-            className="w-full bg-white! justify-start flex items-center gap-3 px-8 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
-          >
-            <LogoutOutlined className="text-lg" />
-            <span>登出系統</span>
           </div>
-        </div>
+        ) : (
+          <div className="mt-1">
+            {menuItems.map((item, index) => (
+              <div
+                key={index}
+                onClick={item.onClick}
+                className="whitespace-nowrap w-full flex bg-white! justify-start  items-center gap-2 px-8 py-2 text-sm text-gray-600 hover:bg-[#f0f2f5]! hover:text-[#1890ff] transition-colors cursor-pointer"
+              >
+                <span className="text-lg">{item.icon}</span>
+                {item.label}
+              </div>
+            ))}
+
+            <div className="my-1 border-t border-gray-100"></div>
+
+            {/* 登出按鈕 */}
+            <div
+              onClick={onLogout}
+              className="w-full bg-white! justify-start flex items-center gap-3 px-8 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+            >
+              <LogoutOutlined className="text-lg" />
+              <span>登出系統</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
