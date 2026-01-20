@@ -30,7 +30,7 @@ api.interceptors.response.use(
     }
     return response;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 export interface ApiResponse<T> {
@@ -243,15 +243,24 @@ export interface OrderListResponse {
 }
 
 export const groupbuyApi = {
+  getAnnouncment: () =>
+    api
+      .get<
+        ApiResponse<{
+          announcement: string;
+          notice: string;
+        }>
+      >("/Common/GetAnnouncement?cx_Code=groupbuy")
+      .then((res) => res.data),
   getGroupBuyList: () =>
     api
       .get<ApiResponse<Array<GroupBuyData>>>("/GroupBuy/GetGroupBuyList")
       .then((res) => res.data),
   getGroupBuyData: (groupBuyId: string) =>
     api
-      .get<ApiResponse<GroupByResponse>>(
-        "/GroupBuy/GetGroupBuyData?id=" + groupBuyId
-      )
+      .get<
+        ApiResponse<GroupByResponse>
+      >("/GroupBuy/GetGroupBuyData?id=" + groupBuyId)
       .then((res) => res.data),
   getStock: (groupItemId: string) =>
     api
@@ -263,9 +272,9 @@ export const groupbuyApi = {
       .then((res) => res.data),
   getPickupPlaceByGroupId: (groupId: string) =>
     api
-      .get<ApiResponse<Array<ShipPlace>>>(
-        "/Common/GetPickupPlaceByGroupBuyId?id_group=" + groupId
-      )
+      .get<
+        ApiResponse<Array<ShipPlace>>
+      >("/Common/GetPickupPlaceByGroupBuyId?id_group=" + groupId)
       .then((res) => res.data),
   createOrder: (body: CreateOrderRequest) =>
     api

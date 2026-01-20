@@ -30,7 +30,7 @@ export default function MainLayout() {
         </div>
       </header>
 
-      <main className="flex-1 p-3.5">
+      <main className="flex-1 p-3.5 bg-[#FBFBFB]">
         <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>

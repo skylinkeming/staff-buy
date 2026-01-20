@@ -209,6 +209,12 @@ export default function OrderDesktopTable(props: {
                 value={orderItem.invoiceInfo.carrierId}
               />
             )}
+            {orderItem.invoiceInfo.loveCode && (
+              <DataRow
+                field="愛心碼"
+                value={orderItem.invoiceInfo.loveCode}
+              />
+            )}
             {orderItem.shippingInfo.trackingNumber && (
               <DataRow
                 field="黑貓宅配單號"

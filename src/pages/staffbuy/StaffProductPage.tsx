@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
 import { Grid } from "antd";
@@ -44,6 +44,7 @@ export default function StaffProductPage() {
   const staffCart = useCartStore((state) => state.staffCart);
   const { data: rawProducts, isLoading: fetching } =
     useStaffbuyApi.useProductListQuery();
+  const { data: annoData } = useStaffbuyApi.useAnnouncementQuery();
 
   const cartItems = Object.values(staffCart);
 
@@ -53,7 +54,7 @@ export default function StaffProductPage() {
 
     // 根據搜尋字串過濾
     return showList.filter((p) =>
-      p.name.toLowerCase().includes(searchkey.toLowerCase())
+      p.name.toLowerCase().includes(searchkey.toLowerCase()),
     );
   }, [rawProducts, searchkey]);
 
@@ -91,11 +92,11 @@ export default function StaffProductPage() {
             productName: item.name,
             price: item.price,
           },
-          realStock
+          realStock,
         );
       }
     },
-    500
+    500,
   );
 
   const handleAmountChange = (item: TableRowData, qty: number) => {
@@ -106,12 +107,33 @@ export default function StaffProductPage() {
         productName: item.name,
         price: item.price,
       },
-      qty
+      qty,
     );
 
     // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
     debouncedFetchStock(item, qty);
   };
+
+  useEffect(() => {
+    const expiry = localStorage.getItem("staffbuy-anno-expiry");
+    if (
+      annoData?.announcement &&
+      (!expiry || new Date().getTime() > parseInt(expiry))
+    ) {
+      AppAlert({
+        title: "公告",
+        message: (
+          <div
+            dangerouslySetInnerHTML={{ __html: annoData?.announcement }}
+          ></div>
+        ),
+        hideCancel: true,
+      }).then(() => {
+        const expiryDate = new Date().getTime() + 4 * 60 * 60 * 1000; // 4小時後才能再顯示一次
+        localStorage.setItem("staffbuy-anno-expiry", expiryDate.toString());
+      });
+    }
+  }, [annoData]);
 
   return (
     <div className="md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
@@ -120,7 +142,10 @@ export default function StaffProductPage() {
         <BlockTitle className="mb-4">員購</BlockTitle>
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
-            <Notice className="mb-[30px] w-full md:w-auto" />
+            <Notice
+              className="mb-[30px] w-full md:w-auto"
+              notice={annoData?.notice || ""}
+            />
             <KeywordSearchAction
               className="mb-[30px] md:w-[100%]"
               placeholder="搜尋員購商品"

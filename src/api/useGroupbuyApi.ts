@@ -2,6 +2,15 @@ import { groupbuyApi, type CreateOrderRequest } from "@/api/groupbuyApi";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGroupbuyApi = {
+  useAnnouncementQuery: () =>
+    useQuery({
+      queryKey: ["groupbuy_announcement"],
+      queryFn: () => groupbuyApi.getAnnouncment(),
+      select: (res) => {
+        return res.data;
+      },
+      staleTime: 3000,
+    }),
   useGroupBuyListQuery: () =>
     useQuery({
       queryKey: ["groupbuy_list"],
@@ -105,7 +114,7 @@ export const useGroupbuyApi = {
                 invoiceNumber: "",
                 // invoiceDate:o.
                 carrierId: o.cX_Invoice_ForWeb,
-                cX_Love_Code: o.cX_Love_Code,
+                loveCode: o.cX_Love_Code,
               },
               shippingInfo: {
                 receiver: o.cX_Ship_Name,

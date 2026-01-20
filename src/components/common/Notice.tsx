@@ -1,33 +1,24 @@
-import { useStaffbuyApi } from "@/api/useStaffbuyApi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
-import AppAlert from "./AppAlert";
 
-export default function Notice({ className = "" }: { className?: string }) {
+export default function Notice({
+  className = "",
+  notice = "",
+}: {
+  className?: string;
+  notice: string;
+}) {
   const [isOpen, setIsOpen] = useState(true);
-  const { data } = useStaffbuyApi.useAnnouncementQuery();
-
-  useEffect(() => {
-    if (data) {
-      AppAlert({
-        title: "員購公告",
-        message: (
-          <div dangerouslySetInnerHTML={{ __html: data.announcement }}></div>
-        ),
-        hideCancel: true,
-      });
-    }
-  }, [data]);
 
   return (
     <div
       className={
-        "w-full bg-white border-[#E5E5E5] border-1 overflow-hidden rounded-[5px] " +
+        "w-full bg-white border-[#E5E5E5] border overflow-hidden rounded-[5px] " +
         className
       }
     >
       <div
-        className="bg-staffbuy-primary flex items-center pl-3.5 text-white h-[32px] relative cursor-pointer z-20"
+        className="bg-staffbuy-primary flex items-center pl-3.5 text-white h-8 relative cursor-pointer z-20"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="font-medium">注意事項</span>
@@ -50,10 +41,10 @@ export default function Notice({ className = "" }: { className?: string }) {
             isOpen ? "max-h-[1000px]" : "max-h-0"
           }`}
         >
-          {data?.notice && (
+          {notice && (
             <div
               className="py-[15px] px-[15px] whitespace-pre-line text-sm text-gray-700 leading-relaxed pb-8"
-              dangerouslySetInnerHTML={{ __html: data?.notice }}
+              dangerouslySetInnerHTML={{ __html: notice }}
             />
           )}
         </div>

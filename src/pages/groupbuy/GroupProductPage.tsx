@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
 import { Grid, Select } from "antd";
@@ -42,7 +42,7 @@ export default function GroupBuyProductPage() {
   const [loading, setLoading] = useState(false);
   const selectedGroup = useCartStore((state) => state.selectedGroup);
   const updateSelectedGroup = useCartStore(
-    (state) => state.updateSelectedGroup
+    (state) => state.updateSelectedGroup,
   );
   const updateCart = useCartStore((state) => state.updateCart);
   const groupCart = useCartStore((state) => state.groupCart);
@@ -50,8 +50,30 @@ export default function GroupBuyProductPage() {
   const { data: groupbuyTopicList } = useGroupbuyApi.useGroupBuyListQuery();
   const { data: groupbuyProducts, isLoading: isFetching } =
     useGroupbuyApi.useGroupBuyProductListQuery(selectedGroup.id);
+  const { data: annoData } = useGroupbuyApi.useAnnouncementQuery();
 
   const cartItems = Object.values(groupCart);
+
+  useEffect(() => {
+    const expiry = localStorage.getItem("groupbuy-anno-expiry");
+    if (
+      annoData?.announcement &&
+      (!expiry || new Date().getTime() > parseInt(expiry))
+    ) {
+      AppAlert({
+        title: "公告",
+        message: (
+          <div
+            dangerouslySetInnerHTML={{ __html: annoData?.announcement }}
+          ></div>
+        ),
+        hideCancel: true,
+      }).then(() => {
+        const expiryDate = new Date().getTime() + 4 * 60 * 60 * 1000; // 4小時後才能再顯示一次公告
+        localStorage.setItem("groupbuy-anno-expiry", expiryDate.toString());
+      });
+    }
+  }, [annoData]);
 
   //團購主題選取器
   const groupSelect = (
@@ -61,13 +83,13 @@ export default function GroupBuyProductPage() {
         selectedGroup?.id
           ? selectedGroup?.id
           : groupbuyTopicList?.length
-          ? groupbuyTopicList[0].iD_GroupBy.toString()
-          : ""
+            ? groupbuyTopicList[0].iD_GroupBy.toString()
+            : ""
       }
       popupMatchSelectWidth={false}
       onChange={(val) => {
         const targetGroup = groupbuyTopicList?.find(
-          (g) => g.iD_GroupBy.toString() == val
+          (g) => g.iD_GroupBy.toString() == val,
         );
         if (!targetGroup) return;
         updateSelectedGroup({
@@ -116,7 +138,7 @@ export default function GroupBuyProductPage() {
     const showList = [...groupbuyProducts];
 
     return showList.filter((p) =>
-      p.name.toLowerCase().includes(searchkey.toLowerCase())
+      p.name.toLowerCase().includes(searchkey.toLowerCase()),
     );
   }, [groupbuyProducts, searchkey]);
 
@@ -180,11 +202,11 @@ export default function GroupBuyProductPage() {
             productName: item.name,
             price: item.price,
           },
-          realStock
+          realStock,
         );
       }
     },
-    500
+    500,
   );
 
   const handleAmountChange = (item: TableRowData, qty: number) => {
@@ -196,7 +218,7 @@ export default function GroupBuyProductPage() {
         productName: item.name,
         price: item.price,
       },
-      qty
+      qty,
     );
 
     // 先更新購物車 但是背景去打庫存API 檢查庫存數夠不夠
@@ -210,7 +232,10 @@ export default function GroupBuyProductPage() {
         <BlockTitle className="mb-4">團購</BlockTitle>
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
-            <Notice className="mb-5 w-full md:w-auto" />
+            <Notice
+              className="mb-5  w-full md:w-auto"
+              notice={annoData?.notice || ""}
+            />
             <div className="flex flex-col md:flex-row gap-2.5 mb-5">
               {groupSelect}
               <KeywordSearchAction
