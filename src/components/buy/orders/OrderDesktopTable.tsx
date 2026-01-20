@@ -38,14 +38,11 @@ export default function OrderDesktopTable(props: {
     deliveryMethod = orderItem.shippingInfo.address;
   }
 
-  const gridClass = orderItem.groupBuyName
-    ? "grid grid-cols-6"
-    : "grid grid-cols-7";
 
   const basicInfo = (
     <>
       <div
-        className={`${gridClass} bg-gray-100 border-b border-gray-300 font-medium text-gray-700`}
+        className={`grid grid-cols-7 bg-gray-100 border-b border-gray-300 font-medium text-gray-700`}
       >
         <div className="border-r border-gray-300 px-2 py-2 text-center">
           訂單編號
@@ -77,8 +74,7 @@ export default function OrderDesktopTable(props: {
         )}
       </div>
       <div
-        className={`grid grid-cols-${
-          orderItem.groupBuyName ? "6" : "7"
+        className={`grid grid-cols-7
         } hover:bg-gray-50 transition-colors`}
       >
         <div

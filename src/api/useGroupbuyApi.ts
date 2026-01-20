@@ -122,7 +122,7 @@ export const useGroupbuyApi = {
                 address: o.cX_Address,
                 shipTime: o.cX_Ship_Time,
                 // trackingNumber: o.c;
-                // fG_Status: string;
+                fG_Status: o.iD_GroupByNavigation.fG_Status,
                 // cX_GetDate: o.;
                 // nQ_Bag: o.;
                 // nQ_Transport_Money: number;

@@ -63,6 +63,7 @@ export default function OrderCard(props: {
 
   const isDelivery = orderItem?.transport === "Y";
   let deliveryMethod = isDelivery ? "宅配" : "自取";
+
   if (
     orderItem?.groupBuyName &&
     !isDelivery &&
@@ -99,7 +100,7 @@ export default function OrderCard(props: {
   );
 
   const moreInfo = [
-    orderItem.shippingInfo.nQ_Bag
+    orderItem.shippingInfo.nQ_Bag !== undefined
       ? {
           ...{
             field: "附提袋數",
@@ -109,22 +110,26 @@ export default function OrderCard(props: {
         }
       : { ...{} },
     {
+      field: "訂單情況",
+      value: `${orderItem.shippingInfo.fG_Status}`,
+      link: "",
+    },
+    {
       field: "發票號碼/日期",
       value: orderItem.invoiceInfo.invoiceNumber
         ? `${orderItem.invoiceInfo.invoiceNumber} / (${orderItem.invoiceInfo.invoiceDate})`
         : "尚未開立",
       link: "",
     },
-    orderItem.shippingInfo.cX_GetDate
-      ? {
-          ...{
-            field: "取貨時間",
-            value: orderItem.shippingInfo.cX_GetDate,
-            link: "",
-          },
-        }
-      : { ...{} },
   ];
+
+  if (orderItem.shippingInfo.cX_GetDate) {
+    moreInfo.push({
+      field: "取貨時間",
+      value: orderItem.shippingInfo.cX_GetDate,
+      link: "",
+    });
+  }
   if (orderItem.groupBuyName) {
     moreInfo.push({
       field: "團購主題",
@@ -168,7 +173,7 @@ export default function OrderCard(props: {
     moreInfo.push(
       { field: "收件人", value: orderItem.shippingInfo.receiver, link: "" },
       { field: "收件人電話", value: orderItem.shippingInfo.phone, link: "" },
-      { field: "到貨地址", value: orderItem.shippingInfo.address, link: "" }
+      { field: "到貨地址", value: orderItem.shippingInfo.address, link: "" },
     );
   }
 
