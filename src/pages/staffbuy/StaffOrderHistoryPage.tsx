@@ -52,7 +52,7 @@ export default function StaffOrderHistoryPage() {
           {screens.md ? (
             <OrderDesktopTable orderItem={{ ...o }} />
           ) : (
-            <OrderCard {...o} />
+            <OrderCard orderItem={{ ...o }} />
           )}
         </>
       ))}

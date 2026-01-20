@@ -31,11 +31,11 @@ export default function UserDropdown() {
 
   // 選單配置資料
   const menuItems = [
-    {
-      label: "個人設定",
-      icon: <UserOutlined />,
-      onClick: () => navigate(""),
-    },
+    // {
+    //   label: "個人設定",
+    //   icon: <UserOutlined />,
+    //   onClick: () => navigate(""),
+    // },
     {
       label: "我的員購紀錄",
       icon: <ShoppingOutlined />,
@@ -46,11 +46,11 @@ export default function UserDropdown() {
       icon: <ShoppingOutlined />,
       onClick: () => navigate("/groupbuy/orders"),
     },
-    {
-      label: "我的揪團訂單",
-      icon: <TeamOutlined />,
-      onClick: () => console.log("揪團"),
-    },
+    // {
+    //   label: "我的揪團訂單",
+    //   icon: <TeamOutlined />,
+    //   onClick: () => console.log("揪團"),
+    // },
   ];
 
   return (
@@ -60,7 +60,7 @@ export default function UserDropdown() {
       onMouseLeave={() => setIsOpen(false)}
     >
       {/* 頭像 Icon */}
-      <div className="border-2 border-transparent transition duration-200 hover:border-[#1890ff] cursor-pointer text-[16px] leading-4 flex justify-center items-center bg-[#87d068] w-12 h-12 rounded-full overflow-hidden text-white font-bold">
+      <div className="border-2 border-transparent transition duration-200 hover:border-[#1890ff] cursor-pointer text-[16px] leading-4 flex justify-center items-center bg-[#87d068] w-8 h-8 md:w-12 md:h-12 rounded-full overflow-hidden text-white font-bold">
         {user?.displayName ? user.displayName[0] : "U"}
       </div>
 

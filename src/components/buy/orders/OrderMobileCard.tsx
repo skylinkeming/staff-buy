@@ -9,7 +9,7 @@ const DataRow = ({
   openDetail,
   link = "",
 }: any) => {
-  let textStyle = "text-sm text-[#20232C] max-w-50";
+  let textStyle = "text-sm text-[#20232C] max-w-50 text-right ";
   if (isTotalPrice) {
     textStyle = `text-staffbuy-primary font-bold ${
       openDetail ? "text-md" : "text-sm"
@@ -129,6 +129,13 @@ export default function OrderCard(props: {
     moreInfo.push({
       field: "團購主題",
       value: orderItem.groupBuyName,
+      link: "",
+    });
+  }
+  if (orderItem.purchasePeriod) {
+    moreInfo.push({
+      field: "團購期間",
+      value: orderItem.purchasePeriod,
       link: "",
     });
   }

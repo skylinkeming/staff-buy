@@ -70,8 +70,7 @@ export const useGroupbuyApi = {
       queryKey: ["groupbuy_orderList", params],
       queryFn: () => groupbuyApi.getMyOrders(params),
       select: (res) => {
-        console.log(res.data.list);
-
+        //轉換成訂單UI要用的格式
         return {
           orderList: res.data.list.map((o) => {
             return {
@@ -106,6 +105,7 @@ export const useGroupbuyApi = {
                 invoiceNumber: "",
                 // invoiceDate:o.
                 carrierId: o.cX_Invoice_ForWeb,
+                cX_Love_Code: o.cX_Love_Code,
               },
               shippingInfo: {
                 receiver: o.cX_Ship_Name,

@@ -204,7 +204,7 @@ export default function GroupBuyProductPage() {
   };
 
   return (
-    <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
+    <div className="md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
       <div className="w-full md:w-auto">
         <Breadcrumbs className="max-w-7xl mx-auto mt-5" />
         <BlockTitle className="mb-4">團購</BlockTitle>

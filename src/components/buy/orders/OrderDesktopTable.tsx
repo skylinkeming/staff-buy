@@ -1,15 +1,16 @@
 import { useState } from "react";
 import type { OrderItem } from "@/api/staffbuyApi";
 import { FaPlay } from "react-icons/fa";
-import AppAlert from "@/components/common/AppAlert";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 
 const DataRow = ({ field, value, isHighlight, link }: any) => {
   let textStyle = "text-sm text-[#20232C]";
   if (isHighlight) {
     textStyle = `text-[#175dcc] font-bold ${"text-sm"}`;
+  } else if (link) {
+    textStyle += " text-blue-600 cursor-pointer ";
   }
+
   return (
     <div
       className={"flex w-full mb-2.5 " + (isHighlight ? " items-end" : "")}
@@ -37,12 +38,14 @@ export default function OrderDesktopTable(props: {
     deliveryMethod = orderItem.shippingInfo.address;
   }
 
+  const gridClass = orderItem.groupBuyName
+    ? "grid grid-cols-6"
+    : "grid grid-cols-7";
+
   const basicInfo = (
     <>
       <div
-        className={`grid grid-cols-${
-          orderItem.groupBuyName ? "6" : "7"
-        } bg-gray-100 border-b border-gray-300 font-medium text-gray-700`}
+        className={`${gridClass} bg-gray-100 border-b border-gray-300 font-medium text-gray-700`}
       >
         <div className="border-r border-gray-300 px-2 py-2 text-center">
           訂單編號
@@ -123,18 +126,30 @@ export default function OrderDesktopTable(props: {
         {orderItem.groupBuyName && (
           <div className="border-l border-gray-300 px-2 py-2 text-center flex items-center justify-center font-bold text-staffbuy-primary leading-3.5">
             <div
-              className={
-                "md:grid grid-cols-[20px_35px] shrink-0 items-center bg-[#69b1ff] px-2.5 py-1.25 rounded-[5px] " +
-                (isOrderConfirmed
-                  ? "pointer-none bg-gray-300"
-                  : "cursor-pointer")
-              }
+              className={`
+                md:grid grid-cols-[20px_35px] shrink-0 items-center px-2.5 py-1.25 rounded-[5px] border transition-all duration-200
+                ${
+                  isOrderConfirmed
+                    ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-white border-red-500 text-red-500 cursor-pointer hover:bg-red-500 hover:text-white"
+                }
+              `}
               onClick={() => {
-                onClickDeleteBtn(orderItem.idBuyM!)
+                if (!isOrderConfirmed) {
+                  onClickDeleteBtn(orderItem.idBuyM!);
+                }
               }}
             >
-              <FaRegTrashAlt color={"white"} />
-              <div className="text-white">刪除</div>
+              {/* 圖示顏色也要隨著 hover 改變 */}
+              <FaRegTrashAlt
+                className={
+                  isOrderConfirmed
+                    ? "text-gray-400"
+                    : "transition-colors duration-200"
+                }
+                // 如果圖示不支援 className 顏色，可用 style 或讓父層 text-red 控制
+              />
+              <div className="font-medium">刪除</div>
             </div>
           </div>
         )}
@@ -175,7 +190,7 @@ export default function OrderDesktopTable(props: {
             </div>
           </div>
           <div className="px-7.5 my-3.5 w-[50%]  max-h-40 overflow-auto">
-            {orderItem.shippingInfo.nQ_Bag && (
+            {orderItem.shippingInfo.nQ_Bag !== undefined && (
               <DataRow field="附提袋數" value={orderItem.shippingInfo.nQ_Bag} />
             )}
             {orderItem.purchasePeriod && (
@@ -198,6 +213,10 @@ export default function OrderDesktopTable(props: {
               <DataRow
                 field="黑貓宅配單號"
                 value={orderItem.shippingInfo.trackingNumber}
+                link={
+                  "https://www.t-cat.com.tw/Inquire/Trace.aspx?method=result&billID=" +
+                  orderItem.shippingInfo.trackingNumber
+                }
               />
             )}
             {isDelivery && orderItem.shippingInfo.receiver && (

@@ -4,7 +4,7 @@ import UserDropdown from "@/components/common/UserDropdown";
 export default function MainLayout() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col w-full">
-      <header className="h-16 bg-white shadow-sm px-6 flex justify-center items-center justify-between sticky top-0 z-40">
+      <header className="h-12 md:h-16 bg-white shadow-sm px-6 flex justify-center items-center justify-between sticky top-0 z-40">
         <div className="w-280 flex justify-between">
           <div className="flex items-center gap-4">
             {/* <h1 className="text-xl font-bold text-blue-600">員購系統</h1> */}
@@ -30,7 +30,7 @@ export default function MainLayout() {
         </div>
       </header>
 
-      <main className="flex-1 p-3">
+      <main className="flex-1 p-3.5">
         <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>

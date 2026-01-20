@@ -114,7 +114,7 @@ export default function StaffProductPage() {
   };
 
   return (
-    <div className="px-3.5 md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
+    <div className="md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
       <div className="relative">
         <Breadcrumbs className="max-w-7xl mx-auto mt-5" />
         <BlockTitle className="mb-4">員購</BlockTitle>
