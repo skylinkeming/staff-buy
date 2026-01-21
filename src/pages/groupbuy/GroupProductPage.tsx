@@ -91,14 +91,22 @@ export default function GroupBuyProductPage() {
         const targetGroup = groupbuyTopicList?.find(
           (g) => g.iD_GroupBy.toString() == val,
         );
-        if (!targetGroup) return;
+        setSearchkey("");
+        if (!targetGroup) {
+          updateSelectedGroup({
+            name: "",
+            id: "",
+            canBuyFrom: "",
+            canBuyTo: "",
+          });
+          return;
+        }
         updateSelectedGroup({
           name: targetGroup.cX_GroupBy_Name,
-          id: targetGroup?.iD_GroupBy.toString(),
-          canBuyFrom: targetGroup?.dT_CanBuyFrom,
-          canBuyTo: targetGroup?.dT_CanBuyTo,
+          id: targetGroup.iD_GroupBy.toString(),
+          canBuyFrom: targetGroup.dT_CanBuyFrom,
+          canBuyTo: targetGroup.dT_CanBuyTo,
         });
-        setSearchkey("");
       }}
       options={
         groupbuyTopicList
