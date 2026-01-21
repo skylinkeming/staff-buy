@@ -26,7 +26,7 @@ const DataRow = ({
         (isTotalPrice && openDetail ? "mt-3.5 items-end" : "")
       }
     >
-      <span className={"text-sm"}>{field}</span>
+      <span className={"text-sm font-medium "}>{field}</span>
       <span
         className={textStyle}
         onClick={() => {

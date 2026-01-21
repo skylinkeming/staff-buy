@@ -27,7 +27,6 @@ export default function GroupCheckoutPage() {
   const { mutate: handleCreateOrder, isPending } =
     useGroupbuyApi.useCreateOrderMutation();
 
-
   const cartItems = Object.values(groupCart);
 
   // 取得庫存數量
@@ -51,16 +50,16 @@ export default function GroupCheckoutPage() {
             productName: cartItem.productName,
             price: cartItem.price,
           },
-          realStock
+          realStock,
         );
       }
     },
-    500
+    500,
   );
 
   const handleAmountChange = async (
     cartItem: CartItem,
-    requestedQty: number
+    requestedQty: number,
   ) => {
     // 數量增減時要打api取得最新庫存
     debouncedFetchStock(cartItem, requestedQty);
@@ -93,7 +92,7 @@ export default function GroupCheckoutPage() {
         cX_GetDate: shippingInfo.pickupDate,
         cX_Ship_Name: shippingInfo.name,
         cX_Tel: shippingInfo.phone,
-        cX_Address: shippingInfo.address,
+        cX_Address: shippingInfo.address || shippingInfo.location,
         cX_Ship_Time: shippingInfo.deliveryTime,
         nQ_Bag: parseInt(shippingInfo.bagQty),
         cX_Invoice_ForWeb: invoiceInfo.carrierId,
