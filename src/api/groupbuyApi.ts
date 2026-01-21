@@ -283,13 +283,13 @@ export const groupbuyApi = {
   getMyOrders: async ({
     page = 1,
     pageSize = 10,
-    orderId,
+    searchTerm,
     startDate,
     endDate,
   }: {
     page: number;
     pageSize?: number;
-    orderId?: string;
+    searchTerm?: string;
     startDate?: string | null;
     endDate?: string | null;
   }) => {
@@ -300,9 +300,9 @@ export const groupbuyApi = {
     const data = {
       page,
       pageSize,
-      orderId,
       startDate,
       endDate,
+      cX_GroupBy_Name: searchTerm,
     };
 
     return api

@@ -21,9 +21,11 @@ export default function OrderSearchGroup({
   }) => void;
   placeholder?: string;
 }) {
+  const defaultStart = dayjs().subtract(6, "month").format("YYYY-MM-DD");
+  const defaultEnd = dayjs().format("YYYY-MM-DD");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>(defaultStart);
+  const [endDate, setEndDate] = useState<string>(defaultEnd);
 
   const handleSearch = () => {
     onClickSearchBtn({

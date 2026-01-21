@@ -13,11 +13,11 @@ export default function GroupOrderHistoryPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [orderFilter, setOrderFilter] = useState<{
-    orderId: string;
+    searchTerm: string;
     startDate: string;
     endDate: string;
   }>({
-    orderId: "",
+    searchTerm: "",
     startDate: "",
     endDate: "",
   });
@@ -28,7 +28,7 @@ export default function GroupOrderHistoryPage() {
   } = useGroupbuyApi.useOrderListQuery({
     page: currentPage,
     pageSize: pageSize,
-    orderId: orderFilter.orderId,
+    searchTerm: orderFilter.searchTerm,
     startDate: orderFilter.startDate,
     endDate: orderFilter.endDate,
   });
@@ -119,10 +119,10 @@ export default function GroupOrderHistoryPage() {
           <OrderSearchGroup
             className=" mb-5 border-b-[1px] border-[#d9d9d9] pb-5"
             isLoading={isLoading}
-            placeholder="請輸入訂單編號查詢"
+            placeholder="請輸入團購名稱或商品名稱"
             onClickSearchBtn={(searchParams) => {
               setOrderFilter({
-                orderId: searchParams.searchTerm,
+                searchTerm: searchParams.searchTerm,
                 startDate: searchParams.startDate,
                 endDate: searchParams.endDate,
               });

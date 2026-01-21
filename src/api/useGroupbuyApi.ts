@@ -71,7 +71,7 @@ export const useGroupbuyApi = {
   useOrderListQuery: (params: {
     page: number;
     pageSize?: number;
-    orderId?: string;
+    searchTerm?: string;
     startDate?: string;
     endDate?: string;
   }) => {
