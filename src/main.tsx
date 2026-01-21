@@ -19,6 +19,7 @@ import GroupCheckoutPage from "@/pages/groupbuy/GroupCheckoutPage.tsx";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
 import MainLayout from "./components/layout/MainLayout.tsx";
+import { useAuthStore } from "./store/useAuthStore.ts";
 
 const router = createHashRouter([
   {
@@ -76,7 +77,7 @@ const queryClient = new QueryClient({
 
       if (isAuthError) {
         queryClient.clear();
-        localStorage.removeItem("token");
+        useAuthStore.getState().clearAuth();
 
         AppAlert({ message: error.message, type: "warning" }).then(() => {
           window.location.href = "/";
@@ -98,5 +99,5 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );
