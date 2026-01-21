@@ -111,10 +111,10 @@ export const useGroupbuyApi = {
                 };
               }),
               invoiceInfo: {
-                invoiceNumber: "",
-                // invoiceDate:o.
                 carrierId: o.cX_Invoice_ForWeb,
                 loveCode: o.cX_Love_Code,
+                invoiceNumber: o.orderMs[0]?.cX_Invoice_Number,
+                invoiceDate: o.orderMs[0]?.cX_Invoice_Date,
               },
               shippingInfo: {
                 receiver: o.cX_Ship_Name,

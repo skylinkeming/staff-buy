@@ -45,6 +45,7 @@ export default function GroupBuyProductPage() {
     (state) => state.updateSelectedGroup,
   );
   const updateCart = useCartStore((state) => state.updateCart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const groupCart = useCartStore((state) => state.groupCart);
 
   const { data: groupbuyTopicList } = useGroupbuyApi.useGroupBuyListQuery();
@@ -93,14 +94,9 @@ export default function GroupBuyProductPage() {
         );
         setSearchkey("");
         if (!targetGroup) {
-          updateSelectedGroup({
-            name: "",
-            id: "",
-            canBuyFrom: "",
-            canBuyTo: "",
-          });
           return;
         }
+        clearCart(CART_TYPE);
         updateSelectedGroup({
           name: targetGroup.cX_GroupBy_Name,
           id: targetGroup.iD_GroupBy.toString(),
@@ -255,7 +251,7 @@ export default function GroupBuyProductPage() {
             </div>
             {renderProductTable()}
           </div>
-          <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
+          <div className="hidden md:inline-block sticky top-16 h-100  ">
             <CartSummary showDetail />
           </div>
           <MobileCheckoutBar

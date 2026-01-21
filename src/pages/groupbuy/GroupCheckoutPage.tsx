@@ -140,7 +140,7 @@ export default function GroupCheckoutPage() {
         <ShippingInfo isSubmitting={isSubmitting} />
         <InvoiceInfo isSubmitting={isSubmitting} />
       </div>
-      <div className="hidden md:inline-block sticky top-[0px] h-[400px] mt-15">
+      <div className="hidden md:inline-block sticky top-16 h-100 mt-15">
         <CartSummary
           onClickPurchaseBtn={handleClickPurchaseButton}
           disableBtn={isPending}

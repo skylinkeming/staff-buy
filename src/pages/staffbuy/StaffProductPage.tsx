@@ -169,7 +169,7 @@ export default function StaffProductPage() {
               />
             )}
           </div>
-          <div className="hidden md:inline-block sticky top-[0px] h-[400px] ">
+          <div className="hidden md:inline-block sticky top-16 h-100  ">
             <CartSummary showDetail />
           </div>
           <MobileCheckoutBar

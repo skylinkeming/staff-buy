@@ -38,7 +38,6 @@ export default function OrderDesktopTable(props: {
     deliveryMethod = orderItem.shippingInfo.address;
   }
 
-
   const basicInfo = (
     <>
       <div
@@ -66,7 +65,7 @@ export default function OrderDesktopTable(props: {
         <div className="border-r border-gray-300 px-2 py-2 text-center">
           商品總價
         </div>
-        <div className="px-2 py-2 text-center">發票日期</div>
+        <div className="px-2 py-2 text-center">發票號碼</div>
         {orderItem.groupBuyName && (
           <div className="border-l border-gray-300 px-2 py-2 text-center">
             功能
@@ -199,6 +198,12 @@ export default function OrderDesktopTable(props: {
                 isHighlight
               />
             )}
+            {orderItem.invoiceInfo.invoiceDate && (
+              <DataRow
+                field="發票日期"
+                value={orderItem.invoiceInfo.invoiceDate}
+              />
+            )}
             {orderItem.invoiceInfo.carrierId && (
               <DataRow
                 field="載具號碼"
@@ -206,10 +211,7 @@ export default function OrderDesktopTable(props: {
               />
             )}
             {orderItem.invoiceInfo.loveCode && (
-              <DataRow
-                field="愛心碼"
-                value={orderItem.invoiceInfo.loveCode}
-              />
+              <DataRow field="愛心碼" value={orderItem.invoiceInfo.loveCode} />
             )}
             {orderItem.shippingInfo.trackingNumber && (
               <DataRow

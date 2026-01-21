@@ -115,13 +115,21 @@ export default function OrderCard(props: {
       link: "",
     },
     {
-      field: "發票號碼/日期",
+      field: "發票號碼",
       value: orderItem.invoiceInfo.invoiceNumber
-        ? `${orderItem.invoiceInfo.invoiceNumber} / (${orderItem.invoiceInfo.invoiceDate})`
+        ? `${orderItem.invoiceInfo.invoiceNumber}`
         : "尚未開立",
       link: "",
     },
   ];
+
+  if (orderItem.invoiceInfo.invoiceDate) {
+    moreInfo.push({
+      field: "發票日期",
+      value: orderItem.invoiceInfo.invoiceDate,
+      link: "",
+    });
+  }
 
   if (orderItem.shippingInfo.cX_GetDate) {
     moreInfo.push({
