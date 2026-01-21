@@ -32,7 +32,7 @@ export default function GroupOrderHistoryPage() {
     startDate: orderFilter.startDate,
     endDate: orderFilter.endDate,
   });
-  const { mutate: handleDeleteOrder, isPending: isDeleting } =
+  const { mutate: handleDeleteOrder } =
     useGroupbuyApi.useDeleteOrderMutation();
 
   const screens = useBreakpoint();
@@ -85,7 +85,7 @@ export default function GroupOrderHistoryPage() {
     });
   };
 
-  
+
   orderlistContainer = (
     <div className="w-full flex flex-col gap-5">
       {data?.orderList.map((o) => (

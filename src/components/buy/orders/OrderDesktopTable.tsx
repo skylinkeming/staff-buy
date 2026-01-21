@@ -26,7 +26,7 @@ const DataRow = ({ field, value, isHighlight, link }: any) => {
 
 export default function OrderDesktopTable(props: {
   orderItem: OrderItem;
-  onClickDeleteBtn: (idBuyM: number) => void;
+  onClickDeleteBtn?: (idBuyM: number) => void;
 }) {
   const { onClickDeleteBtn, orderItem } = props;
   const [openDetail, setOpenDetail] = useState(false);
@@ -130,7 +130,7 @@ export default function OrderDesktopTable(props: {
                 }
               `}
               onClick={() => {
-                if (!isOrderConfirmed) {
+                if (!isOrderConfirmed && onClickDeleteBtn) {
                   onClickDeleteBtn(orderItem.idBuyM!);
                 }
               }}

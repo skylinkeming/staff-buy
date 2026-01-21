@@ -46,12 +46,12 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       storage: {
         getItem: (name) => {
-          const tokenData = base64Storage.getItem(`${name}-token`);
+          const tokenData = base64Storage.getItem(`${name}-token`) as any;
           const userData = localStorage.getItem(`${name}-user`);
           
           return {
             state: {
-              token: tokenData?.state?.token || null,
+              token: (tokenData && 'state' in tokenData) ? tokenData.state.token : null,
               user: userData ? JSON.parse(userData) : null,
             },
             version: 0,

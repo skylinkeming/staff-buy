@@ -86,7 +86,7 @@ export const useGroupbuyApi = {
               idBuyM: o.iD_BuyM,
               serialNum: o.cX_Serialnumber ? o.cX_Serialnumber : "尚未成單",
               groupBuyName: o.iD_GroupByNavigation.cX_GroupBy_Name,
-              groupBuyId: o.iD_GroupBy,
+              groupBuyId: o.iD_GroupBy.toString(),
               purchasePeriod:
                 o.iD_GroupByNavigation.dT_CanBuyFrom
                   .replace("T", " ")
@@ -96,7 +96,7 @@ export const useGroupbuyApi = {
                   .replace("T", " ")
                   .slice(0, 16),
               date: o.dT_Create.replace("T", " ").slice(0, 16),
-              transport: o.fG_Transport,
+              transport: o.fG_Transport as "Y" | "N",
               totalPrice: o.buyDs.reduce((acc, d) => {
                 const price = d.iD_ProductNavigation?.nQ_Price || 0;
                 const qty = d.nQ_BuyQuantity || 0;
@@ -121,11 +121,11 @@ export const useGroupbuyApi = {
                 phone: o.cX_Tel,
                 address: o.cX_Address,
                 shipTime: o.cX_Ship_Time,
-                // trackingNumber: o.c;
+                trackingNumber: "",
                 fG_Status: o.iD_GroupByNavigation.fG_Status,
-                // cX_GetDate: o.;
-                // nQ_Bag: o.;
-                // nQ_Transport_Money: number;
+                cX_GetDate: "",
+                nQ_Bag: 0,
+                nQ_Transport_Money: 0,
               },
             };
           }),

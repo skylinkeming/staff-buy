@@ -54,7 +54,7 @@ const BuyItem = ({ prodName, qty, price, subTotal }: any) => (
 // 手機版訂單卡片
 export default function OrderCard(props: {
   orderItem: OrderItem;
-  onClickDeleteBtn: (idBuyM: number) => void;
+  onClickDeleteBtn?: (idBuyM: number) => void;
 }) {
   const { orderItem, onClickDeleteBtn } = props;
   const [openDetail, setOpenDetail] = useState(false);
@@ -192,7 +192,9 @@ export default function OrderCard(props: {
         {orderItem.groupBuyName && orderItem.serialNum === "尚未成單" && (
           <FaRegTrashAlt
             onClick={() => {
-              onClickDeleteBtn(orderItem.idBuyM!);
+              if (onClickDeleteBtn) {
+                onClickDeleteBtn(orderItem.idBuyM!);
+              }
             }}
           />
         )}
