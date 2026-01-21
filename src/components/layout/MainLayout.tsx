@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import UserDropdown from "@/components/common/UserDropdown";
 
 export default function MainLayout() {
@@ -9,18 +9,18 @@ export default function MainLayout() {
           <div className="flex items-center gap-4">
             {/* <h1 className="text-xl font-bold text-blue-600">員購系統</h1> */}
             <nav className="hidden md:flex gap-8 ml-8">
-              <a
-                href="/#/staffbuy"
+              <Link
+                to="/staffbuy/purchase"
                 className="text-gray-600 hover:text-blue-500"
               >
-                員購區
-              </a>
-              <a
-                href="/#/groupbuy"
+                員購區   
+              </Link>
+              <Link
+                to="/groupbuy/purchase"
                 className="text-gray-600 hover:text-blue-500"
               >
                 團購區
-              </a>
+              </Link>
             </nav>
           </div>
 
