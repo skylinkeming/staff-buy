@@ -101,7 +101,7 @@ export default function CartSummary({
         <div
           onClick={handleClickClearBtn}
           className={
-            "flex items-center gap-[5px] bg-staffbuy-secondary min-w-20 cursor-pointer text-[white] rounded-[5px] py-[5px] justify-center "
+            "flex items-center bg-staffbuy-secondary min-w-20 cursor-pointer text-[white] rounded-[5px] py-[5px] justify-center "
           }
         >
           清空

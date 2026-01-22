@@ -48,6 +48,7 @@ export default function GroupCheckoutPage() {
           {
             productId: cartItem.productId,
             productName: cartItem.productName,
+            groupItemId: cartItem.groupItemId,
             price: cartItem.price,
           },
           realStock,

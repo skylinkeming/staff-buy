@@ -107,10 +107,10 @@ export default function GroupBuyProductPage() {
       options={
         groupbuyTopicList
           ? groupbuyTopicList.map((g) => ({
-              value: g.iD_GroupBy.toString(),
-              label: g.cX_GroupBy_Name,
-              // disabled: g.,
-            }))
+            value: g.iD_GroupBy.toString(),
+            label: g.cX_GroupBy_Name,
+            // disabled: g.,
+          }))
           : []
       }
     />
@@ -204,6 +204,7 @@ export default function GroupBuyProductPage() {
           {
             productId: item.id,
             productName: item.name,
+            groupItemId: item.groupBuyItemId!,
             price: item.price,
           },
           realStock,

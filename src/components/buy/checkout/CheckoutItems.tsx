@@ -43,6 +43,7 @@ export default function CheckoutItems({
       {
         productId: cartItem.productId,
         productName: cartItem.productName,
+        groupItemId: cartItem.groupItemId,
         price: cartItem.price,
       },
       qty
