@@ -40,7 +40,7 @@ export default function AuthWrapper() {
 
   if (qweValue && isPending) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center">
+      <div className="flex h-screen w-screen items-center justify-center gap-2.5">
         <Spin size="large" tip="自動登入中..." />
         自動登入中...
       </div>

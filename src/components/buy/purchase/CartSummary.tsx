@@ -20,9 +20,24 @@ export default function CartSummary({
   const cart = useCartStore((state) =>
     isStaffBuy ? state.staffCart : state.groupCart,
   );
+  const clearCart = useCartStore((state) => state.clearCart);
   const cartItems = Object.values(cart);
 
-  const handleClickBtn = async () => {
+
+  const handleClickClearBtn = async () => {
+    if (cartItems.length === 0) {
+      return;
+    }
+    const res = await AppAlert({
+      message: "確認清空購物車?",
+    });
+    if (res === "cancel") {
+      return;
+    }
+    clearCart(isStaffBuy ? "staff" : "group");
+  }
+
+  const handleClickPurchaseBtn = async () => {
     if (isCheckoutStage && onClickPurchaseBtn) {
       onClickPurchaseBtn();
       return;
@@ -82,15 +97,24 @@ export default function CartSummary({
           </span>
         </div>
       </div>
-
-      <div
-        onClick={handleClickBtn}
-        className={
-          "bg-staffbuy-primary cursor-pointer text-[white] rounded-[15px] py-[5px] text-center hover:text-[white] w-full inline-block underline-offset-[0px] " +
-          (disableBtn ? "pointer-events-none opacity-50" : "")
-        }
-      >
-        購買商品
+      <div className="flex gap-[10px]">
+        <div
+          onClick={handleClickClearBtn}
+          className={
+            "flex items-center gap-[5px] bg-staffbuy-secondary min-w-20 cursor-pointer text-[white] rounded-[5px] py-[5px] justify-center "
+          }
+        >
+          清空
+        </div>
+        <div
+          onClick={handleClickPurchaseBtn}
+          className={
+            "bg-staffbuy-primary cursor-pointer text-[white] rounded-[5px] py-[5px] text-center hover:text-[white] w-full inline-block underline-offset-[0px] " +
+            (disableBtn ? "pointer-events-none opacity-50" : "")
+          }
+        >
+          {isCheckoutStage ? "完成購買" : "購買商品"}
+        </div>
       </div>
     </div>
   );
