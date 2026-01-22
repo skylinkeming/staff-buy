@@ -50,13 +50,6 @@ export const useGroupbuyApi = {
       },
       staleTime: 30000,
     }),
-  useInvoicePickStoreListQuery: (enabled = true) =>
-    useQuery({
-      queryKey: ["groupbuy_invoicePickupStoreList"],
-      queryFn: () => groupbuyApi.getInvoicePickupStoreList(),
-      select: (res) => res.data,
-      enabled: enabled,
-    }),
   usePickupStoreListQuery: (groupbuyId: string) =>
     useQuery({
       queryKey: ["groupbuy_pickupPlaceList"],

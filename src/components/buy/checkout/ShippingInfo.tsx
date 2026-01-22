@@ -1,10 +1,10 @@
 import { useCartStore, type CartState } from "@/store/useCartStore";
 import FormInput from "../../common/FormInput";
 import { useEffect } from "react";
-import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 import { useLocation } from "react-router";
+import { useCommonApi } from "@/api/useCommonApi";
 
 export default function ShippingInfo({
   isSubmitting,
@@ -13,18 +13,18 @@ export default function ShippingInfo({
 }) {
   const location = useLocation();
   const isGroupBuy = location.pathname.includes("groupbuy");
-  const { data: bagList } = useStaffbuyApi.useBagListQuery();
-  const { data: shiptimeList } = useStaffbuyApi.useShiptimeListQuery();
+  const { data: bagList } = useCommonApi.useBagListQuery();
+  const { data: shiptimeList } = useCommonApi.useShiptimeListQuery();
   const selectedGroup = useCartStore((state) => state.selectedGroup);
   const { data: pickupStoreList } = useGroupbuyApi.usePickupStoreListQuery(
-    selectedGroup?.id
+    selectedGroup?.id,
   );
   const updateShippingInfo = useCartStore((state) => state.updateShippingInfo);
   const shippingInfo = useCartStore((state) => state.shippingInfo);
   const setFormError = useCartStore((state) => state.setFormError);
 
   const getFieldErrorMsg: (key: keyof typeof shippingInfo) => string = (
-    key
+    key,
   ) => {
     if (!isSubmitting) return "";
 
@@ -32,7 +32,7 @@ export default function ShippingInfo({
   };
 
   const hasError = Object.values(validateRules(shippingInfo, isGroupBuy)).some(
-    (rule) => rule() !== ""
+    (rule) => rule() !== "",
   );
 
   useEffect(() => {
@@ -43,18 +43,20 @@ export default function ShippingInfo({
     <>
       <BlockTitle className="mt-[30px] mb-[10px]">取貨資訊</BlockTitle>
       <div className="bg-[white] grid grid-cols-1 px-2.5 py-5 rounded-[15px] max-w-175 md:grid-cols-2 gap-2.5">
-        <FormInput
-          required
-          variant="date"
-          label="取貨日期"
-          value={shippingInfo.pickupDate}
-          errorMsg={getFieldErrorMsg("pickupDate")}
-          onChange={(val) => {
-            updateShippingInfo({
-              pickupDate: val,
-            });
-          }}
-        />
+        {!isGroupBuy && (
+          <FormInput
+            required
+            variant="date"
+            label="取貨日期"
+            value={shippingInfo.pickupDate}
+            errorMsg={getFieldErrorMsg("pickupDate")}
+            onChange={(val) => {
+              updateShippingInfo({
+                pickupDate: val,
+              });
+            }}
+          />
+        )}
         {!isGroupBuy && (
           <FormInput
             required
@@ -190,10 +192,10 @@ export default function ShippingInfo({
 
 const validateRules = (
   shippingInfo: Partial<CartState["shippingInfo"]>,
-  isGroupBuy?: boolean
+  isGroupBuy?: boolean,
 ) => ({
   pickupDate: () => {
-    if (!shippingInfo.pickupDate) return "請選擇取件日期";
+    if (!isGroupBuy && !shippingInfo.pickupDate) return "請選擇取件日期";
     return "";
   },
   bagQty: () => {

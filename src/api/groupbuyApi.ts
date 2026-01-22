@@ -266,10 +266,6 @@ export const groupbuyApi = {
     api
       .get<ApiResponse<StockInfo>>("/GroupBuy/GetStock?id=" + groupItemId)
       .then((res) => res.data),
-  getInvoicePickupStoreList: () =>
-    api
-      .get<ApiResponse<Array<Option>>>("/Common/GetInvoicePickupStoreList")
-      .then((res) => res.data),
   getPickupPlaceByGroupId: (groupId: string) =>
     api
       .get<

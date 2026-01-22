@@ -18,7 +18,7 @@ export default function CartSummary({
   const isStaffBuy = location.pathname.includes("staffbuy");
   const isCheckoutStage = location.pathname.includes("checkout");
   const cart = useCartStore((state) =>
-    isStaffBuy ? state.staffCart : state.groupCart
+    isStaffBuy ? state.staffCart : state.groupCart,
   );
   const cartItems = Object.values(cart);
 
@@ -44,7 +44,8 @@ export default function CartSummary({
   return (
     <div
       className={
-        "border border-[#D9D9D9] p-[20px] w-[280px] rounded-[10px] bg-white " + className
+        "border border-[#D9D9D9] p-[20px] w-[280px] rounded-[10px] bg-white " +
+        className
       }
     >
       {cartItems.length > 0 && showDetail && (
@@ -69,6 +70,7 @@ export default function CartSummary({
           })}
         </div>
       )}
+
       <div className="flex justify-between items-end mb-[20px]">
         <div className="shrink-0 text-[14px]">總金額</div>
         <div className="text-staffbuy-primary">

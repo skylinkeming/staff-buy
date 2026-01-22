@@ -1,28 +1,28 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router";
 import { useMutation } from "@tanstack/react-query";
-import { staffbuyApi } from "@/api/staffbuyApi";
 import { Spin } from "antd";
 import { useAuthStore } from "@/store/useAuthStore";
+import { commonApi } from "@/api/commonApi";
 
 export default function AuthWrapper() {
-  const { setToken, setUser, user } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
   const nativeParams = new URLSearchParams(window.location.search);
   const qweValue = nativeParams.get("qwe");
 
   const { mutate: autoLogin, isPending } = useMutation({
-    mutationFn: (qwe: string) => staffbuyApi.login({ qwe }),
+    mutationFn: (qwe: string) => commonApi.login({ qwe }),
     onSuccess: (res) => {
       // 儲存 token
       setToken(res.data);
-      if (!user?.eID) {
-        staffbuyApi
-          .getUserInfo()
-          .then((res) => res.data)
-          .then((result) => {
-            setUser(result);
-          });
-      }
+
+      // 取得使用者資訊
+      commonApi
+        .getUserInfo()
+        .then((res) => res.data)
+        .then((result) => {
+          setUser(result);
+        });
 
       // 清除網址上的qwe
       const url = new URL(window.location.href);

@@ -1,12 +1,13 @@
 import { Link, Outlet } from "react-router";
 import UserDropdown from "@/components/common/UserDropdown";
+import { useCommonApi } from "@/api/useCommonApi";
 
 export default function MainLayout() {
-  const showHeader = import.meta.env.VITE_SHOW_HEADER === "1";
+  const { data: hasLayout } = useCommonApi.useHasLayoutQuery();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col w-full">
-      {showHeader && (
+      {hasLayout && (
         <header className="h-12 md:h-16 bg-white shadow-sm px-6 flex justify-center items-center justify-between sticky top-0 z-40">
           <div className="w-280 flex justify-between">
             <div className="flex items-center gap-4">
@@ -26,7 +27,6 @@ export default function MainLayout() {
                 </Link>
               </nav>
             </div>
-
             <div className="relative">
               <UserDropdown />
             </div>

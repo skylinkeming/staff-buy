@@ -56,12 +56,7 @@ export interface StaffBuyProduct {
   nQ_StockQty: number;
 }
 
-export interface Option {
-  disabled: boolean;
-  selected: boolean;
-  text: string;
-  value: string;
-}
+
 
 export interface OrderItem {
   id: number;
@@ -173,18 +168,6 @@ export const staffbuyApi = {
       .get<ApiResponse<Array<{ iD_Product: string; nQ_StockQty: number }>>>(url)
       .then((res) => res.data);
   },
-  getShipTimeList: () =>
-    api
-      .get<ApiResponse<Array<Option>>>("/Common/ShipTimeList")
-      .then((res) => res.data),
-  getBagList: () =>
-    api
-      .get<ApiResponse<Array<Option>>>("/Common/BagList")
-      .then((res) => res.data),
-  getInvoicePickupStoreList: () =>
-    api
-      .get<ApiResponse<Array<Option>>>("/Common/GetInvoicePickupStoreList")
-      .then((res) => res.data),
   createOrder: (body: CreateOrderRequest) =>
     api
       .post<ApiResponse<string>>("/Order/CreateOrder", body)

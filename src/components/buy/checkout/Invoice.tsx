@@ -1,9 +1,9 @@
 import { useCartStore, type CartState } from "@/store/useCartStore";
 import FormInput from "../../common/FormInput";
 import { useEffect } from "react";
-import { useStaffbuyApi } from "@/api/useStaffbuyApi";
 import { useLocation } from "react-router";
 import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
+import { useCommonApi } from "@/api/useCommonApi";
 
 export default function InvoiceInfo({
   isSubmitting,
@@ -13,7 +13,7 @@ export default function InvoiceInfo({
   const location = useLocation();
   const isGroupBuy = location.pathname.includes("groupbuy");
   const { data: invoicePickupStoreList } =
-    useStaffbuyApi.useInvoicePickStoreListQuery(isGroupBuy);
+    useCommonApi.useInvoicePickStoreListQuery(isGroupBuy);
 
   const updateInvoiceInfo = useCartStore((state) => state.updateInvoiceInfo);
   const invoiceInfo = useCartStore((state) => state.invoiceInfo);
@@ -49,7 +49,7 @@ export default function InvoiceInfo({
   };
 
   const hasError = Object.values(validateRules(invoiceInfo)).some(
-    (rule) => rule() !== ""
+    (rule) => rule() !== "",
   );
 
   useEffect(() => {

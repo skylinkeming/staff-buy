@@ -1,9 +1,9 @@
 import { BlockTitle } from "@/pages/staffbuy/StaffProductPage";
 import FormInput from "../../common/FormInput";
-import { useStaffbuyApi } from "@/api/useStaffbuyApi";
+import { useCommonApi } from "@/api/useCommonApi";
 
 export default function OrdererInfo() {
-  const { data } = useStaffbuyApi.useUserInfoQuery();
+  const { data } = useCommonApi.useUserInfoQuery();
 
   return (
     <>

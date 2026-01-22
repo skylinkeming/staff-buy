@@ -13,7 +13,7 @@ export default function Notice({
   return (
     <div
       className={
-        "w-full bg-white border-[#E5E5E5] border overflow-hidden rounded-[5px] " +
+        "w-full bg-white border-[#E5E5E5] border overflow-hidden rounded-[10px] " +
         className
       }
     >
