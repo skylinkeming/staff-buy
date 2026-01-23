@@ -29,13 +29,22 @@ h1 {
 .no-padding-title .ant-table-title {
   padding: 0 !important;
 }
+
 .no-padding-title .ant-table-footer {
   padding: 0 !important;
 }
 
+pre {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  word-break: break-all !important;
+  font-family: inherit;
+  margin: 1em 0;
+}
+
 .row-disabled {
-  color: #b6b6b6 !important; 
-  background-color:white; 
+  color: #b6b6b6 !important;
+  background-color: white;
   pointer-events: none;
 }
 
@@ -43,8 +52,10 @@ h1 {
 @media (max-width: 576px) {
   .ant-picker-panels {
     flex-direction: column;
-    overflow-y: scroll; /* Add scroll if needed for height */
-    height: 400px; /* Example height */
+    overflow-y: scroll;
+    /* Add scroll if needed for height */
+    height: 400px;
+    /* Example height */
   }
 }
 

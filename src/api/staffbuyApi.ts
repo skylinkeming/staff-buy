@@ -131,19 +131,6 @@ export interface CreateOrderRequest {
 }
 
 export const staffbuyApi = {
-  login: (body: { qwe: string }) =>
-    api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),
-  getUserInfo: () =>
-    api
-      .get<
-        ApiResponse<{
-          eID: string;
-          displayName: string;
-          deptId: string;
-          deptName: string;
-        }>
-      >("/Auth/userinfo")
-      .then((res) => res.data),
   getAnnouncment: () =>
     api
       .get<
