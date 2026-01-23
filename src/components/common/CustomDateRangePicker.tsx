@@ -15,13 +15,11 @@ export default function CustomDateRangePicker({
   return (
     <ConfigProvider locale={zhTW}>
       <RangePicker
+        format="YYYY/MM/DD"
         className={className}
         onChange={(_, dates) => {
-          console.log(dates);
           onChange(dates[0], dates[1]);
         }}
-        // value={[dayjs(searchStartDate), dayjs(searchEndDate)]}
-        // 為了讓面板在 Popover 裡顯示更自然，可以使用以下設定
         allowClear
       />
     </ConfigProvider>

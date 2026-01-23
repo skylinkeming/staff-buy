@@ -28,7 +28,7 @@ function App() {
 
   return (
     <div className="w-full h-screen flex items-center justify-center items-center gap-5 ">
-      {renderMenuItem("員工頁面", "/staffbuy/purchase", <ShoppingOutlined className="text-5xl" />)}
+      {renderMenuItem("員購頁面", "/staffbuy/purchase", <ShoppingOutlined className="text-5xl" />)}
       {renderMenuItem("團購頁面", "/groupbuy/purchase", <ShoppingOutlined className="text-5xl" />)}
     </div>
   );

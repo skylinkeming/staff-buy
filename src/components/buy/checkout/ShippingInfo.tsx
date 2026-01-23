@@ -67,10 +67,10 @@ export default function ShippingInfo({
             optionData={
               bagList
                 ? bagList?.map((b) => ({
-                    value: b.value,
-                    label: b.text,
-                    disabled: b.disabled,
-                  }))
+                  value: b.value,
+                  label: b.text,
+                  disabled: b.disabled,
+                }))
                 : []
             }
             onChange={(val) => {
@@ -89,9 +89,9 @@ export default function ShippingInfo({
             optionData={
               pickupStoreList
                 ? pickupStoreList?.map((b) => ({
-                    value: b.cX_ShipPlace,
-                    label: b.cX_ShipPlace === "Y" ? "宅配" : b.cX_ShipPlace,
-                  }))
+                  value: b.cX_ShipPlace,
+                  label: b.cX_ShipPlace === "Y" ? "宅配" : b.cX_ShipPlace,
+                }))
                 : []
             }
             errorMsg={getFieldErrorMsg("location")}
@@ -127,6 +127,7 @@ export default function ShippingInfo({
             }}
           />
         )}
+        <div />
         {shippingInfo.isDelivery === "Y" && (
           <>
             <FormInput
@@ -170,10 +171,10 @@ export default function ShippingInfo({
               optionData={
                 shiptimeList
                   ? shiptimeList?.map((b) => ({
-                      value: b.value,
-                      label: b.text,
-                      disabled: b.disabled,
-                    }))
+                    value: b.value,
+                    label: b.text,
+                    disabled: b.disabled,
+                  }))
                   : []
               }
               errorMsg={getFieldErrorMsg("deliveryTime")}

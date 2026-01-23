@@ -48,6 +48,7 @@ export interface Option {
   value: string;
 }
 
+// 共用的API
 export const commonApi = {
   login: (body: { qwe: string }) =>
     api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),

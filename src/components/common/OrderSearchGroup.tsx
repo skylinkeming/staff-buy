@@ -55,6 +55,7 @@ export default function OrderSearchGroup({
         />
         <RangePicker
           className="w-full md:w-60"
+          format="YYYY/MM/DD"
           onChange={(_, dates) => {
             if (dates) {
               setStartDate(dates[0]);
