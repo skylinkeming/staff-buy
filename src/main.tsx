@@ -79,9 +79,12 @@ const queryClient = new QueryClient({
         queryClient.clear();
         useAuthStore.getState().clearAuth();
 
-        AppAlert({ message: error.message, type: "warning" }).then(() => {
-          window.location.href = "/";
-        });
+        if (typeof window !== "undefined" && !window.location.href.includes("qwe")) {//如果不是正在登入中
+          AppAlert({ message: error.message, type: "warning" }).then(() => {
+            window.location.href = "/";
+          });
+        }
+
         return;
       }
 
