@@ -145,7 +145,7 @@ export default function StaffProductPage() {
     <KeywordSearchAction
       key={"staffbuy"}
       className={"md:w-[50%] w-full"}
-      placeholder="搜尋此團購的商品"
+      placeholder="搜尋員購商品"
       onClickSearch={handleSearch}
     />
   </div>
@@ -161,11 +161,6 @@ export default function StaffProductPage() {
               className="mb-[15px] w-full md:w-auto"
               notice={annoData?.notice || ""}
             />
-            {/* <KeywordSearchAction
-              className="mb-[30px] md:w-[100%]"
-              placeholder="搜尋員購商品"
-              onClickSearch={handleSearch}
-            /> */}
             {screens.md ? (
               <ProductTable
                 title={tableTitle}

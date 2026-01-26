@@ -177,6 +177,7 @@ export default function GroupBuyProductPage() {
         groupItemId: item.groupBuyItemId!,
         productName: item.name,
         price: item.price,
+        limit: item.limit,
       },
       qty,
     );

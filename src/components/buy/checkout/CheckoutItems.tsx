@@ -38,6 +38,14 @@ export default function CheckoutItems({
         return;
       }
     }
+    if (cartItem.limit) {
+      if (qty > cartItem.limit) {
+        AppAlert({
+          message: cartItem.productName + " 超過每人最大購買數量:" + cartItem.limit,
+        });
+        return;
+      }
+    }
     updateCart(
       CART_TYPE,
       {
