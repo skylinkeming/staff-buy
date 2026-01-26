@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dayjs from "dayjs";
 import type { OrderItem } from "@/api/staffbuyApi";
 import { FaRegTrashAlt } from "react-icons/fa";
 
@@ -11,9 +12,8 @@ const DataRow = ({
 }: any) => {
   let textStyle = "text-sm text-[#20232C] max-w-50 text-right ";
   if (isTotalPrice) {
-    textStyle = `text-staffbuy-primary font-bold ${
-      openDetail ? "text-md" : "text-sm"
-    }`;
+    textStyle = `text-staffbuy-primary font-bold ${openDetail ? "text-md" : "text-sm"
+      }`;
   }
   if (link) {
     textStyle += " text-blue cursor-pointer";
@@ -61,6 +61,13 @@ export default function OrderCard(props: {
 
   if (!orderItem) return <></>;
 
+  const checkIsOrderLocked = () => {
+    const isInPurchasePeriod =
+      dayjs(orderItem.purchasePeriod?.split(" ~ ")[1]).isAfter(dayjs()) && dayjs(orderItem.purchasePeriod?.split(" ~ ")[0]).isBefore(dayjs());
+
+    return orderItem.serialNum !== "尚未成單" || !isInPurchasePeriod;
+  }
+
   const isDelivery = orderItem?.transport === "Y";
   let deliveryMethod = isDelivery ? "宅配" : "自取";
 
@@ -102,12 +109,12 @@ export default function OrderCard(props: {
   const moreInfo = [
     orderItem.shippingInfo.nQ_Bag !== undefined
       ? {
-          ...{
-            field: "附提袋數",
-            value: orderItem.shippingInfo.nQ_Bag,
-            link: "",
-          },
-        }
+        ...{
+          field: "附提袋數",
+          value: orderItem.shippingInfo.nQ_Bag,
+          link: "",
+        },
+      }
       : { ...{} },
     {
       field: "訂單情況",
@@ -189,7 +196,7 @@ export default function OrderCard(props: {
     <div className="w-full shadow-[1px_2px_4px_0px_rgba(0,0,0,0.25)] rounded-[15px] bg-white overflow-hidden">
       <div className="border-b font-[600] border-[#D9D9D9] text-[#020202] py-2.5 px-5 flex justify-between items-center">
         訂單資訊
-        {orderItem.groupBuyName && orderItem.serialNum === "尚未成單" && (
+        {orderItem.groupBuyName && !checkIsOrderLocked() && (
           <FaRegTrashAlt
             onClick={() => {
               if (onClickDeleteBtn) {

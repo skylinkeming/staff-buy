@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dayjs from "dayjs";
 import type { OrderItem } from "@/api/staffbuyApi";
 import { FaPlay } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -30,12 +31,18 @@ export default function OrderDesktopTable(props: {
 }) {
   const { onClickDeleteBtn, orderItem } = props;
   const [openDetail, setOpenDetail] = useState(false);
-  const isOrderConfirmed = orderItem.serialNum !== "尚未成單";
   const isDelivery = orderItem.transport === "Y";
   let deliveryMethod = isDelivery ? "宅配" : "自取";
 
   if (orderItem.groupBuyName && !isDelivery && orderItem.shippingInfo.address) {
     deliveryMethod = orderItem.shippingInfo.address;
+  }
+
+  const checkIsOrderLocked = () => {
+    const isInPurchasePeriod =
+      dayjs(orderItem.purchasePeriod?.split(" ~ ")[1]).isAfter(dayjs()) && dayjs(orderItem.purchasePeriod?.split(" ~ ")[0]).isBefore(dayjs());
+
+    return orderItem.serialNum !== "尚未成單" || !isInPurchasePeriod;
   }
 
   const basicInfo = (
@@ -81,9 +88,8 @@ export default function OrderDesktopTable(props: {
           onClick={() => setOpenDetail((prev) => !prev)}
         >
           <FaPlay
-            className={`text-black w-2 absolute left-2 transition-transform duration-200 ${
-              openDetail ? "rotate-90" : ""
-            } text-[#20232C]`}
+            className={`text-black w-2 absolute left-2 transition-transform duration-200 ${openDetail ? "rotate-90" : ""
+              } text-[#20232C]`}
           />
           {orderItem.serialNum}
         </div>
@@ -124,21 +130,20 @@ export default function OrderDesktopTable(props: {
             <div
               className={`
                 md:grid grid-cols-[20px_35px] shrink-0 items-center px-2.5 py-1.25 rounded-[5px] border transition-all duration-200
-                ${
-                  isOrderConfirmed
-                    ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-white border-red-500 text-red-500 cursor-pointer hover:bg-red-500 hover:text-white"
+                ${checkIsOrderLocked()
+                  ? "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-white border-red-500 text-red-500 cursor-pointer hover:bg-red-500 hover:text-white"
                 }
               `}
               onClick={() => {
-                if (!isOrderConfirmed && onClickDeleteBtn) {
+                if (!checkIsOrderLocked() && onClickDeleteBtn) {
                   onClickDeleteBtn(orderItem.idBuyM!);
                 }
               }}
             >
               <FaRegTrashAlt
                 className={
-                  isOrderConfirmed
+                  checkIsOrderLocked()
                     ? "text-gray-400"
                     : "transition-colors duration-200"
                 }

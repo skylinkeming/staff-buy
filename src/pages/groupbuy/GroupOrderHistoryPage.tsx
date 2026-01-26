@@ -64,15 +64,12 @@ export default function GroupOrderHistoryPage() {
 
     handleDeleteOrder(idBuyM, {
       onSuccess: async (data) => {
-        // setIsSubmitting(false);
         console.log("訂單刪除成功:", data);
         await AppAlert({
           message: "訂單刪除成功",
           type: "success",
         });
         refetchOrders();
-        // clearCart("staff");
-        // navigate("/staffbuy/orders");
       },
       onError: (error) => {
         console.error("建立失敗:", error);
