@@ -2,6 +2,7 @@ import { Table, ConfigProvider } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import QuantityInput from "./QuantityInput";
 import type { ReactNode } from "react";
+import AppAlert from "@/components/common/AppAlert";
 
 interface TableRowData {
   id: string;
@@ -10,6 +11,8 @@ interface TableRowData {
   stock: number;
   quantity: number;
   subtotal: number;
+  limit?: number;
+  groupBuyItemId?: string;
 }
 
 interface MobileProductTableProps {
@@ -43,20 +46,18 @@ export default function MobileProductTable({
           </div>
           <div className="flex gap-2.5">
             <div
-              className={`text-[12px] leading-3 pr-1 rounded ${
-                record.quantity > 0
-                  ? "text-[#6B5E55]"
-                  : "text-[#999] bg-[#FBFBFB]"
-              }`}
+              className={`text-[12px] leading-3 pr-1 rounded ${record.quantity > 0
+                ? "text-[#6B5E55]"
+                : "text-[#999] bg-[#FBFBFB]"
+                }`}
             >
               價格: {record.price}
             </div>
             <div
-              className={`text-[12px] px-1 leading-3 rounded ${
-                record.quantity > 0
-                  ? "text-[#6B5E55]"
-                  : "text-[#999] bg-[#FBFBFB]"
-              }`}
+              className={`text-[12px] px-1 leading-3 rounded ${record.quantity > 0
+                ? "text-[#6B5E55]"
+                : "text-[#999] bg-[#FBFBFB]"
+                }`}
             >
               剩餘: {record.stock}
             </div>
@@ -84,6 +85,14 @@ export default function MobileProductTable({
               onChange={(val) => {
                 if (val > record.stock) {
                   onChangeQty(record, record.stock);
+                  return;
+                }
+                if (record.limit && val > record.limit) {
+                  AppAlert({
+                    message: `此商品每人限購${record.limit}件`,
+                    hideCancel: true,
+                  })
+                  onChangeQty(record, record.limit);
                   return;
                 }
                 onChangeQty(record, val);

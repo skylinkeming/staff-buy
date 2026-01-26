@@ -84,12 +84,15 @@ export interface GroupBuyProduct {
   iD_Product: number;
   cX_ProductName: string;
   nQ_BuyQuantity: number;
+  nQ_OneMayQty: number;
   nQ_Price: number;
   cX_UnitName: string;
   nQ_Total: number;
   nQ_Less: number;
   iD_GroupBy_Item: number;
 }
+
+
 
 export interface Option {
   disabled: boolean;

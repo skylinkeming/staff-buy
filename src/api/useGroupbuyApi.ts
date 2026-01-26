@@ -30,6 +30,7 @@ export const useGroupbuyApi = {
           id: p.iD_Product.toString(),
           groupBuyItemId: p.iD_GroupBy_Item.toString(),
           name: p.cX_ProductName,
+          limit: p.nQ_OneMayQty,
           price: p.nQ_Price,
           stock: p.nQ_Less,
         }));

@@ -146,6 +146,8 @@ export default function GroupBuyProductPage() {
     );
   }, [groupbuyProducts, searchkey]);
 
+
+  // 轉換成表格資料格式
   const tableData = filteredProducts.map((prd) => {
     return {
       ...prd,
