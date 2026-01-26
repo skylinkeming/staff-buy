@@ -121,7 +121,7 @@ export default function MobileProductTable({
         theme={{
           components: {
             Table: {
-              headerBg: "#F5F5F5",
+              headerBg: "rgb(239, 249, 255)",
               headerColor: "#333333",
               cellPaddingBlock: 10,
               cellPaddingInline: 8,
@@ -137,9 +137,12 @@ export default function MobileProductTable({
           loading={isLoading}
           pagination={false}
           sticky
-          rowClassName={(record) => {
+          rowClassName={(record, index) => {
             if (record.quantity > 0) {
-              return "bg-[#FFF6E9] hover:bg-[#FFF6E9]";
+              return "bg-[#E3F2FD] ";
+            }
+            if (index % 2 !== 0) {
+              return "bg-[#FBFBFB]";
             }
             if (record.stock === 0) {
               return "row-disabled";

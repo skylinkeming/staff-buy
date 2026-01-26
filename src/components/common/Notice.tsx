@@ -18,16 +18,15 @@ export default function Notice({
       }
     >
       <div
-        className="bg-staffbuy-primary flex items-center pl-3.5 text-white h-8 relative cursor-pointer z-20"
+        className="bg-staffbuy-primary flex items-center pl-3.5 text-white py-1.25 relative cursor-pointer z-20"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="font-medium">注意事項</span>
+        <span className="font-medium text-md">注意事項</span>
         <div className="absolute right-2.5">
           <IoIosArrowDown
             size={20}
-            className={`transition-transform duration-300 ${
-              isOpen ? "rotate-180" : "rotate-0"
-            }`}
+            className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"
+              }`}
           />
         </div>
       </div>
@@ -37,9 +36,8 @@ export default function Notice({
         onClick={() => setIsOpen(!isOpen)}
       >
         <div
-          className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${
-            isOpen ? "max-h-[1000px]" : "max-h-0"
-          }`}
+          className={`transition-[max-height] duration-500 ease-in-out overflow-hidden ${isOpen ? "max-h-[1000px]" : "max-h-0"
+            }`}
         >
           {notice && (
             <div
@@ -49,9 +47,8 @@ export default function Notice({
           )}
         </div>
         <div
-          className={`absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white via-white/80 to-transparent transition-opacity duration-300 pointer-events-none z-10 ${
-            isOpen ? "opacity-0" : "opacity-100"
-          }`}
+          className={`absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white via-white/80 to-transparent transition-opacity duration-300 pointer-events-none z-10 ${isOpen ? "opacity-0" : "opacity-100"
+            }`}
         />
       </div>
     </div>

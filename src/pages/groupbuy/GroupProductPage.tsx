@@ -15,6 +15,7 @@ import AppAlert from "@/components/common/AppAlert";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 import { groupbuyApi } from "@/api/groupbuyApi";
+import GroupSelect from "@/components/buy/purchase/GroupSelect";
 
 const CART_TYPE = "group";
 const { useBreakpoint } = Grid;
@@ -41,14 +42,10 @@ export default function GroupBuyProductPage() {
   const [searchkey, setSearchkey] = useState("");
   const [loading, setLoading] = useState(false);
   const selectedGroup = useCartStore((state) => state.selectedGroup);
-  const updateSelectedGroup = useCartStore(
-    (state) => state.updateSelectedGroup,
-  );
+
   const updateCart = useCartStore((state) => state.updateCart);
-  const clearCart = useCartStore((state) => state.clearCart);
   const groupCart = useCartStore((state) => state.groupCart);
 
-  const { data: groupbuyTopicList } = useGroupbuyApi.useGroupBuyListQuery();
   const { data: groupbuyProducts, isLoading: isFetching } =
     useGroupbuyApi.useGroupBuyProductListQuery(selectedGroup.id);
   const { data: annoData } = useGroupbuyApi.useAnnouncementQuery();
@@ -76,65 +73,27 @@ export default function GroupBuyProductPage() {
     }
   }, [annoData]);
 
-  //團購主題選取器
-  const groupSelect = (
-    <Select
-      className={"w-full h-8 " + (selectedGroup?.id ? "" : "")}
-      value={
-        selectedGroup?.id
-          ? selectedGroup?.id
-          : groupbuyTopicList?.length
-            ? groupbuyTopicList[0].iD_GroupBy.toString()
-            : ""
-      }
-      popupMatchSelectWidth={false}
-      onChange={(val) => {
-        const targetGroup = groupbuyTopicList?.find(
-          (g) => g.iD_GroupBy.toString() == val,
-        );
-        setSearchkey("");
-        if (!targetGroup) {
-          return;
-        }
-        clearCart(CART_TYPE);
-        updateSelectedGroup({
-          name: targetGroup.cX_GroupBy_Name,
-          id: targetGroup.iD_GroupBy.toString(),
-          canBuyFrom: targetGroup.dT_CanBuyFrom,
-          canBuyTo: targetGroup.dT_CanBuyTo,
-        });
-      }}
-      options={
-        groupbuyTopicList
-          ? groupbuyTopicList.map((g) => ({
-            value: g.iD_GroupBy.toString(),
-            label: g.cX_GroupBy_Name,
-            // disabled: g.,
-          }))
-          : []
-      }
-    />
-  );
 
-  // 商品表格title資訊
-  const tableTitle =
-    selectedGroup.id && selectedGroup.canBuyFrom ? (
-      <div className="bg-[#e6f4ff] p-3.5 border-b border-[#91d5ff]">
-        <div className="text-[#0958d9] text-center text-[16px] mb-2.5 font-bold">
-          團購主題: {selectedGroup.name}
-        </div>
-        <div className="text-[#1E1E1E] flex flex-col justify-center gap-2.5 md:flex-row ">
-          <div className="flex justify-center gap-2.5">
-            <div className="">{"開放購買日期:"}</div>
-            <div className="font-bold">{selectedGroup.canBuyFrom}</div>
-          </div>
-          <div className="flex justify-center gap-2.5">
-            <div>{" ~  截止購買日期: "}</div>
-            <div className="font-bold">{selectedGroup.canBuyTo}</div>
-          </div>
-        </div>
-      </div>
-    ) : null;
+  const handleSearch = (inputVal: string) => {
+    setLoading(true);
+    setTimeout(() => {
+      setSearchkey(inputVal);
+      setLoading(false);
+    }, 200);
+  };
+
+
+  const tableTitle = <div className="p-3.5 md:flex justify-between items-center">
+    <div className="mb-2.5 md:mb-0 font-bold text-[16px] border-staffbuy-primary border-l-4 pl-2.5 leading-6">
+      團購商品
+    </div>
+    <KeywordSearchAction
+      key={selectedGroup?.id}
+      className={"md:w-[50%] w-full " + (selectedGroup?.id ? "" : "hidden")}
+      placeholder="搜尋此團購的商品"
+      onClickSearch={handleSearch}
+    />
+  </div>
 
   // 根據搜尋字串過濾
   const filteredProducts = useMemo(() => {
@@ -180,13 +139,7 @@ export default function GroupBuyProductPage() {
     );
   };
 
-  const handleSearch = (inputVal: string) => {
-    setLoading(true);
-    setTimeout(() => {
-      setSearchkey(inputVal);
-      setLoading(false);
-    }, 200);
-  };
+
 
   // 取得庫存數量
   const debouncedFetchStock = useDebounce(
@@ -244,13 +197,7 @@ export default function GroupBuyProductPage() {
               notice={annoData?.notice || ""}
             />
             <div className="flex flex-col md:flex-row gap-2.5 mb-5">
-              {groupSelect}
-              <KeywordSearchAction
-                key={selectedGroup?.id}
-                className={"w-full " + (selectedGroup?.id ? "" : "hidden")}
-                placeholder="搜尋此團購的商品"
-                onClickSearch={handleSearch}
-              />
+              <GroupSelect onChangeGroup={() => { setSearchkey("") }} />
             </div>
             {renderProductTable()}
           </div>

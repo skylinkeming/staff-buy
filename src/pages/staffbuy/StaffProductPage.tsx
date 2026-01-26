@@ -66,6 +66,8 @@ export default function StaffProductPage() {
     };
   });
 
+
+
   const handleSearch = (inputVal: string) => {
     setLoading(true);
     setTimeout(() => {
@@ -135,6 +137,19 @@ export default function StaffProductPage() {
     }
   }, [annoData]);
 
+
+  const tableTitle = <div className="p-3.5 md:flex justify-between items-center">
+    <div className="mb-2.5 md:mb-0 font-bold text-[16px] border-staffbuy-primary border-l-4 pl-2.5 leading-6">
+      員購商品
+    </div>
+    <KeywordSearchAction
+      key={"staffbuy"}
+      className={"md:w-[50%] w-full"}
+      placeholder="搜尋此團購的商品"
+      onClickSearch={handleSearch}
+    />
+  </div>
+
   return (
     <div className="md:px-0 pb-20 min-h-[100%] w-[100%] relative flex flex-col items-center gap-[40px] bg-[#FBFBFB]">
       <div className="relative">
@@ -143,16 +158,17 @@ export default function StaffProductPage() {
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
             <Notice
-              className="mb-[30px] w-full md:w-auto"
+              className="mb-[15px] w-full md:w-auto"
               notice={annoData?.notice || ""}
             />
-            <KeywordSearchAction
+            {/* <KeywordSearchAction
               className="mb-[30px] md:w-[100%]"
               placeholder="搜尋員購商品"
               onClickSearch={handleSearch}
-            />
+            /> */}
             {screens.md ? (
               <ProductTable
+                title={tableTitle}
                 key={rawProducts?.length}
                 className="hidden md:inline-block"
                 isLoading={loading || fetching}
@@ -161,6 +177,7 @@ export default function StaffProductPage() {
               />
             ) : (
               <MobileProductTable
+                title={tableTitle}
                 key={rawProducts?.length}
                 className="inline-block md:hidden"
                 isLoading={loading}
