@@ -97,11 +97,11 @@ export default function CartSummary({
           </span>
         </div>
       </div>
-      <div className="flex gap-[10px]">
+      <div className="flex gap-[5px]">
         <div
           onClick={handleClickClearBtn}
           className={
-            "flex items-center bg-staffbuy-secondary min-w-20 cursor-pointer text-[white] rounded-[5px] py-[5px] justify-center "
+            "flex items-center border border-staffbuy-primary text-staffbuy-primary min-w-20 cursor-pointer text-[white] rounded-[5px] py-[5px] justify-center "
           }
         >
           清空

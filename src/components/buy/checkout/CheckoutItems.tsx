@@ -84,9 +84,9 @@ export default function CheckoutItems({
                     onClick={() => handleClickRemoveButton(cartItem.productId)}
                   >
                     <FaRegTrashAlt className="md:hidden" />
-                    <div className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center bg-staffbuy-secondary px-2.5 py-1.25 rounded-[5px]">
-                      <FaRegTrashAlt color={"white"} />
-                      <div className="text-white">刪除</div>
+                    <div className="hidden cursor-pointer md:grid grid-cols-[20px_35px] shrink-0 items-center border border-staffbuy-primary text-staffbuy-primary px-2.5 py-1.25 rounded-[5px]">
+                      <FaRegTrashAlt color={"#175dcc"} />
+                      <div className="text-staffbuy-primary">刪除</div>
                     </div>
                   </div>
                 </div>
