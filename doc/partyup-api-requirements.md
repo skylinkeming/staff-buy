@@ -77,32 +77,32 @@
 
 ```json
 {
-  "partyup_list": [
+  "partyupList": [
     {
       "id": "g223",
-      "party_name": "毛巾團購",
+      "partyName": "毛巾團購",
       "participants": 236,
       "period": "2025/11/1~2025/11/30",
-      "party_status": 1, //上架中
-      "product_options": [
+      "partyStatus": 1, //上架中
+      "productOptions": [
         {
           "id": "a22523",
-          "img_url": "",
-          "prod_name": "佛羅倫斯系列之毛巾",
-          "party_price": 260,
-          "original_price": 320
+          "imgUrl": "",
+          "prodName": "佛羅倫斯系列之毛巾",
+          "partyPrice": 260,
+          "originalPrice": 320
         },
         {
           "id": "a22523",
-          "img_url": "",
-          "prod_name": "佛羅倫斯系列之浴巾",
-          "party_price": 380,
-          "original_price": 400
+          "imgUrl": "",
+          "prodName": "佛羅倫斯系列之浴巾",
+          "partyPrice": 380,
+          "originalPrice": 400
         }
       ],
       "pagination": {
         "page": 1,
-        "page_size": 10,
+        "pageSize": 10,
         "total": 30
       }
     }
@@ -129,33 +129,33 @@
 ```json
 {
   "id": "g223",
-  "party_name": "毛巾團購",
+  "partyName": "毛巾團購",
   "participants": 236,
   "period": "2025/11/1~2025/11/30",
-  "party_status": 1, //上架中
-  "product_options": [
+  "partyStatus": 1, //上架中
+  "productOptions": [
     {
-      "product_id": "a1235",
-      "img_url": "",
-      "prod_name": "佛羅倫斯系列之毛巾",
-      "option_desc": "",
-      "party_price": 260,
-      "original_price": 320
+      "productId": "a1235",
+      "imgUrl": "",
+      "prodName": "佛羅倫斯系列之毛巾",
+      "optionDesc": "",
+      "partyPrice": 260,
+      "originalPrice": 320
     },
     {
-      "product_id": "2342525",
-      "img_url": "",
-      "prod_name": "佛羅倫斯系列之浴巾",
-      "option_desc": "",
-      "party_price": 380,
-      "original_price": 400
+      "productId": "2342525",
+      "imgUrl": "",
+      "prodName": "佛羅倫斯系列之浴巾",
+      "optionDesc": "",
+      "partyPrice": 380,
+      "originalPrice": 400
     }
   ],
-  "other_prd_images": ["https://....", ""],
-  "product_summary": "",
-  "product_spec": "",
+  "otherPrdImages": ["https://....", ""],
+  "productSummary": "",
+  "productSpec": "",
   "note": "",
-  "requires_shipping_info": false //是否需要宅配資訊
+  "requiresShippingInfo": false //是否需要宅配資訊
 }
 ```
 
@@ -272,21 +272,21 @@
   "orderList": [
     {
       "orderId": "ORD-20250808-001",
-      "created_at": "2025-12-22 10:30",
-      "pickup_date": "2026-01-02 10:30",
-      "pickup_method": "自取", //或宅配
-      "order_status": "已領取",
-      "total_amount": 3690,
-      "party_name": "毛巾團購",
-      "buy_items": [
+      "createdAt": "2025-12-22 10:30",
+      "pickupDate": "2026-01-02 10:30",
+      "pickupMethod": "自取", //或宅配
+      "orderStatus": "已領取",
+      "totalAmount": 3690,
+      "partyName": "毛巾團購",
+      "buyItems": [
         {
-          "image_url": "https://...",
+          "imageUrl": "https://...",
           "name": "佛羅倫斯之浴巾",
           "qty": 2,
           "price": 130
         }
       ],
-      "shipping_info": {
+      "shippingInfo": {
         "trackingNumber": "907344452512",
         "shippingFee": 240,
         "name": "王爸爸",
