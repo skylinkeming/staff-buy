@@ -16,7 +16,7 @@ export default function AuthWrapper() {
       // 儲存 token
       setToken(res.data);
 
-      // 取得使用者資訊
+      // 取得使用者資訊 
       commonApi
         .getUserInfo()
         .then((res) => res.data)

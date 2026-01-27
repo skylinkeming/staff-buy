@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
-import { Grid, Select } from "antd";
+import { Grid } from "antd";
 import CartSummary from "@/components/buy/purchase/CartSummary";
 import Notice from "@/components/common/Notice";
 import ProductTable, {

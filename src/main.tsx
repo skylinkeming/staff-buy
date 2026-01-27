@@ -20,6 +20,8 @@ import ErrorPage from "@/pages/ErrorPage.tsx";
 import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
 import MainLayout from "./components/layout/MainLayout.tsx";
 import { useAuthStore } from "./store/useAuthStore.ts";
+import PartyBuyListPage from "./pages/partyup/PartyBuyListPage.tsx";
+import PartyProductPage from "./pages/partyup/PartyProductPage.tsx";
 
 const router = createHashRouter([
   {
@@ -53,9 +55,13 @@ const router = createHashRouter([
           {
             path: "/partyup",
             element: (
-              <>
-                <h1>揪團頁面</h1>
-              </>
+              <PartyBuyListPage />
+            ),
+          },
+          {
+            path: "/partyup/partyDetail/:id",
+            element: (
+              <PartyProductPage />
             ),
           },
         ],

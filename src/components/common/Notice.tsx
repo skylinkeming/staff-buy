@@ -4,11 +4,15 @@ import { IoIosArrowDown } from "react-icons/io";
 export default function Notice({
   className = "",
   notice = "",
+  color = ""
 }: {
   className?: string;
   notice: string;
+  color?: string;
 }) {
   const [isOpen, setIsOpen] = useState(true);
+  let bg = "bg-staffbuy-primary"
+  if (color) bg = color
 
   return (
     <div
@@ -18,7 +22,7 @@ export default function Notice({
       }
     >
       <div
-        className="bg-staffbuy-primary flex items-center pl-3.5 text-white py-1.25 relative cursor-pointer z-20"
+        className={bg + " flex items-center pl-3.5 text-white py-1.25 relative cursor-pointer z-20"}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="font-medium text-md">注意事項</span>

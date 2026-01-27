@@ -6,12 +6,14 @@ interface KeywordSearchActionProps {
   className?: string;
   onClickSearch: (searchKey: string) => void;
   placeholder?: string;
+  buttonColor?: string;
 }
 
 export default function KeywordSearchAction({
   className = "",
   onClickSearch,
   placeholder = "請輸入關鍵字",
+  buttonColor = "bg-staffbuy-primary!",
 }: KeywordSearchActionProps) {
   const inputRef = useRef<any>(null);
 
@@ -44,9 +46,10 @@ export default function KeywordSearchAction({
         type="primary"
         icon={<SearchOutlined />}
         onClick={handleSearch}
-        className="h-10 rounded-[15px] px-5 bg-staffbuy-primary! border-staffbuy-primary! hover:opacity-90! flex items-center justify-center"
+        style={{ color: buttonColor === "bg-staffbuy-primary!" ? "white" : "black" }}
+        className={"h-10 rounded-[15px] px-5 " + buttonColor + " hover:opacity-90! flex items-center justify-center"}
       >
-        <span className="whitespace-nowrap ml-1">搜尋</span>
+        <span className={"whitespace-nowrap ml-1"}>搜尋</span>
       </Button>
     </div>
   );

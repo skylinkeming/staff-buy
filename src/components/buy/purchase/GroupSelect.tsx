@@ -23,7 +23,7 @@ export default function GroupSelect({ onChangeGroup }: { onChangeGroup: () => vo
                     </div>
                     <Select
                         variant="filled"
-                        style={{ backgroundColor: '#EFF9FF' }}
+                        style={{ backgroundColor: '#E3F2FD' }}
                         className={"w-full h-8 " + (selectedGroup?.id ? "" : "")}
                         value={
                             selectedGroup?.id

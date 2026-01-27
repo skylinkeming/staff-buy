@@ -13,9 +13,11 @@ export default function Breadcrumbs({ className }: { className?: string }) {
     purchase: "Step 1. 商品列表",
     staffbuy: "員購",
     groupbuy: "團購",
+    partyup: "揪團",
     checkout: "Step 2. 填寫資料",
     "/staffbuy/orders": "員購紀錄",
     "/groupbuy/orders": "團購紀錄",
+    "/partyup/purchase": "揪團商品列表",
   };
 
   // 1. 定義路徑重新導向地圖
