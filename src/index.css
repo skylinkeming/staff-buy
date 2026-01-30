@@ -64,4 +64,6 @@ pre {
 @theme {
   --color-staffbuy-primary: rgb(23, 93, 204);
   --color-staffbuy-secondary: rgb(158, 171, 249);
+  --color-partyup-primary: rgb(30, 136, 229);
+
 }
