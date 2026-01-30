@@ -1,22 +1,35 @@
 import { create } from "zustand";
-import { persist, type PersistStorage } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import CryptoJS from "crypto-js";
 
-const base64Storage: PersistStorage<any> = {
-  getItem: (name) => {
-    const str = localStorage.getItem(name);
-    if (!str) return null;
+
+const SECRET_KEY = "鼎泰豐讚啦~~";
+
+//混淆token
+const cryptoHelper = {
+  encrypt: (data: any): string => {
     try {
-      return JSON.parse(atob(str));
+      const jsonStr = JSON.stringify(data);
+      return CryptoJS.AES.encrypt(jsonStr, SECRET_KEY).toString();
     } catch (e) {
+      console.error("Encryption failed", e);
+      return "";
+    }
+  },
+  decrypt: (cipherText: string): any => {
+    try {
+      const bytes = CryptoJS.AES.decrypt(cipherText, SECRET_KEY);
+      const originalText = bytes.toString(CryptoJS.enc.Utf8);
+      if (!originalText) return null;
+      return JSON.parse(originalText);
+    } catch (e) {
+      // 當密鑰更換或資料受損時會進入此處
+      console.warn("Decryption failed: data may be corrupted or key mismatched.");
       return null;
     }
   },
-  setItem: (name, value) => {
-    const str = JSON.stringify(value);
-    localStorage.setItem(name, btoa(unescape(encodeURIComponent(str))));
-  },
-  removeItem: (name) => localStorage.removeItem(name),
 };
+
 
 interface User {
   eID: string;
@@ -33,6 +46,7 @@ interface AuthState {
   clearAuth: () => void;
 }
 
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -46,24 +60,35 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       storage: {
         getItem: (name) => {
-          const tokenData = base64Storage.getItem(`${name}-token`) as any;
+          const encryptedToken = localStorage.getItem(`${name}-token`);
           const userData = localStorage.getItem(`${name}-user`);
-          
+
+          const decryptedData = encryptedToken ? cryptoHelper.decrypt(encryptedToken) : null;
+
           return {
             state: {
-              token: (tokenData && 'state' in tokenData) ? tokenData.state.token : null,
+              token: decryptedData?.token || null,
               user: userData ? JSON.parse(userData) : null,
             },
             version: 0,
           };
         },
         setItem: (name, value) => {
-          // 混淆儲存 token
-          base64Storage.setItem(`${name}-token`, { 
-            state: { token: value.state.token } 
-          });
-          // 儲存user
-          localStorage.setItem(`${name}-user`, JSON.stringify(value.state.user));
+          const { token, user } = value.state;
+
+          // 1. 加密 Token 並儲存 (儲存為字串)
+          if (token) {
+            const encryptedToken = cryptoHelper.encrypt({ token });
+            localStorage.setItem(`${name}-token`, encryptedToken);
+          } else {
+            localStorage.removeItem(`${name}-token`);
+          }
+
+          if (user) {
+            localStorage.setItem(`${name}-user`, JSON.stringify(user));
+          } else {
+            localStorage.removeItem(`${name}-user`);
+          }
         },
         removeItem: (name) => {
           localStorage.removeItem(`${name}-token`);
