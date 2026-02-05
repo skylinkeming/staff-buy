@@ -139,7 +139,7 @@ export default function MobileProductTable({
           sticky
           rowClassName={(record, index) => {
             if (record.quantity > 0) {
-              return "bg-[#E3F2FD] ";
+              return "bg-[#fff5c4] ";
             }
             if (index % 2 !== 0) {
               return "bg-[#FBFBFB]";

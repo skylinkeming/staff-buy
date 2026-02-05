@@ -14,11 +14,8 @@ export default function GroupSelect({ onChangeGroup }: { onChangeGroup: () => vo
     return (
         <div className="w-full border border-gray-200 rounded-lg">
             <div className="bg-white p-3.5 py-3.5 flex-col gap-3.5 flex rounded-[10px]">
-                <div className="font-bold text-md border-staffbuy-primary border-l-4 pl-2.5 leading-6">
-                    選擇團購
-                </div>
                 <div className="flex gap-3.5 items-center">
-                    <div className="w-30">
+                    <div className="w-30 font-[500]">
                         選擇團購主題
                     </div>
                     <Select
@@ -61,8 +58,8 @@ export default function GroupSelect({ onChangeGroup }: { onChangeGroup: () => vo
 
                 </div>
                 {selectedGroup.canBuyFrom && selectedGroup.canBuyTo && <div className="flex gap-5 items-center">
-                    <div>開放購買期間</div>
-                    <div>{selectedGroup.canBuyFrom}{" ~ "}<span className="text-[orange]">{selectedGroup.canBuyTo}</span></div>
+                    <div className="font-[500]">開放購買期間</div>
+                    <div>{selectedGroup.canBuyFrom}{" ~ "}<span className="text-[#ff4d4f]">{selectedGroup.canBuyTo}</span></div>
                 </div>}
 
 

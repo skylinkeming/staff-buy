@@ -84,7 +84,7 @@ export default function GroupBuyProductPage() {
 
 
   const tableTitle = <div className="p-3.5 md:flex justify-between items-center">
-    <div className="mb-2.5 md:mb-0 font-bold text-[16px] border-staffbuy-primary border-l-4 pl-2.5 leading-6">
+    <div className="mb-2.5 md:mb-0 font-bold text-[16px] leading-6">
       團購商品
     </div>
     <KeywordSearchAction
@@ -194,10 +194,10 @@ export default function GroupBuyProductPage() {
         <div className="flex gap-[40px] ">
           <div className="w-full md:w-[740px] inline-block">
             <Notice
-              className="mb-5  w-full md:w-auto"
+              className="mb-2.5  w-full md:w-auto"
               notice={annoData?.notice || ""}
             />
-            <div className="flex flex-col md:flex-row gap-2.5 mb-5">
+            <div className="flex flex-col md:flex-row gap-2.5 mb-2.5">
               <GroupSelect onChangeGroup={() => { setSearchkey("") }} />
             </div>
             {renderProductTable()}

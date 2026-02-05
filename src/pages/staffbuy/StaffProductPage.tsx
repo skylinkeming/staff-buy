@@ -139,7 +139,7 @@ export default function StaffProductPage() {
 
 
   const tableTitle = <div className="p-3.5 md:flex justify-between items-center">
-    <div className="mb-2.5 md:mb-0 font-bold text-[16px] border-staffbuy-primary border-l-4 pl-2.5 leading-6">
+    <div className="mb-2.5 md:mb-0 font-bold text-[16px] leading-6">
       員購商品
     </div>
     <KeywordSearchAction
