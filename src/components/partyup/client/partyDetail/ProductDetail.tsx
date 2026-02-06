@@ -124,6 +124,7 @@ export default function ProductDetail({
                             <span className="">原價 </span>
                             <span className=" ">NT${selectedOption?.originalPrice}</span>
                         </div>
+                        {/* 商品選項 */}
                         <div className="flex flex-wrap gap-2.5 mb-5">
                             {data?.productOptions.map((o) => (
                                 <div
@@ -133,7 +134,10 @@ export default function ProductDetail({
                                             ? "border-2 border-[#1E88E5] bg-[#CFF8FF] text-[#1E88E5]"
                                             : "border border-[#D9D9D9]")
                                     }
-                                    onClick={() => setSelectedOption(o)}
+                                    onClick={() => {
+                                        setSelectedOption(o)
+                                        setDisplayImg(o.imgUrl);
+                                    }}
                                 >
                                     {o.prodName}
                                 </div>
@@ -153,7 +157,7 @@ export default function ProductDetail({
             </div>
             {data?.productSummary && <>
                 <BlockTitle className="pl-2.5 md:pl-0">商品介紹</BlockTitle>
-                <div className="mt-1.25 mb-5 flex gap-8 md:w-205 md:border md:border-[#d9d9d9] p-6.25 rounded-[10px] bg-white">
+                <div className=" mt-1.25 mb-5 flex gap-8 md:w-205 md:border md:border-[#d9d9d9] p-6.25 rounded-[10px] bg-white">
                     {data?.productSummary}
                 </div></>
             }
