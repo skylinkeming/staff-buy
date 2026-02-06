@@ -19,7 +19,7 @@ export interface PartyBuyData {
 export default function PartyProductCard({ className = "", partyData }: { className?: string, partyData: PartyBuyData }) {
     const navigate = useNavigate();
     return (
-        <div className={"overflow-hidden w-[250px] pb-2 duration-300 cursor-pointer transition-all  border-[#D9D9D9] rounded-[10px] bg-yellow-50 hover:shadow-[0_4px_10px_0_rgba(0,0,0,0.10)] " + className}
+        <div className={"overflow-hidden w-[250px] pb-2 duration-300 cursor-pointer transition-all  border-[#D9D9D9] rounded-[10px] bg-yellow-50 hover:shadow-[0_4px_10px_0px_rgba(0,0,0,0.10)] " + className}
             onClick={() => {
                 navigate(`/partyup/partyDetail/${partyData.id}`)
             }}
@@ -34,7 +34,7 @@ export default function PartyProductCard({ className = "", partyData }: { classN
                 <div className="flex justify-between items-center">
                     <p className="font-[500] text-[#2a4e41] text-sm">參與人數</p>
                     <div className="flex items-center gap-1">
-                        <IoIosPeople className="text-[#e5861e]" />
+                        <IoIosPeople size={20} className="text-[#e5861e]" />
                         <p className="text-sm text-[#e5861e] font-[500]">{partyData.participants}</p>
                     </div>
                 </div>

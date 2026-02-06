@@ -22,7 +22,7 @@ export default function QuantityInput({
     onChange(inputNumber - 1);
   };
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(parseInt(e.target.value ? e.target.value : "0"));
   };
 
@@ -30,12 +30,12 @@ export default function QuantityInput({
     return (
       <div
         className={
-          "flex border-[1px] border-[#E5E5E5] w-[70px] rounded-[7px] " +
+          "flex border-[1px] border-[#E5E5E5] rounded-[7px] " +
           className
         }
       >
         <div
-          className="flex cursor-pointer items-center w-[20px] bg-[#F5F5F5] px-[5px] rounded-tl-[7px] rounded-bl-[7px]"
+          className="flex cursor-pointer items-center w-[36px] bg-[#F5F5F5] px-[5px] rounded-tl-[7px] rounded-bl-[7px]"
           onClick={handleDecrement}
         >
           <svg
@@ -49,12 +49,12 @@ export default function QuantityInput({
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
           </svg>
         </div>
-        <div className="w-[38px] text-center border-[#E5E5E5] border-r-[1px] border-l-[1px]">
+        <div className="w-[calc(100vw-102px)] md:w-[100px] text-center border-[#E5E5E5] border-r-[1px] border-l-[1px]">
           {inputNumber}
         </div>
         <div
           onClick={handleIncrement}
-          className="flex cursor-pointer items-center w-[20px] px-[5px] bg-[#F5F5F5] rounded-tr-[7px] rounded-br-[7px]"
+          className="flex cursor-pointer items-center w-[36px] px-[5px] bg-[#F5F5F5] rounded-tr-[7px] rounded-br-[7px]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@ export default function QuantityInput({
             viewBox="0 0 24 24"
             strokeWidth={1}
             stroke="currentColor"
-            className="size-2"
+            className="size-6"
           >
             <path
               strokeLinecap="round"
