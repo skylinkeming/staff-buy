@@ -5,6 +5,7 @@ import QuantityInput from "@/components/buy/purchase/QuantityInput";
 import { Button } from "antd";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import { IoIosPeople } from "react-icons/io";
+import { usePartyupStore } from "@/store/usePartyupStore";
 
 
 // 揪團商品詳情
@@ -20,13 +21,23 @@ export default function ProductDetail({
     const [selectedOption, setSelectedOption] = useState<ProductOption | null>(
         null,
     );
+    const [amountValue, setAmountValue] = useState(1);
+    const updateCart = usePartyupStore((state) => state.updateCart);
+    const cartsByParty = usePartyupStore((state) => state.cartsByParty);
+    const amountInCart = selectedOption?.productId && cartsByParty[data.id]?.items[selectedOption?.productId]?.quantity || 0;
 
-    const handleAmountChange = (amount: number) => { };
+    const handleAmountChange = (amount: number) => {
+        setAmountValue(amount);
+    };
 
     useEffect(() => {
         setSelectedOption(data?.productOptions[0]);
         setDisplayImg(data?.productOptions[0].imgUrl);
     }, [data]);
+
+    useEffect(() => {
+        setAmountValue(1);
+    }, [selectedOption]);
 
     const renderOptionImg = (o: ProductOption, idx: number) => {
         return (<img
@@ -46,6 +57,14 @@ export default function ProductDetail({
                 }
             }}
         />)
+    }
+
+    const handleAddToCart = () => {
+        updateCart({
+            id: data.id,
+            name: data.partyName,
+            requiresShippingInfo: data.requiresShippingInfo,
+        }, selectedOption!, amountValue + amountInCart)
     }
 
     return (
@@ -123,11 +142,11 @@ export default function ProductDetail({
                     </div>
                     <div className="flex flex-col md:flex-row gap-5">
                         <QuantityInput
-                            inputNumber={1}
+                            inputNumber={amountValue}
                             variant="classic"
                             onChange={handleAmountChange}
                         />
-                        <Button className="bg-[#1E88E5]! text-white! px-17.5! rounded-[15px]! md:rounded-[5px]! py-2.5! text-md!">加入購買</Button>
+                        <Button className="bg-[#1E88E5]! text-white! px-17.5! rounded-[15px]! md:rounded-[5px]! py-2.5! text-md!" onClick={handleAddToCart}>加入購買</Button>
                     </div>
                     <div></div>
                 </div>

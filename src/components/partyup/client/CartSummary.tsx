@@ -1,121 +1,151 @@
 import { useLocation, useNavigate } from "react-router";
-import { useCartStore } from "../../../store/useCartStore";
 import AppAlert from "@/components/common/AppAlert";
+import { usePartyupStore } from "@/store/usePartyupStore";
+
+interface CartSummaryProps {
+    className?: string;
+    showDetail?: boolean;
+    onClickPurchaseBtn?: (payload: any) => void; // 傳出準備好的 API Payload
+    disableBtn?: boolean;
+}
 
 export default function CartSummary({
     className = "",
-    showDetail = false,
+    showDetail = true,
     onClickPurchaseBtn,
     disableBtn,
-}: {
-    className?: string;
-    showDetail?: boolean;
-    onClickPurchaseBtn?: () => void;
-    disableBtn?: boolean;
-}) {
+}: CartSummaryProps) {
     const location = useLocation();
     const navigate = useNavigate();
-    const isStaffBuy = location.pathname.includes("staffbuy");
-    const isCheckoutStage = location.pathname.includes("checkout");
-    const cart = useCartStore((state) =>
-        isStaffBuy ? state.staffCart : state.groupCart,
-    );
-    const clearCart = useCartStore((state) => state.clearCart);
-    const cartItems = Object.values(cart);
 
+    const cartsByParty = usePartyupStore((state) => state.cartsByParty);
+    const clearAllCarts = usePartyupStore((state) => state.clearAllCarts);
+    const getApiPayload = usePartyupStore((state) => state.getApiPayload);
+
+    const isCheckoutStage = location.pathname.includes("checkout");
+
+    const partyEntries = Object.values(cartsByParty);
+    const hasItems = partyEntries.length > 0;
+
+    const totalAmount = partyEntries.reduce((sum, party) => {
+        const partyTotal = Object.values(party.items).reduce(
+            (s, item) => s + item.partyPrice * item.quantity,
+            0
+        );
+        return sum + partyTotal;
+    }, 0);
 
     const handleClickClearBtn = async () => {
-        if (cartItems.length === 0) {
-            return;
-        }
+        if (!hasItems) return;
+
         const res = await AppAlert({
-            message: "確認清空購物車?",
+            message: "確認清空所有購物車商品?",
         });
-        if (res === "cancel") {
-            return;
+
+        if (res !== "cancel") {
+            clearAllCarts();
         }
-        clearCart(isStaffBuy ? "staff" : "group");
-    }
+    };
 
     const handleClickPurchaseBtn = async () => {
-        if (isCheckoutStage && onClickPurchaseBtn) {
-            onClickPurchaseBtn();
-            return;
-        }
-
-        if (cartItems.length === 0) {
+        if (!hasItems) {
             await AppAlert({
-                title: "購物車沒有商品",
-                message: "請放入商品",
-                okText: "確認",
+                title: "購物車是空的",
+                message: "請先挑選商品後再結帳",
                 hideCancel: true,
             });
-
             return;
         }
-        navigate(isStaffBuy ? "/staffbuy/checkout" : "/groupbuy/checkout");
+
+        if (isCheckoutStage) {
+            if (onClickPurchaseBtn) {
+                const payload = getApiPayload();
+                onClickPurchaseBtn(payload);
+            }
+        } else {
+            navigate("/partyup/checkout");
+        }
     };
 
     return (
         <div
-            className={
-                "border border-[#D9D9D9] p-[20px] w-[280px] rounded-[10px] bg-white " +
-                className
-            }
+            className={`flex flex-col border border-[#D9D9D9] p-[20px] w-[300px] rounded-[10px] bg-white shadow-sm ${className}`}
         >
-            {cartItems.length > 0 && showDetail && (
-                <div className="w-full flex flex-col gap-[15px] mb-[20px] max-h-[500px] overflow-y-auto">
-                    {cartItems.map((cartItem) => {
-                        return (
-                            <div
-                                key={cartItem.productId}
-                                className="flex space-around w-full"
-                            >
-                                <div className="w-35 shrink-0 font-bold text-[14px]">
-                                    {cartItem.productName}
-                                </div>
-                                <div className="w-[40px] shrink-0 text-[14px] text-right">
-                                    x {cartItem.quantity}
-                                </div>
-                                <div className="w-[25px] shrink-0 flex-1 text-right pr-[5px] text-[14px]">
-                                    {cart[cartItem.productId]?.quantity * cartItem.price}
-                                </div>
+            <h3 className="font-bold text-[16px] mb-4 flex items-center gap-2">
+                🛒 購物清單
+            </h3>
+
+            {/* 商品細目區塊 */}
+            {showDetail && (
+                <div className="flex-1 overflow-y-auto mb-1.25 border-b border-dashed pb-1.25  max-h-[400px] pr-2 custom-scrollbar">
+                    {
+                        partyEntries.map((party) => (
+                            <div key={party.partyId} className="mb-4 last:mb-0">
+                                {Object.values(party.items).map((item) => (
+                                    <div
+                                        key={item.productId}
+                                        className="flex justify-between items-start mb-2 gap-2"
+                                    >
+                                        <div className="flex-1">
+                                            <div className="text-[13px] font-bold text-gray-700 leading-tight">
+                                                {item.prodName}
+                                            </div>
+
+                                        </div>
+                                        <div className="text-[13px] text-gray-500 whitespace-nowrap">
+                                            x {item.quantity}
+                                        </div>
+                                        <div className="text-[13px] font-medium text-gray-800 w-[60px] text-right">
+                                            ${(item.partyPrice * item.quantity).toLocaleString()}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        );
-                    })}
+                        ))
+                    }
                 </div>
             )}
 
-            <div className="flex justify-between items-end mb-[20px]">
-                <div className="shrink-0 text-[14px]">總金額</div>
-                <div className="text-staffbuy-primary">
-                    $NT
-                    <span className="text-[22px] ml-[10px] font-[700]">
-                        {cartItems.reduce((sum, cartItem) => {
-                            return sum + cartItem.price * cartItem.quantity;
-                        }, 0)}
-                    </span>
+            <div className="mb-4">
+                <div className="flex justify-between items-end">
+                    <div className="text-[14px] text-gray-600">應付總額</div>
+                    <div className="text-staffbuy-primary font-bold">
+                        <span className="text-[12px] mr-1">$NT</span>
+                        <span className="text-[24px]">
+                            {totalAmount.toLocaleString()}
+                        </span>
+                    </div>
                 </div>
             </div>
-            <div className="flex gap-[5px]">
-                <div
+
+            {/* 操作按鈕 */}
+            <div className="flex gap-2">
+                <button
+                    type="button"
                     onClick={handleClickClearBtn}
-                    className={
-                        "flex items-center border border-gray text-gray min-w-20 cursor-pointer rounded-[5px] py-[5px] justify-center "
-                    }
+                    className="cursor-pointer flex-1 border border-gray-300 text-gray-500 text-[14px] py-2 rounded-[5px] hover:bg-gray-50 transition-colors"
                 >
                     清空
-                </div>
-                <div
+                </button>
+                <button
+                    type="button"
+                    disabled={disableBtn}
                     onClick={handleClickPurchaseBtn}
-                    className={
-                        "bg-[#FFD400] cursor-pointer  rounded-[5px] py-[5px] text-center hover:text-[white] w-full inline-block underline-offset-[0px] " +
-                        (disableBtn ? "pointer-events-none opacity-50" : "")
-                    }
+                    className={`cursor-pointer flex-[2] text-[14px] py-2 rounded-[5px] font-bold transition-all ${disableBtn
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-[#FFD400] text-gray-800 hover:bg-[#ffdf40] active:scale-95"
+                        }`}
                 >
-                    {isCheckoutStage ? "完成購買" : "購買商品"}
-                </div>
+                    {isCheckoutStage ? "送出訂單" : "前往結帳"}
+                </button>
             </div>
+
+            {/* 溫馨提示 */}
+            {!isCheckoutStage && hasItems && (
+                <p className="text-[11px] text-gray-400 text-center mt-3">
+                    * 訂單將依團購活動分開處理
+                </p>
+            )}
         </div>
     );
 }
