@@ -1,5 +1,5 @@
 import CartSummary from "@/components/partyup/client/CartSummary";
-import ProductDetail from "@/components/partyup/client/partyDetail/ProductDetail";
+import ProductInfo from "@/components/partyup/client/productPage/ProductInfo";
 
 
 export default function PartyBuyProductPage() {
@@ -7,7 +7,7 @@ export default function PartyBuyProductPage() {
         <div className="flex gap-7.5 justify-center">
 
             <div className="flex gap-7.5 jusitfy-center">
-                <ProductDetail data={{
+                <ProductInfo data={{
                     "id": "g223",
                     "partyName": "毛巾團購",
                     "participants": 236,
@@ -46,7 +46,7 @@ export default function PartyBuyProductPage() {
                     "requiresShippingInfo": false //是否需要宅配資訊
                 }} />
             </div>
-            <div className="hidden md:inline-block sticky top-16 h-100  mt-21">
+            <div className="hidden md:inline-block sticky top-16 h-100  mt-20">
                 <CartSummary />
             </div>
         </div>

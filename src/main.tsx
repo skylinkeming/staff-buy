@@ -22,6 +22,7 @@ import MainLayout from "./components/layout/MainLayout.tsx";
 import { useAuthStore } from "./store/useAuthStore.ts";
 import PartyBuyListPage from "./pages/partyup/PartyBuyListPage.tsx";
 import PartyProductPage from "./pages/partyup/PartyProductPage.tsx";
+import PartyCheckoutPage from "./pages/partyup/PartyCheckoutPage.tsx";
 
 const router = createHashRouter([
   {
@@ -64,6 +65,10 @@ const router = createHashRouter([
               <PartyProductPage />
             ),
           },
+          {
+            path: "/partyup/checkout",
+            element: <PartyCheckoutPage />
+          }
         ],
       },
     ],

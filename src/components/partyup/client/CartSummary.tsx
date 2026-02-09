@@ -71,9 +71,11 @@ export default function CartSummary({
         <div
             className={`flex flex-col border border-[#D9D9D9] p-[20px] w-[300px] rounded-[10px] bg-white shadow-sm ${className}`}
         >
-            <h3 className="font-bold text-[16px] mb-4 flex items-center gap-2">
-                🛒 購物清單
-            </h3>
+            {showDetail &&
+                <h3 className="font-bold text-[16px] mb-4 flex items-center gap-2">
+                    🛒 購物清單
+                </h3>
+            }
 
             {/* 商品細目區塊 */}
             {showDetail && (

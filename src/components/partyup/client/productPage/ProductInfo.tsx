@@ -9,7 +9,7 @@ import { usePartyupStore } from "@/store/usePartyupStore";
 
 
 // 揪團商品詳情
-export default function ProductDetail({
+export default function ProductInfo({
     className = "",
     data,
 }: {

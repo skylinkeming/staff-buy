@@ -4,40 +4,36 @@ import { create } from "zustand";
 
 
 /** 每個團購活動在購物車中的實體 */
-export interface PartyCartEntry {
+export interface PartyCartData {
     partyId: string;
     partyName: string; // 方便 UI 顯示
     requiresShippingInfo: boolean;
     items: Record<string, ProductOption & { quantity: number }>;
+    shippingInfo: { name: string; phone: string; address: string; };
+    formError: boolean;
 }
 
 export interface CartState {
-    // 改為 Record<partyId, PartyCartEntry>
-    cartsByParty: Record<string, PartyCartEntry>;
-
-    // UI 需要的資訊暫存
-    ordererInfo: { name: string; dept: string; staffId: string };
-    shippingInfo: { name: string; phone: string; address: string; /* ...其他欄位 */ };
+    // Record<partyId, PartyCartEntry>
+    cartsByParty: Record<string, PartyCartData>;
 
     // Actions
-    /** 更新商品，需傳入該商品所屬的團購資訊 */
     updateCart: (
         party: { id: string; name: string; requiresShippingInfo: boolean },
         product: ProductOption,
         targetQuantity: number
     ) => void;
 
+    updateShippingInfo: (partyId: string, shippingInfo: { name: string; phone: string; address: string; }) => void;
     removeFromCart: (partyId: string, productId: string) => void;
     clearAllCarts: () => void;
-
-    /** 核心：產出符合 API 格式的資料 */
+    updateFormError: (partyId: string, formError: boolean) => void;
+    /** 產出符合 API 格式的資料 */
     getApiPayload: () => any;
 }
 
 export const usePartyupStore = create<CartState>((set, get) => ({
     cartsByParty: {},
-    ordererInfo: { name: "", dept: "", staffId: "" },
-    shippingInfo: { name: "", phone: "", address: "" },
 
     updateCart: (party, product, targetQuantity) =>
         set((state) => {
@@ -51,6 +47,8 @@ export const usePartyupStore = create<CartState>((set, get) => ({
                     partyName: party.name,
                     requiresShippingInfo: party.requiresShippingInfo,
                     items: {},
+                    shippingInfo: { name: "", phone: "", address: "" },
+                    formError: false,
                 };
             }
 
@@ -70,6 +68,22 @@ export const usePartyupStore = create<CartState>((set, get) => ({
             return { cartsByParty: newCarts };
         }),
 
+    updateShippingInfo: (partyId, shippingInfo) =>
+        set((state) => {
+            const newCarts = { ...state.cartsByParty };
+            if (newCarts[partyId]) {
+                newCarts[partyId].shippingInfo = { ...shippingInfo };
+            }
+            return { cartsByParty: newCarts };
+        }),
+    updateFormError: (partyId, formError) =>
+        set((state) => {
+            const newCarts = { ...state.cartsByParty };
+            if (newCarts[partyId]) {
+                newCarts[partyId].formError = formError;
+            }
+            return { cartsByParty: newCarts };
+        }),
     removeFromCart: (partyId, productId) =>
         set((state) => {
             const newCarts = { ...state.cartsByParty };
@@ -85,7 +99,7 @@ export const usePartyupStore = create<CartState>((set, get) => ({
     clearAllCarts: () => set({ cartsByParty: {} }),
 
     getApiPayload: () => {
-        const { cartsByParty, shippingInfo } = get();
+        const { cartsByParty } = get();
 
         return {
             cart: Object.values(cartsByParty).map((partyEntry) => {
@@ -100,9 +114,9 @@ export const usePartyupStore = create<CartState>((set, get) => ({
                 // 只有需要宅配資訊的團購才帶入 shippingInfo
                 if (partyEntry.requiresShippingInfo) {
                     payload.shippingInfo = {
-                        name: shippingInfo.name,
-                        phone: shippingInfo.phone,
-                        address: shippingInfo.address,
+                        name: partyEntry.shippingInfo.name,
+                        phone: partyEntry.shippingInfo.phone,
+                        address: partyEntry.shippingInfo.address,
                     };
                 }
 

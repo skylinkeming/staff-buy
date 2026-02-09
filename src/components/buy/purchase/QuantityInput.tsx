@@ -5,11 +5,13 @@ export default function QuantityInput({
   className = "",
   inputNumber,
   onChange,
+  height
 }: {
   variant: string;
   inputNumber: number;
   onChange: (newVal: number) => void;
   className?: string;
+  height?: number;
 }) {
   const handleIncrement = () => {
     onChange(inputNumber + 1);
@@ -49,7 +51,7 @@ export default function QuantityInput({
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
           </svg>
         </div>
-        <div className="w-[calc(100vw-102px)] md:w-[100px] text-center border-[#E5E5E5] border-r-[1px] border-l-[1px]">
+        <div className={"w-[calc(100vw-102px)] flex items-center justify-center md:w-[100px] text-center border-[#E5E5E5] border-r border-l " + (height ? `h-[${height}px]` : "")}>
           {inputNumber}
         </div>
         <div
