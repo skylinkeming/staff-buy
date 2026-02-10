@@ -131,7 +131,7 @@ export default function ProductInfo({
                                     className={
                                         "cursor-pointer rounded-[10px] py-1 px-4 inline-block " +
                                         (o.productId === selectedOption?.productId
-                                            ? "border-2 border-[#1E88E5] bg-[#CFF8FF] text-[#1E88E5]"
+                                            ? "font-medium border-2 border-[#1E88E5] bg-[#CFF8FF] text-[#1E88E5]"
                                             : "border border-[#D9D9D9]")
                                     }
                                     onClick={() => {

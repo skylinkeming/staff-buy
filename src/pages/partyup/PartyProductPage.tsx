@@ -1,8 +1,19 @@
+import MobileCheckoutBar from "@/components/partyup/client/MobileCheckoutBar";
 import CartSummary from "@/components/partyup/client/CartSummary";
 import ProductInfo from "@/components/partyup/client/productPage/ProductInfo";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Grid } from "antd";
 
+const { useBreakpoint } = Grid;
 
 export default function PartyBuyProductPage() {
+    const navigate = useNavigate();
+    const screens = useBreakpoint();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
     return (
         <div className="flex gap-7.5 justify-center">
 
@@ -49,6 +60,8 @@ export default function PartyBuyProductPage() {
             <div className="hidden md:inline-block sticky top-16 h-100  mt-20">
                 <CartSummary />
             </div>
+            {!screens.md && <MobileCheckoutBar onClickBtn={() => navigate("/partyup/checkout")} />}
+
         </div>
     )
 }

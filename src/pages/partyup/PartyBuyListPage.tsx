@@ -114,7 +114,7 @@ export default function PartyBuyListPage() {
                     components: {
                         Pagination: {
                             itemBg: "#D9D9D9",
-                            itemActiveBg: "#679a4e",
+                            itemActiveBg: "#1E88E5",
                             colorPrimary: "white",
                             colorPrimaryHover: "#D9D9D9",
                         },

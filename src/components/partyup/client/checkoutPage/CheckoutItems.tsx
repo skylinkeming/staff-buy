@@ -52,13 +52,13 @@ export default function CheckoutItems({
 
     return (
         <>
-            <div className=" bg-white border w-200 box-border border-[#D9D9D9] rounded-[10px] overflow-hidden py-5 px-5">
+            <div className=" bg-white border md:w-200 box-border border-[#D9D9D9] rounded-[10px] overflow-hidden py-5 px-5">
                 {partyCarts.map(partyCart => {
                     return <div key={partyCart.partyId} className=" flex flex-col gap-5">{
                         Object.keys(partyCart.items).map(itemId => {
                             const item = partyCart.items[itemId];
                             return <div key={itemId} className=" relative flex items-center bg-white">
-                                <div className="w-50 h-40 flex justify-center items-center bg-[#FBFBFB] rounded-sm">
+                                <div className="md:w-50 md:h-40 flex justify-center items-center bg-[#FBFBFB] rounded-sm">
                                     <img className="w-35" src={item.imgUrl} />
                                 </div>
                                 <div className="flex flex-col items-start pl-10 h-40 justify-between">
@@ -69,7 +69,7 @@ export default function CheckoutItems({
                                     <div className="text-[20px] text-[#FF0000]">NT$ {item.partyPrice}</div>
                                     <QuantityInput
                                         height={30}
-                                        className="h-[30px] shadow-sm absolute right-2.5 top-0 w-28 flex justify-center"
+                                        className="h-[30px] shadow-sm md:absolute right-2.5 top-0 w-42 md:w-28 flex justify-center"
                                         variant="classic"
                                         inputNumber={item.quantity}
                                         onChange={async (qty) => {
@@ -77,7 +77,7 @@ export default function CheckoutItems({
                                         }}
                                     />
                                     <div
-                                        className="flex-none shrink-0 w-8 flex items-center justify-end md:flex-none absolute right-2.5 bottom-0"
+                                        className="flex-none shrink-0 w-8 flex items-center justify-end md:flex-none absolute right-0 top-1.25 md:bottom-0 md:top-auto md:right-2.5"
                                         onClick={() => handleClickRemoveButton(partyCart, itemId)}
                                     >
                                         <FaRegTrashAlt className="md:hidden" />

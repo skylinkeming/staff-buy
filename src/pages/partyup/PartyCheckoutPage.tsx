@@ -1,9 +1,9 @@
 
 
 
-import MobileCheckoutBar from "@/components/buy/purchase/MobileCheckoutBar";
+import MobileCheckoutBar from "@/components/partyup/client/MobileCheckoutBar";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppAlert from "@/components/common/AppAlert";
 import { useNavigate } from "react-router";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
@@ -23,6 +23,9 @@ export default function PartyCheckoutPage() {
 
     // const cartItems = Object.values(groupCart);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
 
 
     const handleAmountChange = async (
