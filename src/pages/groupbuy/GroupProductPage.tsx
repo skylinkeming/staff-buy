@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useCartStore } from "@/store/useCartStore";
 import { useNavigate } from "react-router";
-import { Grid } from "antd";
+import { Grid, Select } from "antd";
 import CartSummary from "@/components/buy/purchase/CartSummary";
 import Notice from "@/components/common/Notice";
 import ProductTable, {
@@ -15,7 +15,6 @@ import AppAlert from "@/components/common/AppAlert";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 import { groupbuyApi } from "@/api/groupbuyApi";
-import GroupSelect from "@/components/buy/purchase/GroupSelect";
 
 const CART_TYPE = "group";
 const { useBreakpoint } = Grid;
@@ -45,10 +44,15 @@ export default function GroupBuyProductPage() {
 
   const updateCart = useCartStore((state) => state.updateCart);
   const groupCart = useCartStore((state) => state.groupCart);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const updateSelectedGroup = useCartStore(
+    (state) => state.updateSelectedGroup,
+  );
 
   const { data: groupbuyProducts, isLoading: isFetching } =
     useGroupbuyApi.useGroupBuyProductListQuery(selectedGroup.id);
   const { data: annoData } = useGroupbuyApi.useAnnouncementQuery();
+  const { data: groupbuyTopicList } = useGroupbuyApi.useGroupBuyListQuery();
 
   const cartItems = Object.values(groupCart);
 
@@ -83,17 +87,61 @@ export default function GroupBuyProductPage() {
   };
 
 
-  const tableTitle = <div className="p-3.5 md:flex justify-between items-center">
-    <div className="mb-2.5 md:mb-0 font-bold text-[16px] leading-6">
-      團購商品
-    </div>
-    <KeywordSearchAction
-      key={selectedGroup?.id}
-      className={"md:w-[50%] w-full " + (selectedGroup?.id ? "" : "hidden")}
-      placeholder="搜尋此團購的商品"
-      onClickSearch={handleSearch}
-    />
-  </div>
+  const tableTitle =
+    <>
+      <div className={" pt-3.5 pb-2.5 md:flex justify-between items-center " + (selectedGroup?.id ? "px-3.5" : " px-0 w-full")}>
+        <Select
+          style={{ backgroundColor: 'white' }}
+          className={"w-full md:w-85 h-8 " + (selectedGroup?.id ? "" : "md:w-full")}
+          value={
+            selectedGroup?.id
+              ? selectedGroup?.id
+              : groupbuyTopicList?.length
+                ? groupbuyTopicList[0].iD_GroupBy.toString()
+                : ""
+          }
+          popupMatchSelectWidth={false}
+          onChange={(val) => {
+            const targetGroup = groupbuyTopicList?.find(
+              (g) => g.iD_GroupBy.toString() == val,
+            );
+            if (!targetGroup) {
+              return;
+            }
+            clearCart("group");
+            updateSelectedGroup({
+              name: targetGroup.cX_GroupBy_Name,
+              id: targetGroup.iD_GroupBy.toString(),
+              canBuyFrom: targetGroup.dT_CanBuyFrom,
+              canBuyTo: targetGroup.dT_CanBuyTo,
+            });
+            setSearchkey("");
+          }}
+          options={
+            groupbuyTopicList
+              ? groupbuyTopicList.map((g) => ({
+                value: g.iD_GroupBy.toString(),
+                label: g.cX_GroupBy_Name,
+              }))
+              : []
+          }
+        />
+        <KeywordSearchAction
+          key={selectedGroup?.id}
+          className={"mt-2.5 md:mt-0 md:w-[50%] w-full " + (selectedGroup?.id ? "" : "hidden")}
+          placeholder="搜尋此團購的商品"
+          onClickSearch={handleSearch}
+        />
+
+      </div>
+      {
+        selectedGroup?.id && (
+          <div className="mx-3.5 mb-2.5 text-center font-bold">
+            開放購買期間: {selectedGroup.canBuyFrom} ~ {selectedGroup.canBuyTo}
+          </div>
+        )
+      }
+    </>
 
   // 根據搜尋字串過濾
   const filteredProducts = useMemo(() => {
@@ -116,7 +164,7 @@ export default function GroupBuyProductPage() {
   });
 
   const renderProductTable = () => {
-    if (!selectedGroup?.id) return <></>;
+    if (!selectedGroup?.id) return tableTitle;
 
     return screens.md ? (
       <ProductTable
@@ -197,9 +245,6 @@ export default function GroupBuyProductPage() {
               className="mb-2.5  w-full md:w-auto"
               notice={annoData?.notice || ""}
             />
-            <div className="flex flex-col md:flex-row gap-2.5 mb-2.5">
-              <GroupSelect onChangeGroup={() => { setSearchkey("") }} />
-            </div>
             {renderProductTable()}
           </div>
           <div className="hidden md:inline-block sticky top-16 h-100  ">
