@@ -19,17 +19,17 @@ export interface PartyBuyData {
 export default function PartyProductCard({ className = "", partyData }: { className?: string, partyData: PartyBuyData }) {
     const navigate = useNavigate();
     return (
-        <div className={"overflow-hidden w-[250px] pb-2 duration-300 cursor-pointer transition-all  border-[#D9D9D9] rounded-[10px] bg-yellow-50 hover:shadow-[0_4px_10px_0px_rgba(0,0,0,0.10)] " + className}
+        <div className={"overflow-hidden w-[250px] pb-2 duration-300 cursor-pointer transition-all  border-[#D9D9D9] rounded-[10px] bg-yellow-50 hover:shadow-xl hover:-translate-y-1 " + className}
             onClick={() => {
                 navigate(`/partyup/partyDetail/${partyData.id}`)
             }}
         >
-            <div className="flex justify-center items-center bg-[#FBFBFB] relative h-[180px] overflow-hidden">
-                <IoIosArrowBack color={"#74a26e"} className="absolute top-[50%] left-0 -translate-y-1/2" />
-                <img className="w-full h-[180px] object-cover" src={partyData.image} alt="" />
-                <IoIosArrowForward color={"#74a26e"} className="absolute top-[50%] right-0 -translate-y-1/2" />
+            <div className="flex justify-center items-center bg-[#FBFBFB] relative h-[180px] overflow-hidden ">
+                <IoIosArrowBack color={"#74a26e"} className="absolute top-[50%] left-0 z-1" />
+                <img className="w-full h-[180px] object-cover transition-transform duration-500 hover:scale-110 " src={partyData.image} alt="" />
+                <IoIosArrowForward color={"#74a26e"} className="absolute top-[50%] right-0" />
             </div>
-            <div className="px-3.5 text-lg text-center font-[500] text-black mt-2">{partyData.name}</div>
+            <div className="px-3.5 text-lg text-center font-medium text-black mt-2">{partyData.name}</div>
             <div className="p-3.5 pt-2 flex flex-col gap-2">
                 <div className="flex justify-between items-center">
                     <p className="font-[500] text-[#2a4e41] text-sm">參與人數</p>
