@@ -11,12 +11,14 @@ export default function PartyOrdersPage() {
     return (
         <div>
             <Breadcrumbs />
-            <h2 className="text-[24px] font-bold">揪團訂購紀錄</h2>
-            <OrderSearchGroup className="mt-5" isLoading={isLoading} onClickSearchBtn={() => { }} />
-            <div className="mt-5">
-                {data?.map((order) => (
-                    <OrderCard key={order.id} orderItem={order} />
-                ))}
+            <div className="md:max-w-[850px] mx-auto">
+                <h2 className="text-[24px] font-bold">揪團訂購紀錄</h2>
+                <OrderSearchGroup className="mt-5" isLoading={isLoading} onClickSearchBtn={() => { }} />
+                <div className="mt-5">
+                    {data?.map((order) => (
+                        <OrderCard key={order.orderId} orderItem={order} />
+                    ))}
+                </div>
             </div>
         </div>
     )
