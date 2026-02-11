@@ -29,7 +29,7 @@ export default function OrderCard({ orderItem }: { orderItem: OrderData }) {
                 </div>
             </div>
 
-            {/* 訂單內容網格 */}
+            {/* 訂單內容 */}
             <div className="gap-y-1.5 md:gap-y-1.5 pt-4 pb-2 grid grid-cols-1 md:grid-cols-2">
                 {renderRow("揪團名稱:", <span className="text-partyup-primary font-bold">{orderItem.partyName}</span>)}
                 {renderRow("訂單時間:", <span className="font-['Inria_Sans']">{orderItem.createdAt}</span>)}
@@ -48,13 +48,13 @@ export default function OrderCard({ orderItem }: { orderItem: OrderData }) {
                     </>
                 )}
             </div>
-
+            {isExpanded && <div className="md:col-span-2 border-t border-dashed border-[#CFCFCF] my-1 mx-4"></div>}
             {/* 購買商品清單 */}
             {isExpanded &&
-                <div className="border-t border-[#CFCFCF] pt-4 mt-2 px-4 md:px-6 ">
+                <div className=" pt-2.5 mt-2 px-4 md:px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
                         {orderItem.buyItems.map((item, idx) => (
-                            <div key={idx} className="flex gap-3.5 p-2 rounded-lg border border-[#F0F0F0] bg-[#fcfcfc]">
+                            <div key={idx} className="flex gap-3.5 p-2 rounded-lg ">
                                 <div className=" w-[100px] h-[100px] shrink-0 flex justify-center items-center rounded-md overflow-hidden border border-[#EEE] ">
                                     <img src={item.imageUrl} className="w-full h-full object-cover" alt={item.name} />
                                 </div>
