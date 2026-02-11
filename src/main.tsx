@@ -23,6 +23,7 @@ import { useAuthStore } from "./store/useAuthStore.ts";
 import PartyBuyListPage from "./pages/partyup/PartyBuyListPage.tsx";
 import PartyProductPage from "./pages/partyup/PartyProductPage.tsx";
 import PartyCheckoutPage from "./pages/partyup/PartyCheckoutPage.tsx";
+import PartyOrdersPage from "./pages/partyup/OrderPage.tsx";
 
 const router = createHashRouter([
   {
@@ -68,6 +69,10 @@ const router = createHashRouter([
           {
             path: "/partyup/checkout",
             element: <PartyCheckoutPage />
+          },
+          {
+            path: "/partyup/orders",
+            element: <PartyOrdersPage />
           }
         ],
       },
