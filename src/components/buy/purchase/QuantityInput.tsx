@@ -51,7 +51,7 @@ export default function QuantityInput({
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
           </svg>
         </div>
-        <div className={"w-[calc(100vw-102px)] flex items-center justify-center md:w-[100px] text-center border-[#E5E5E5] border-r border-l " + (height ? `h-[${height}px]` : "")}>
+        <div className={"w-[calc(100vw-102px)] h-full flex items-center justify-center md:w-[100px] text-center border-[#E5E5E5] border-r border-l " + (height ? `h-[${height}px]` : "")}>
           {inputNumber}
         </div>
         <div

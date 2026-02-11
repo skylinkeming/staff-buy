@@ -21,18 +21,20 @@ export default function OrderCard({ orderItem }: { orderItem: OrderData }) {
                 <div className="text-[#7E8182]">
                     訂單編號: <span className="font-bold text-[#0B7F9F] font-['Inria_Sans'] text-[20px] ml-1">{orderItem.orderId}</span>
                 </div>
-                <div className="flex gap-2 items-center">
+                {/* <div className="flex gap-2 items-center">
                     <div className="text-[14px] font-bold px-2 py-0.5 bg-white border border-[#CFCFCF] rounded-[4px]">{orderItem.orderStatus}</div>
                     {orderItem.orderStatus === "已領取" && (
                         <div className="text-[#7E8182] text-[12px] hidden md:block">{orderItem.pickupDate}</div>
                     )}
-                </div>
+                </div> */}
             </div>
 
             {/* 訂單內容 */}
             <div className="gap-y-1.5 md:gap-y-1.5 pt-4 pb-2 grid grid-cols-1 md:grid-cols-2">
                 {renderRow("揪團名稱:", <span className="text-partyup-primary font-bold">{orderItem.partyName}</span>)}
-                {renderRow("訂單時間:", <span className="font-['Inria_Sans']">{orderItem.createdAt}</span>)}
+                {renderRow("訂單時間:", orderItem.createdAt)}
+                {renderRow("訂單狀態:", orderItem.orderStatus)}
+                {renderRow("領取日期:", orderItem.pickupDate)}
                 {renderRow("領取方式:", orderItem.pickupMethod)}
                 {renderRow("總金額:", <span className="text-[#FF5C5C] font-bold font-['Inria_Sans'] text-[18px]">${orderItem.totalAmount.toLocaleString()}</span>)}
 
@@ -52,7 +54,7 @@ export default function OrderCard({ orderItem }: { orderItem: OrderData }) {
             {/* 購買商品清單 */}
             {isExpanded &&
                 <div className=" pt-2.5 mt-2 px-4 md:px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1.25 pb-4">
                         {orderItem.buyItems.map((item, idx) => (
                             <div key={idx} className="flex gap-3.5 p-2 rounded-lg ">
                                 <div className=" w-[100px] h-[100px] shrink-0 flex justify-center items-center rounded-md overflow-hidden border border-[#EEE] ">
