@@ -11,6 +11,7 @@ export default function OrderSearchGroup({
   isLoading,
   onClickSearchBtn,
   placeholder,
+  buttonClass
 }: {
   className?: string;
   isLoading: boolean;
@@ -20,6 +21,7 @@ export default function OrderSearchGroup({
     endDate: string;
   }) => void;
   placeholder?: string;
+  buttonClass?: string;
 }) {
   const defaultStart = dayjs().subtract(6, "month").format("YYYY-MM-DD");
   const defaultEnd = dayjs().format("YYYY-MM-DD");
@@ -79,7 +81,8 @@ export default function OrderSearchGroup({
           loading={isLoading}
           type="primary"
           icon={<SearchOutlined />}
-          className="w-full bg-staffbuy-primary! border-bg-staffbuy-primary! hover:opacity-90! mt-2.5 md:mt-0 md:max-w-25"
+          className={"w-full hover:opacity-90! mt-2.5 md:mt-0 md:max-w-25 " +
+            buttonClass ? buttonClass : "bg-staffbuy-primary! border-bg-staffbuy-primary!"}
           onClick={handleSearch}
         >
           搜尋

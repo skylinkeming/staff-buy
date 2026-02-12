@@ -42,33 +42,36 @@ export default function OrderCard({ orderItem }: { orderItem: OrderData }) {
                 {isExpanded && orderItem.shippingInfo && (
                     <>
                         <div className="md:col-span-2 border-t border-dashed border-[#CFCFCF] my-1 mx-4" />
-                        {renderRow("收件人姓名", orderItem.shippingInfo.name)}
-                        {renderRow("收件人電話", <span className="font-['Inria_Sans']">{orderItem.shippingInfo.phone}</span>)}
-                        {renderRow("運費", <span className="font-['Inria_Sans']">${orderItem.shippingInfo.shippingFee}</span>)}
-                        {renderRow("物流單號", <span className="font-['Inria_Sans'] bg-gray-100 px-1 rounded">{orderItem.shippingInfo.trackingNumber}</span>)}
-                        {renderRow("收件地址", orderItem.shippingInfo.address, true)}
+                        {renderRow("收件人姓名:", orderItem.shippingInfo.name)}
+                        {renderRow("收件人電話:", <span className="font-['Inria_Sans']">{orderItem.shippingInfo.phone}</span>)}
+                        {renderRow("運費:", <span className="font-['Inria_Sans']">${orderItem.shippingInfo.shippingFee}</span>)}
+                        {renderRow("物流單號:", <span className="font-['Inria_Sans'] bg-gray-100 px-1 rounded">{orderItem.shippingInfo.trackingNumber}</span>)}
+                        {renderRow("收件地址:", orderItem.shippingInfo.address, true)}
                     </>
                 )}
             </div>
-            {isExpanded && <div className="md:col-span-2 border-t border-dashed border-[#CFCFCF] my-1 mx-4"></div>}
+
             {/* 購買商品清單 */}
             {isExpanded &&
-                <div className=" pt-2.5 mt-2 px-4 md:px-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1.25 pb-4">
-                        {orderItem.buyItems.map((item, idx) => (
-                            <div key={idx} className="flex gap-3.5 p-2 rounded-lg ">
-                                <div className=" w-[100px] h-[100px] shrink-0 flex justify-center items-center rounded-md overflow-hidden border border-[#EEE] ">
-                                    <img src={item.imageUrl} className="w-full h-full object-cover" alt={item.name} />
+                <>
+                    <div className="md:col-span-2 border-t border-dashed border-[#CFCFCF] my-1 mx-4"></div>
+                    <div className=" pt-2.5 px-4 md:px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.25 pb-4">
+                            {orderItem.buyItems.map((item, idx) => (
+                                <div key={idx} className="flex gap-3.5 p-2 rounded-lg ">
+                                    <div className=" w-[100px] h-[100px] shrink-0 flex justify-center items-center rounded-md overflow-hidden border border-[#EEE] ">
+                                        <img src={item.imageUrl} className="w-full h-full object-cover" alt={item.name} />
+                                    </div>
+                                    <div className="flex flex-col justify-center gap-1">
+                                        <p className="font-bold text-[#20232C] text-[15px] line-clamp-1">{item.name}</p>
+                                        <p className="text-[#7E8182] text-[13px]">數量：x {item.qty}</p>
+                                        <p className="text-[#7E8182] text-[13px]">小計：<span className="text-[#FF5C5C] font-bold font-['Inria_Sans']">${item.price}</span></p>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col justify-center gap-1">
-                                    <p className="font-bold text-[#20232C] text-[15px] line-clamp-1">{item.name}</p>
-                                    <p className="text-[#7E8182] text-[13px]">數量：x {item.qty}</p>
-                                    <p className="text-[#7E8182] text-[13px]">小計：<span className="text-[#FF5C5C] font-bold font-['Inria_Sans']">${item.price}</span></p>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </>
             }
 
             {/* 底部按鈕 */}
@@ -78,7 +81,7 @@ export default function OrderCard({ orderItem }: { orderItem: OrderData }) {
                     className="flex gap-1.5 justify-center items-center border border-[#1e88e5] px-4 py-1.5 rounded-[5px] hover:bg-[#1e88e5]/5 transition-colors group cursor-pointer"
                     onClick={() => setIsExpanded(!isExpanded)}
                 >
-                    <span className="text-partyup-primary text-[14px] font-bold">{isExpanded ? "收合明細" : "展開明細"} </span>
+                    <span className="text-partyup-primary text-[14px]">{isExpanded ? "收合明細" : "展開明細"} </span>
                     {isExpanded ?
                         <BiChevronUp className="text-partyup-primary transition-transform group-hover:-translate-y-0.5" size={20} /> :
                         <BiChevronDown className="text-partyup-primary transition-transform group-hover:translate-y-0.5" size={20} />
