@@ -81,8 +81,7 @@ export default function OrderSearchGroup({
           loading={isLoading}
           type="primary"
           icon={<SearchOutlined />}
-          className={"w-full hover:opacity-90! mt-2.5 md:mt-0 md:max-w-25 " +
-            buttonClass ? buttonClass : "bg-staffbuy-primary! border-bg-staffbuy-primary!"}
+          className={"w-full! hover:opacity-90! mt-2.5 md:mt-0 md:max-w-25 " + (buttonClass ? buttonClass : "bg-staffbuy-primary! border-bg-staffbuy-primary! ")}
           onClick={handleSearch}
         >
           搜尋

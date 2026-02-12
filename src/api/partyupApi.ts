@@ -154,6 +154,43 @@ export const partyupApi = {
                             phone: "0912345678",
                             address: "台北市中山區中山路5號"
                         }
+                    },
+                    {
+                        orderId: "QQT2233596",
+                        createdAt: "2025/11/1",
+                        pickupDate: "2025/11/1",
+                        pickupMethod: "自取",
+                        orderStatus: "已領取",
+                        totalAmount: 100,
+                        partyName: "毛巾團購",
+                        buyItems: [
+                            {
+                                imageUrl: "https://i5.momoshop.com.tw/1769164284/goodsimg/TP000/6553/0011/974/TP00065530011974_R.webp",
+                                name: "毛巾",
+                                qty: 1,
+                                price: 100
+                            },
+                            {
+                                imageUrl: "https://www.ihergo.com/photo/product/92/750_1357292_1747104132082.jpg",
+                                name: "B群",
+                                qty: 1,
+                                price: 100
+                            }
+                            ,
+                            {
+                                imageUrl: "https://i5.momoshop.com.tw/1769164284/goodsimg/TP000/6553/0011/974/TP00065530011974_R.webp",
+                                name: "毛巾",
+                                qty: 1,
+                                price: 100
+                            }
+                        ],
+                        shippingInfo: {
+                            trackingNumber: "123",
+                            shippingFee: 100,
+                            name: "Steve Lin",
+                            phone: "0912345678",
+                            address: "台北市中山區中山路5號"
+                        }
                     }
                 ]
                 resolve(res)

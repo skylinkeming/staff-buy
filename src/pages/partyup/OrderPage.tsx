@@ -20,7 +20,7 @@ export default function PartyOrdersPage() {
                     isLoading={isLoading}
                     onClickSearchBtn={() => { }}
                 />
-                <div className="mt-5">
+                <div className="mt-5 grid grid-cols-1 gap-3.5">
                     {data?.map((order) => (
                         <OrderCard key={order.orderId} orderItem={order} />
                     ))}
