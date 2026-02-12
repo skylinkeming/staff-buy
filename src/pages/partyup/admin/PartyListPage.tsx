@@ -13,7 +13,7 @@ export default function PartyListPage() {
     };
     return (
         <div className="w-full flex justify-center bg-partyup-admin-bg">
-            <div className="w-[800px] mx-auto pt-25 pb-10">
+            <div className="w-[800px] mx-auto pt-15 pb-10">
                 <div className="flex justify-between">
                     <h2 className="text-[24px] font-bold">揪團訂購</h2>
                     <Button

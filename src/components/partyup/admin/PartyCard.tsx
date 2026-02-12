@@ -1,4 +1,3 @@
-import { Button } from "antd";
 import { IoPeopleSharp } from "react-icons/io5";
 
 
@@ -16,8 +15,8 @@ export default function PartyCard() {
                     <p className="ml-3.5 mt-1 text-[14px] flex gap-2.5 items-center"><IoPeopleSharp />
                         <span className="text-[#FF9800] font-bold">236人</span></p>
                     <div className="flex gap-3.5">
-                        <div className="text-[#4F48E5] cursor-pointer">編輯</div>
-                        <div className="text-[#4F48E5] cursor-pointer">下架</div>
+                        <div className="text-[#1E88E5] cursor-pointer">編輯</div>
+                        <div className="text-[#1E88E5] cursor-pointer">下架</div>
                     </div>
                 </div>
             </div>
