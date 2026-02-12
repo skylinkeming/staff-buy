@@ -1,6 +1,6 @@
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import Notice from "@/components/partyup/client/listPage/Notice";
-import { BlockTitle } from "../staffbuy/StaffProductPage";
+import { BlockTitle } from "../../staffbuy/StaffProductPage";
 import KeywordSearchAction from "@/components/common/KeywordSearchAction";
 import PartyProductCard from "@/components/partyup/client/listPage/ProductCard";
 import { ConfigProvider, Pagination } from "antd";
