@@ -1,7 +1,7 @@
+import PartyAdminTabs from "@/components/partyup/admin/editor/PartyAdminTabs";
 
-import PartyAdminTabs from "@/components/partyup/admin/PartyAdminTabs";
 
-export default function PartyManagementPage() {
+export default function PartyEditorPage() {
     return (
         <div className="w-full h-full flex justify-center bg-partyup-admin-bg">
             <div className="w-[1000px] mx-auto pt-15 pb-10">

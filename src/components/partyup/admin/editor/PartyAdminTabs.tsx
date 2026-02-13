@@ -1,5 +1,5 @@
 import { ConfigProvider, Tabs } from "antd";
-import PartyManagement from "./PartyManagement";
+import PartyEditor from "./PartyEditor";
 
 export default function PartyAdminTabs() {
     return (
@@ -19,7 +19,7 @@ export default function PartyAdminTabs() {
 
             >
                 <Tabs.TabPane tab="編輯揪團資訊" key="1">
-                    <PartyManagement />
+                    <PartyEditor />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="查看揪團訂單" key="2">
                     <div className="pl-5">查看揪團訂單</div>

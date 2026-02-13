@@ -1,5 +1,5 @@
 import OrderSearchGroup from "@/components/common/OrderSearchGroup";
-import PartyCard from "@/components/partyup/admin/PartyCard";
+import PartyCard from "@/components/partyup/admin/list/PartyCard";
 import { Button, ConfigProvider, Pagination } from "antd";
 import { useState } from "react";
 import { FaPlusSquare } from "react-icons/fa";
