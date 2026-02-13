@@ -2,6 +2,7 @@ import { useEditor, EditorContent, Extension } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Color from "@tiptap/extension-color";
+import Placeholder from '@tiptap/extension-placeholder'
 import { TextStyle } from "@tiptap/extension-text-style";
 import { ColorPicker, Button, Space, Select } from "antd";
 import {
@@ -12,7 +13,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 
-// 富文本編輯器 component
+/** 富文本編輯器 component */
 
 
 
@@ -71,7 +72,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
 
 
     return (
-        <div className="flex flex-wrap gap-2 mb-3 border-b pb-3 border-gray-100 items-center">
+        <div className="flex flex-wrap gap-2 items-center">
             <Space wrap>
                 {/* 字體大小 */}
                 <Select
@@ -118,6 +119,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
     );
 };
 
+/** 富文本編輯器 component */
 export default function TiptapEditor({
     value,
     onChange,
@@ -135,6 +137,10 @@ export default function TiptapEditor({
             TextStyle,
             Color,
             FontSize,
+            Placeholder.configure({
+                placeholder: placeholder || '請輸入內容...',
+                showOnlyWhenEditable: true,
+            }),
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
@@ -142,23 +148,55 @@ export default function TiptapEditor({
                 },
             }),
         ],
-        content: value || `<span class="text-gray-400">${placeholder}</span>`,
+        content: value || "",
         onUpdate: ({ editor }) => {
             setChangedTime(Date.now());
+            // console.log(editor.getJSON().content);
             onChange(editor.getHTML());
         },
         editorProps: {
             attributes: {
-                // 使用 prose 來確保內部的 h1, ul, li 有樣式
-                class: "prose prose-sm focus:outline-none min-h-[300px] max-w-none",
+                // 重點：移除這裡的 h-full，讓它由外層容器控制
+                class: "prose prose-sm focus:outline-none max-w-none p-4",
             },
         },
     });
 
     return (
-        <div className="border border-[#D9D9D9] rounded-[10px] w-full h-full p-2.5 bg-white focus-within:border-partyup-primary transition-colors">
-            <MenuBar key={changedTime} editor={editor} />
-            <EditorContent editor={editor} />
+        <div className="border border-[#D9D9D9] rounded-[10px] w-full h-full flex flex-col bg-white focus-within:border-partyup-primary transition-colors overflow-hidden">
+
+            {/* 頂部 MenuBar - 固定高度 */}
+            <div className="p-2.5 border-b border-gray-100 bg-gray-50/30">
+                <MenuBar key={changedTime} editor={editor} />
+            </div>
+
+            {/* 內容編輯區 - 自動填滿剩餘高度並允許捲軸 */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
+                <EditorContent editor={editor} />
+            </div>
+
+            <style>{`
+                /* 確保編輯器本體填滿容器 */
+                .tiptap {
+                    min-height: 100%;
+                }
+                /* 自定義捲軸樣式，看起來更美觀 */
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background-color: #E2E2E2;
+                    border-radius: 10px;
+                }
+                /* 當編輯器為空時，顯示 placeholder 內容 */
+                .tiptap p.is-editor-empty:first-child::before {
+                    content: attr(data-placeholder);
+                    float: left;
+                    color: #adb5bd; 
+                    pointer-events: none;
+                    height: 0;
+                }
+            `}</style>
         </div>
     );
 }
