@@ -25,6 +25,7 @@ import PartyProductPage from "./pages/partyup/client/PartyProductPage.tsx";
 import PartyCheckoutPage from "./pages/partyup/client/PartyCheckoutPage.tsx";
 import PartyOrdersPage from "./pages/partyup/client/OrderPage.tsx";
 import PartyListPage from "./pages/partyup/admin/PartyListPage.tsx";
+import PartyManagementPage from "./pages/partyup/admin/PartyManagementPage.tsx";
 
 const router = createHashRouter([
   {
@@ -83,6 +84,12 @@ const router = createHashRouter([
     path: "/partyup/admin/list",
     element: (
       <PartyListPage />
+    ),
+  },
+  {
+    path: "/partyup/admin/:id",
+    element: (
+      <PartyManagementPage />
     ),
   }
 ]);
