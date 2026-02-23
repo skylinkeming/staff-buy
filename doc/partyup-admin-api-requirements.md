@@ -258,6 +258,13 @@
       "dept": "資訊部",
       "staff_id": "015550",
       "staff_name": "張阿爆",
+      "buy_items": [
+        {
+          "name": "佛羅倫斯之浴巾",
+          "qty": 2,
+          "price": 130
+        }
+      ],
       "order_status": "已領取"
     }
   ]
