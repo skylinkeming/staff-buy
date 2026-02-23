@@ -279,66 +279,74 @@
 - Path: /api/partyup/order
 - 說明：取得揪團訂單明細
 
-#### Query Params（可選）
+#### Query Params
 
-| 欄位    | 型別   | 必填 | 說明    |
-| ------- | ------ | ---- | ------- |
-| partyId | string | 是   | 揪團 id |
-| orderId | string | 是   | 訂單 id |
+| --------------------------- | ------ | ---- | -------------------------------- |
+| 欄位 | 型別 | 必填 | 說明 |
+| --------------------------- | ------ | ---- | -------------------------------- |
+| partyId | string | 是 | 揪團的 id |
+| orderId | string | 否 | 訂單 id (若為建立新訂單則不用填, 並自動產出一組新的orderId回給前端) |
 
 #### Response
 
 ```json
 {
-  "order": [
-    {
-      "order_id": "TK92600677",
-      "total_amount": 690,
-      "order_date": "2025/12/3 12:43",
-      "dept": "資訊部",
-      "staff_id": "015550",
-      "staff_name": "張阿爆",
-      "order_status": 3, // 已領取(?)
-      "order_status_options": [
-        //訂單狀態清單
-        {
-          "value": "已成單",
-          "id": "2"
-        },
-        {
-          "value": "已領取",
-          "id": "3"
-        }
-      ],
-      "product_options": [
-        {
-          "prod_id": "a1235",
-          "prod_name": "佛羅倫斯系列之毛巾",
-          "party_price": 260,
-          "prod_img": "https://..."
-        },
-        {
-          "prod_id": "2342525",
-          "prod_name": "佛羅倫斯系列之浴巾",
-          "party_price": 380,
-          "prod_img": "https://..."
-        }
-      ],
-      "shippin_info": {
-        //需要宅配資訊的才會帶
-        "name": "Steve Lin",
-        "phone": "0912345678",
-        "address": "台北市中山區...",
-        "tracking_number": "220908799" //宅配單號
+  "orderId": "TK92600677",
+  "totalAmount": 690,
+  "orderDate": "2025/12/3 12:43",
+  "dept": "資訊部",
+  "staffId": "015550",
+  "staffName": "張阿爆",
+  "orderStatus": 3, // 已領取(?)
+  "options": {
+    "orderStatus": [
+      //訂單狀態清單
+      {
+        "value": "已成單",
+        "id": "2"
+      },
+      {
+        "value": "已領取",
+        "id": "3"
       }
+    ],
+    "productOptions": [
+      {
+        "id": "a1235",
+        "name": "佛羅倫斯系列之毛巾",
+        "price": 260,
+        "img": "https://..."
+      },
+      {
+        "id": "2342525",
+        "name": "佛羅倫斯系列之浴巾",
+        "price": 380,
+        "img": "https://..."
+      }
+    ]
+  },
+  "buyItems": [
+    {
+      "id": "P001",
+      "name": "佛羅倫斯系列之毛巾",
+      "img": "https://...",
+      "qty": 2,
+      "price": 130
     }
-  ]
+  ],
+  "shippingInfo": {
+    //需要宅配資訊的才會帶
+    "name": "Steve Lin",
+    "phone": "0912345678",
+    "address": "台北市中山區...",
+    "trackingNumber": "220908799" //宅配單號
+  }
 }
 ```
 
 ---
 
-### 建立訂單 || 更新訂單
+### 更新訂單
 
 - Method: POST
 - Path: /api/partyup/order
@@ -352,7 +360,7 @@
 | orderId                     | string | 否   | 訂單 id (若為建立新訂單則不用填) |
 | staffId                     | string | 是   | 購買者的員工編號                 |
 | buyItems                    | array  | 是   | 訂單商品清單                     |
-| buyItems[].productId        | string | 是   | 商品選項的 ID                    |
+| buyItems[].id               | string | 是   | 商品選項的 ID                    |
 | buyItems[].qty              | number | 是   | 購買數量                         |
 | shippingInfo                | object | 否   | 宅配資訊(需要宅配資訊時為必填)   |
 | shippingInfo.name           | string | 是   | 收件人姓名                       |
@@ -362,34 +370,36 @@
 
 ```json
 {
-  [
+  "orderId": "TK92600677",
+  "totalAmount": 690,
+  "orderDate": "2025/12/3 12:43",
+  "dept": "資訊部",
+  "staffId": "015550",
+  "staffName": "張阿爆",
+  "orderStatus": 3, // 已領取(?)
+  "buyItems": [
     {
-      "partyId": "g2223", //第一個揪團商品結帳
-      "orderId": "a2325325325",
-      "staffId": "017332",
-      "buyItems": [
-        {
-          "prod_id": "P001",
-          "qty": 2
-        }
-      ],
-      "shippinInfo": {//需要宅配資訊的才會帶
-        "name": "Steve Lin",
-        "phone": "0912345678",
-        "address": "台北市中山區...",
-      },
+      "id": "P001",
+      "qty": 2
     }
-  ]
+  ],
+  "shippingInfo": {
+    //需要宅配資訊的才會帶
+    "name": "Steve Lin",
+    "phone": "0912345678",
+    "address": "台北市中山區...",
+    "trackingNumber": "220908799" //宅配單號
+  }
 }
 ```
 
 ---
 
-### 批次變更訂單
+### 批次變更訂單狀態
 
 - Method: POST
 - Path: /api/partyup/orders
-- 說明：批次變更揪團的訂單
+- 說明：批次變更揪團的訂單狀態
 
 #### Request Body
 
