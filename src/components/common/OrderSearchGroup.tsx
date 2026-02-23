@@ -1,4 +1,4 @@
-import { ConfigProvider, DatePicker, Input, Button } from "antd";
+import { ConfigProvider, DatePicker, Input, Button, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import zhTW from "antd/es/locale/zh_TW";
@@ -11,7 +11,8 @@ export default function OrderSearchGroup({
   isLoading,
   onClickSearchBtn,
   placeholder,
-  buttonClass
+  buttonClass,
+  canSelectOrderStatus
 }: {
   className?: string;
   isLoading: boolean;
@@ -22,6 +23,7 @@ export default function OrderSearchGroup({
   }) => void;
   placeholder?: string;
   buttonClass?: string;
+  canSelectOrderStatus?: boolean;
 }) {
   const defaultStart = dayjs().subtract(6, "month").format("YYYY-MM-DD");
   const defaultEnd = dayjs().format("YYYY-MM-DD");
@@ -56,7 +58,7 @@ export default function OrderSearchGroup({
           onPressEnter={handleSearch}
         />
         <RangePicker
-          className="w-full md:w-60"
+          className="w-[240px]! md:w-60"
           format="YYYY/MM/DD"
           onChange={(_, dates) => {
             if (dates) {
@@ -77,6 +79,24 @@ export default function OrderSearchGroup({
             endDate ? dayjs(endDate) : undefined,
           ]}
         />
+        {canSelectOrderStatus && (
+          <Select
+            disabled={false}
+            status={""}
+            value={""}
+            onChange={(val) => { }}
+            placeholder={"訂單狀態"}
+            className={`w-25!`}
+            options={[
+              { value: "", label: "全部" },
+              { value: "1", label: "未付款" },
+              { value: "2", label: "已付款" },
+              { value: "3", label: "已領取" },
+              { value: "4", label: "已完成" },
+              { value: "5", label: "已取消" },
+            ]}
+          />
+        )}
         <Button
           loading={isLoading}
           type="primary"

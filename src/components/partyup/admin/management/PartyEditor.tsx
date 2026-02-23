@@ -19,7 +19,9 @@ export default function PartyEditor() {
                     <Input placeholder="搜尋商品名稱" className="w-100!" />
                 </div>
                 <div className="flex gap-3.5 justify-between items-center ">
-                    <label className="whitespace-nowrap font-bold">揪團狀態:</label>
+                    <label className="whitespace-nowrap font-bold">
+                        <span className="text-red-500">*</span>
+                        揪團狀態:</label>
                     <Select
                         disabled={false}
                         status={""}
