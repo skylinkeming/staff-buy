@@ -102,7 +102,6 @@ const orderStatusStyles = {
 };
 
 export function OrderStatus({ status }: { status: string }) {
-    // 取得對應的樣式組合，如果找不到則給予預設值
     const activeStyle = orderStatusStyles[status as keyof typeof orderStatusStyles] || "text-gray-500 border-gray-500";
 
     return (
