@@ -59,14 +59,14 @@ export default function CheckoutItems({
                             const item = partyCart.items[itemId];
                             return <div key={itemId} className=" relative flex items-center bg-white">
                                 <div className="md:w-50 md:h-40 flex justify-center items-center bg-[#FBFBFB] rounded-sm">
-                                    <img className="w-35" src={item.imgUrl} />
+                                    <img className="w-35" src={item.imageUrls[0]} />
                                 </div>
                                 <div className="flex flex-col items-start pl-10 h-40 justify-between">
                                     <div>
-                                        <div className="text-[20px] font-medium">{partyCart.partyName}</div>
-                                        <div className="mt-3.5">{item.prodName}</div>
+                                        <div className="text-[20px] font-medium max-w-95">{partyCart.partyName}</div>
+                                        <div className="mt-3.5">{item.optionName}</div>
                                     </div>
-                                    <div className="text-[20px] text-[#FF0000]">NT$ {item.partyPrice}</div>
+                                    <div className="text-[20px] text-[#FF0000]">NT$ {item.price}</div>
                                     <QuantityInput
                                         height={30}
                                         className="h-[30px] shadow-sm md:absolute right-2.5 top-0 w-42 md:w-28 flex justify-center"

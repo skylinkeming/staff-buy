@@ -1,23 +1,16 @@
 import { useNavigate } from "react-router";
-import { IoIosPeople, IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { IoIosPeople } from "react-icons/io";
+import type { PartySummary } from "@/api/partyup/partyupApi";
 
 
 
 
-export interface PartyBuyData {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    participants: number;
-    purchasePeriod: string;
-}
 
 
 
-export default function PartyProductCard({ className = "", partyData }: { className?: string, partyData: PartyBuyData }) {
+export default function PartyProductCard({ className = "", partyData }: { className?: string, partyData: PartySummary }) {
     const navigate = useNavigate();
+
     return (
         <div className={"overflow-hidden w-[250px] pb-2 duration-300 cursor-pointer transition-all  border-[#D9D9D9] rounded-[10px] bg-yellow-50 hover:shadow-xl hover:-translate-y-1 " + className}
             onClick={() => {
@@ -25,11 +18,9 @@ export default function PartyProductCard({ className = "", partyData }: { classN
             }}
         >
             <div className="flex justify-center items-center bg-[#FBFBFB] relative h-[180px] overflow-hidden ">
-                <IoIosArrowBack color={"#74a26e"} className="absolute top-[50%] left-0 z-1" />
-                <img className="w-full h-[180px] object-cover transition-transform duration-500 hover:scale-110 " src={partyData.image} alt="" />
-                <IoIosArrowForward color={"#74a26e"} className="absolute top-[50%] right-0" />
+                <img className="w-full h-[180px] object-cover transition-transform duration-500 hover:scale-110 " src={partyData.imageUrl} alt="" />
             </div>
-            <div className="px-3.5 text-lg text-center font-medium text-black mt-2">{partyData.name}</div>
+            <div className="px-3.5 text-lg text-center font-medium text-black mt-2">{partyData.title}</div>
             <div className="p-3.5 pt-2 flex flex-col gap-2">
                 <div className="flex justify-between items-center">
                     <p className="font-[500] text-[#2a4e41] text-sm">參與人數</p>
@@ -47,12 +38,12 @@ export default function PartyProductCard({ className = "", partyData }: { classN
                 <div className="flex justify-between items-center">
                     <p className="font-[500] text-[#2a4e41] text-sm">結束日期</p>
                     <div>
-                        <p className="text-sm md:text-md text-right max-w-[120px] md:max-w-[180px] text-sm">{partyData.purchasePeriod.split("~")[1]}</p>
+                        <p className="text-sm md:text-md text-right max-w-[120px] md:max-w-[180px] text-sm">{partyData.period?.split("~")[1]}</p>
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
                     <p className="font-[500] text-[#2a4e41] text-sm">團購價格</p>
-                    <p className="font-[500] text-[#FF3434] text-sm">${partyData.price}起</p>
+                    <p className="font-[500] text-[#FF3434] text-sm">${partyData.minPrice}起</p>
                 </div>
                 {/* <div className="flex justify-center items-center">
                     <div className="w-full bg-[#1E88E5] text-white text-center rounded-[10px] py-2 cursor-pointer leading-4"

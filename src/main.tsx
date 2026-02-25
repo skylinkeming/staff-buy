@@ -20,12 +20,12 @@ import ErrorPage from "@/pages/ErrorPage.tsx";
 import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
 import MainLayout from "./components/layout/MainLayout.tsx";
 import { useAuthStore } from "./store/useAuthStore.ts";
-import PartyBuyListPage from "./pages/partyup/client/PartyBuyListPage.tsx";
-import PartyProductPage from "./pages/partyup/client/PartyProductPage.tsx";
+import ClientPartyListPage from "./pages/partyup/client/ClientPartyListPage.tsx";
 import PartyCheckoutPage from "./pages/partyup/client/PartyCheckoutPage.tsx";
 import PartyOrdersPage from "./pages/partyup/client/OrderPage.tsx";
 import PartyListPage from "./pages/partyup/admin/PartyListPage.tsx";
 import PartyManagementPage from "./pages/partyup/admin/PartyManagementPage.tsx";
+import PartyPage from "./pages/partyup/client/PartyPage.tsx";
 
 const router = createHashRouter([
   {
@@ -59,13 +59,13 @@ const router = createHashRouter([
           {
             path: "/partyup",
             element: (
-              <PartyBuyListPage />
+              <ClientPartyListPage />
             ),
           },
           {
             path: "/partyup/partyDetail/:id",
             element: (
-              <PartyProductPage />
+              <PartyPage />
             ),
           },
           {

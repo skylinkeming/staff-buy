@@ -1,7 +1,7 @@
-import { usePartyupApi } from "@/api/usePartyupApi";
+import { usePartyupApi } from "@/api/partyup/usePartyupApi";
 import Breadcrumbs from "@/components/common/BreadCrumbs";
 import OrderSearchGroup from "@/components/common/OrderSearchGroup";
-import OrderCard from "@/components/partyup/client/orders/OrderCard";
+import OrderCard from "@/components/partyup/client/orderPage/OrderCard";
 
 
 export default function PartyOrdersPage() {

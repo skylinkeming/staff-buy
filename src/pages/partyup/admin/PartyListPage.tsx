@@ -1,3 +1,4 @@
+
 import OrderSearchGroup from "@/components/common/OrderSearchGroup";
 import PartyCard from "@/components/partyup/admin/list/PartyCard";
 import { Button, ConfigProvider, Pagination } from "antd";
@@ -11,6 +12,8 @@ export default function PartyListPage() {
     const onPageChange = (page: number) => {
         setCurrentPage(page);
     };
+
+
     return (
         <div className="w-full flex justify-center bg-partyup-admin-bg">
             <div className="w-[800px] mx-auto pt-15 pb-10">

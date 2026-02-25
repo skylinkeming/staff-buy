@@ -29,7 +29,7 @@ export default function CartSummary({
 
     const totalAmount = partyEntries.reduce((sum, party) => {
         const partyTotal = Object.values(party.items).reduce(
-            (s, item) => s + item.partyPrice * item.quantity,
+            (s, item) => s + item.price * item.quantity,
             0
         );
         return sum + partyTotal;
@@ -85,12 +85,12 @@ export default function CartSummary({
                             <div key={party.partyId} className="mb-4 last:mb-0">
                                 {Object.values(party.items).map((item) => (
                                     <div
-                                        key={item.productId}
+                                        key={item.id}
                                         className="flex justify-between items-start mb-2 gap-2"
                                     >
                                         <div className="flex-1">
                                             <div className="text-[13px] font-bold text-gray-700 leading-tight">
-                                                {item.prodName}
+                                                {item.optionName}
                                             </div>
 
                                         </div>
@@ -98,7 +98,7 @@ export default function CartSummary({
                                             x {item.quantity}
                                         </div>
                                         <div className="text-[13px] font-medium text-gray-800 w-[60px] text-right">
-                                            ${(item.partyPrice * item.quantity).toLocaleString()}
+                                            ${(item.price * item.quantity).toLocaleString()}
                                         </div>
                                     </div>
                                 ))}

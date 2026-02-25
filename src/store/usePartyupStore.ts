@@ -1,4 +1,4 @@
-import type { ProductOption } from "@/api/partyupApi";
+import type { PartyOption, ProductOption } from "@/api/partyup/partyupApi";
 import { create } from "zustand";
 
 
@@ -8,7 +8,7 @@ export interface PartyCartData {
     partyId: string;
     partyName: string; // 方便 UI 顯示
     requiresShippingInfo: boolean;
-    items: Record<string, ProductOption & { quantity: number }>;
+    items: Record<string, PartyOption & { quantity: number }>;
     shippingInfo: { name: string; phone: string; address: string; };
     formError: boolean;
 }
@@ -20,7 +20,7 @@ export interface CartState {
     // Actions
     updateCart: (
         party: { id: string; name: string; requiresShippingInfo: boolean },
-        product: ProductOption,
+        product: PartyOption,
         targetQuantity: number
     ) => void;
 
@@ -53,13 +53,13 @@ export const usePartyupStore = create<CartState>((set, get) => ({
             }
 
             if (targetQuantity <= 0) {
-                delete newCarts[partyId].items[product.productId];
+                delete newCarts[partyId].items[product.id];
                 // 如果該團購下沒東西了，就把整個團購移除
                 if (Object.keys(newCarts[partyId].items).length === 0) {
                     delete newCarts[partyId];
                 }
             } else {
-                newCarts[partyId].items[product.productId] = {
+                newCarts[partyId].items[product.id] = {
                     ...product,
                     quantity: targetQuantity,
                 };
@@ -106,7 +106,7 @@ export const usePartyupStore = create<CartState>((set, get) => ({
                 const payload: any = {
                     partyId: partyEntry.partyId,
                     buyItems: Object.values(partyEntry.items).map((item) => ({
-                        productId: item.productId,
+                        productId: item.id,
                         qty: item.quantity,
                     })),
                 };
