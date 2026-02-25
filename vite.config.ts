@@ -17,6 +17,11 @@ export default defineConfig({
         target: "http://192.168.80.27:8004/staffbuyapi/",
         changeOrigin: true,
       },
+      "/partyupApi": {
+        target: "http://192.168.80.27:8004/CoPurchaseAPI/",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/partyupApi/, "/api"),
+      },
     },
   },
 });
