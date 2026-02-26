@@ -4,7 +4,7 @@ import OrderSearchGroup from "@/components/common/OrderSearchGroup";
 import OrderCard from "@/components/partyup/client/orderPage/OrderCard";
 
 
-export default function PartyOrdersPage() {
+export default function ClientOrderPage() {
 
     const { data, isLoading } = usePartyupApi.useOrderListQuery();
 

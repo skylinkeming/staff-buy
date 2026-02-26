@@ -1,8 +1,8 @@
 
 
 
-import { useQuery } from "@tanstack/react-query";
-import { partyupApi } from "./partyupApi";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { partyupApi, type CreateOrderRequest } from "./partyupApi";
 
 export const usePartyupApi = {
     usePartyListQuery: () =>
@@ -18,5 +18,9 @@ export const usePartyupApi = {
             queryFn: () => partyupApi.getPartyDetail(id),
             staleTime: 0,
             select: (data) => data.data,
+        }),
+    useCreateOrderMutation: () =>
+        useMutation({
+            mutationFn: (body: CreateOrderRequest) => partyupApi.createOrder(body),
         }),
 };

@@ -21,8 +21,8 @@ import GroupOrderHistoryPage from "./pages/groupbuy/GroupOrderHistoryPage.tsx";
 import MainLayout from "./components/layout/MainLayout.tsx";
 import { useAuthStore } from "./store/useAuthStore.ts";
 import ClientPartyListPage from "./pages/partyup/client/ClientPartyListPage.tsx";
-import PartyCheckoutPage from "./pages/partyup/client/PartyCheckoutPage.tsx";
-import PartyOrdersPage from "./pages/partyup/client/OrderPage.tsx";
+import ClientCheckoutPage from "./pages/partyup/client/ClientCheckoutPage.tsx";
+import ClientOrderPage from "./pages/partyup/client/ClientOrderPage.tsx";
 import PartyListPage from "./pages/partyup/admin/PartyListPage.tsx";
 import PartyManagementPage from "./pages/partyup/admin/PartyManagementPage.tsx";
 import PartyPage from "./pages/partyup/client/PartyPage.tsx";
@@ -70,11 +70,11 @@ const router = createHashRouter([
           },
           {
             path: "/partyup/checkout",
-            element: <PartyCheckoutPage />
+            element: <ClientCheckoutPage />
           },
           {
             path: "/partyup/orders",
-            element: <PartyOrdersPage />
+            element: <ClientOrderPage />
           }
         ],
       },

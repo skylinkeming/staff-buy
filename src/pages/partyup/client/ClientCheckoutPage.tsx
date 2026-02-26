@@ -6,20 +6,21 @@ import Breadcrumbs from "@/components/common/BreadCrumbs";
 import { useEffect, useState } from "react";
 import AppAlert from "@/components/common/AppAlert";
 import { useNavigate } from "react-router";
-import { useGroupbuyApi } from "@/api/useGroupbuyApi";
 import CartSummary from "@/components/partyup/client/CartSummary";
-import CheckoutItems from "@/components/partyup/client/checkoutPage/CheckoutItems";
-import ShippingInfo from "@/components/partyup/client/checkoutPage/ShippingInfo";
 import { usePartyupStore } from "@/store/usePartyupStore";
+import PartyCheckoutForm from "@/components/partyup/client/checkoutPage/PartyCheckoutForm";
+import { usePartyupApi } from "@/api/partyup/usePartyupApi";
+import { partyupApi, type CreateOrderRequest } from "@/api/partyup/partyupApi";
 
-export default function PartyCheckoutPage() {
+export default function ClientCheckoutPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const partyCarts = usePartyupStore((state) => state.cartsByParty);
+    const getApiPayload = usePartyupStore((state) => state.getApiPayload);
     // const clearCart = usePartyupStore((state) => state.clearCart);
     const navigate = useNavigate();
 
     const { mutate: handleCreateOrder, isPending } =
-        useGroupbuyApi.useCreateOrderMutation();
+        usePartyupApi.useCreateOrderMutation();
 
     // const cartItems = Object.values(groupCart);
 
@@ -45,7 +46,7 @@ export default function PartyCheckoutPage() {
             return;
         }
 
-        if (Object.values(partyCarts).some((cart) => cart.formError)) {
+        if (Object.values(partyCarts).some((partyCart) => partyCart.formError)) {
             await AppAlert({
                 title: "資訊錯誤",
                 message: "請檢查填寫資訊是否有誤",
@@ -54,26 +55,13 @@ export default function PartyCheckoutPage() {
             });
             return;
         }
-        // const body: CreateOrderRequest = {
-        //     master: {
-        //         fG_Transport: shippingInfo.isDelivery,
-        //         cX_GetDate: shippingInfo.pickupDate,
-        //         cX_Ship_Name: shippingInfo.name,
-        //         cX_Tel: shippingInfo.phone,
-        //         cX_Address: shippingInfo.address || shippingInfo.location,
-        //         cX_Ship_Time: shippingInfo.deliveryTime,
-        //         nQ_Bag: parseInt(shippingInfo.bagQty),
-        //         cX_Invoice_ForWeb: invoiceInfo.carrierId,
-        //         cX_Love_Code: invoiceInfo.loveCode,
-        //         iD_GroupBy: selectedGroup.id,
-        //         cX_Invoice_Store: invoiceInfo.location,
-        //     },
-        //     detail: cartItems.map((ci) => ({
-        //         iD_Product: parseInt(ci.productId),
-        //         nQ_BuyQuantity: ci.quantity,
-        //         iD_GroupBy_Item: parseInt(ci.groupItemId!),
-        //     })),
-        // };
+
+
+        const payloads = getApiPayload();
+        console.log("payloads", payloads);
+
+        const results = await postOrders(payloads);
+        console.log("results", results);
 
         // handleCreateOrder(body, {
         //     onSuccess: async (data) => {
@@ -84,8 +72,8 @@ export default function PartyCheckoutPage() {
         //             type: "success",
         //         });
 
-        //         clearCart("group");
-        //         navigate("/groupbuy/orders");
+        //         // clearCart("group");
+        //         navigate("/partyup/orders");
         //     },
         //     onError: (error) => {
         //         console.error("建立失敗:", error);
@@ -98,6 +86,31 @@ export default function PartyCheckoutPage() {
         // });
     };
 
+
+    const postOrders = async (payloads: CreateOrderRequest[]) => {
+        const results = [];
+
+        for (const data of payloads) {
+            try {
+                console.log(`正在發送事件 ID: ${data.eventId}...`);
+
+                // await 會暫停迴圈，直到這支 API 回傳結果
+                const response = await partyupApi.createOrder(data);
+
+                // const result = await response.json();
+                results.push(response);
+
+                console.log(`事件 ${data.eventId} 完成！`);
+            } catch (error) {
+                console.error(`事件 ${data.eventId} 失敗:`, error);
+                // 根據需求決定：要中斷整個迴圈（break）還是繼續下一支（continue）
+                break;
+            }
+        }
+
+        return results;
+    };
+
     return (
         <div className="w-full bg-[#FBFBFB] pb-[120px] md:flex md:gap-[40px] md:justify-center">
 
@@ -105,13 +118,13 @@ export default function PartyCheckoutPage() {
 
                 <Breadcrumbs className="max-w-7xl mx-auto mt-5" />
                 <div className="mt-[28px] mb-[25px] text-[24px] font-bold">我的購物車</div>
-
-                <CheckoutItems onAmountChange={handleAmountChange} />
-                {
-                    Object.keys(partyCarts).map((partyId) => (
-                        <ShippingInfo key={partyId} isSubmitting={isSubmitting} partyId={partyId} />
-                    ))
-                }
+                <div className="flex-col flex gap-10">
+                    {
+                        Object.keys(partyCarts).map((partyCartId) => (
+                            <PartyCheckoutForm key={partyCartId} partyId={partyCartId} isSubmitting={isSubmitting} />
+                        ))
+                    }
+                </div>
             </div>
             <div className="hidden md:inline-block sticky top-35 h-100 mt-15">
                 <CartSummary

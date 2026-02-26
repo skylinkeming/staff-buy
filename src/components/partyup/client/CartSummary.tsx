@@ -28,10 +28,12 @@ export default function CartSummary({
     const hasItems = partyEntries.length > 0;
 
     const totalAmount = partyEntries.reduce((sum, party) => {
-        const partyTotal = Object.values(party.items).reduce(
-            (s, item) => s + item.price * item.quantity,
-            0
-        );
+        const partyTotal = Object.values(party.items)
+            .filter(item => item.checked)
+            .reduce(
+                (s, item) => s + item.price * item.quantity,
+                0
+            );
         return sum + partyTotal;
     }, 0);
 
@@ -78,35 +80,35 @@ export default function CartSummary({
             }
 
             {/* 商品細目區塊 */}
-            {showDetail && (
-                <div className="flex-1 overflow-y-auto mb-1.25 border-b border-dashed pb-1.25  max-h-[400px] pr-2 custom-scrollbar">
-                    {
-                        partyEntries.map((party) => (
-                            <div key={party.partyId} className="mb-4 last:mb-0">
-                                {Object.values(party.items).map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex justify-between items-start mb-2 gap-2"
-                                    >
-                                        <div className="flex-1">
-                                            <div className="text-[13px] font-bold text-gray-700 leading-tight">
-                                                {item.optionName}
-                                            </div>
+            {/* {showDetail && ( */}
+            <div className="flex-1 overflow-y-auto mb-1.25 border-b border-dashed pb-1.25  max-h-[400px] pr-2 custom-scrollbar">
+                {
+                    partyEntries.map((party) => (
+                        <div key={party.partyId} className="mb-4 last:mb-0">
+                            {Object.values(party.items).filter(item => item.checked).map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="flex justify-between items-start mb-2 gap-2"
+                                >
+                                    <div className="flex-1">
+                                        <div className="text-[13px] font-bold text-gray-700 leading-tight">
+                                            {item.optionName}
+                                        </div>
 
-                                        </div>
-                                        <div className="text-[13px] text-gray-500 whitespace-nowrap">
-                                            x {item.quantity}
-                                        </div>
-                                        <div className="text-[13px] font-medium text-gray-800 w-[60px] text-right">
-                                            ${(item.price * item.quantity).toLocaleString()}
-                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        ))
-                    }
-                </div>
-            )}
+                                    <div className="text-[13px] text-gray-500 whitespace-nowrap">
+                                        x {item.quantity}
+                                    </div>
+                                    <div className="text-[13px] font-medium text-gray-800 w-[60px] text-right">
+                                        ${(item.price * item.quantity).toLocaleString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ))
+                }
+            </div>
+            {/* )} */}
 
             <div className="mb-4">
                 <div className="flex justify-between items-end">

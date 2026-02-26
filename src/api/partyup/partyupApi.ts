@@ -124,7 +124,7 @@ export interface PartyListResponse {
     totalCount: number;
 }
 
-
+// 揪團商品選項
 export interface PartyOption {
     id: string;
     optionName: string;
@@ -149,6 +149,27 @@ export interface PartyDetail {
 }
 
 
+export interface CheckoutItem {
+    /** 商品選項 ID (UUID) */
+    optionId: string;
+    /** 購買數量 */
+    qty: number;
+}
+
+export interface CreateOrderRequest {
+    /** 團購活動/事件 ID (UUID) */
+    eventId: string;
+    /** 配送方式 (例如: 'HOME_DELIVERY', 'OFFICE_PICKUP') */
+    deliveryMethod: string;
+    receiverName: string;
+    receiverPhone: string;
+    receiverAddress: string;
+    /** 配送備註 (選填) */
+    deliveryNote?: string;
+    /** 購買商品清單 */
+    items: CheckoutItem[];
+}
+
 export const partyupApi = {
     async getPartyList(): Promise<ApiResponse<PartyListResponse>> {
         const response = await api.get(`/PartyUp?Page=1&PageSize=10`);
@@ -156,6 +177,10 @@ export const partyupApi = {
     },
     async getPartyDetail(id: string): Promise<ApiResponse<PartyDetail>> {
         const response = await api.get(`/PartyUp/${id}`);
+        return response.data;
+    },
+    async createOrder(body: CreateOrderRequest): Promise<ApiResponse<CreateOrderResponse>> {
+        const response = await api.post(`/Orders`, body);
         return response.data;
     },
 
