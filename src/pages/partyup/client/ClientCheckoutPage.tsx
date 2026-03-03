@@ -9,18 +9,17 @@ import { useNavigate } from "react-router";
 import CartSummary from "@/components/partyup/client/CartSummary";
 import { usePartyupStore } from "@/store/usePartyupStore";
 import PartyCheckoutForm from "@/components/partyup/client/checkoutPage/PartyCheckoutForm";
-import { usePartyupApi } from "@/api/partyup/usePartyupApi";
 import { partyupApi, type CreateOrderRequest } from "@/api/partyup/partyupApi";
 
 export default function ClientCheckoutPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isPending, setIsPending] = useState(false);
     const partyCarts = usePartyupStore((state) => state.cartsByParty);
+    const removeFromCart = usePartyupStore((state) => state.removeFromCart);
     const getApiPayload = usePartyupStore((state) => state.getApiPayload);
     // const clearCart = usePartyupStore((state) => state.clearCart);
     const navigate = useNavigate();
 
-    const { mutate: handleCreateOrder, isPending } =
-        usePartyupApi.useCreateOrderMutation();
 
     // const cartItems = Object.values(groupCart);
 
@@ -29,10 +28,6 @@ export default function ClientCheckoutPage() {
     }, [])
 
 
-    const handleAmountChange = async (
-
-    ) => {
-    };
 
     const handleClickPurchaseButton = async () => {
         setIsSubmitting(true);
@@ -58,32 +53,14 @@ export default function ClientCheckoutPage() {
 
 
         const payloads = getApiPayload();
-        console.log("payloads", payloads);
 
+        setIsPending(true);
         const results = await postOrders(payloads);
-        console.log("results", results);
+        setIsPending(false);
+        setIsSubmitting(false);
 
-        // handleCreateOrder(body, {
-        //     onSuccess: async (data) => {
-        //         setIsSubmitting(false);
-        //         console.log("訂單建立成功:", data);
-        //         await AppAlert({
-        //             message: "訂單建立成功",
-        //             type: "success",
-        //         });
+        handleOrderResults(results);
 
-        //         // clearCart("group");
-        //         navigate("/partyup/orders");
-        //     },
-        //     onError: (error) => {
-        //         console.error("建立失敗:", error);
-        //         AppAlert({
-        //             title: "訂購失敗",
-        //             message: (error as any).response?.data?.message || error.message,
-        //             type: "error",
-        //         });
-        //     },
-        // });
     };
 
 
@@ -92,18 +69,11 @@ export default function ClientCheckoutPage() {
 
         for (const data of payloads) {
             try {
-                console.log(`正在發送事件 ID: ${data.eventId}...`);
-
-                // await 會暫停迴圈，直到這支 API 回傳結果
                 const response = await partyupApi.createOrder(data);
-
-                // const result = await response.json();
                 results.push(response);
 
-                console.log(`事件 ${data.eventId} 完成！`);
             } catch (error) {
-                console.error(`事件 ${data.eventId} 失敗:`, error);
-                // 根據需求決定：要中斷整個迴圈（break）還是繼續下一支（continue）
+                console.error(`訂購揪團 ${data.partyId} 失敗:`, error);
                 break;
             }
         }
@@ -111,11 +81,33 @@ export default function ClientCheckoutPage() {
         return results;
     };
 
+    const handleOrderResults = async (results: any[]) => {
+        let isAllSuccess = true;
+        let failPartyNames: string[] = [];
+        results.forEach((result) => {
+            if (!result.success) {
+                isAllSuccess = false;
+                failPartyNames.push(result.data.partyName);
+            }
+            removeFromCart(result.data.partyId, result.data.productId);
+        });
+        if (isAllSuccess) {
+            await AppAlert({
+                message: "訂單建立成功",
+                type: "success",
+            });
+            navigate("/partyup/orders");
+        } else {
+            await AppAlert({
+                message: `${failPartyNames.join(", ")} 訂購失敗，請重新訂購 `,
+                type: "error",
+            });
+        }
+    }
+
     return (
         <div className="w-full bg-[#FBFBFB] pb-[120px] md:flex md:gap-[40px] md:justify-center">
-
             <div className="">
-
                 <Breadcrumbs className="max-w-7xl mx-auto mt-5" />
                 <div className="mt-[28px] mb-[25px] text-[24px] font-bold">我的購物車</div>
                 <div className="flex-col flex gap-10">
