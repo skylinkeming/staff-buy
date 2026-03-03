@@ -7,7 +7,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const token = useAuthStore.getState().tokens.staffbuy;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -50,7 +50,7 @@ export interface Option {
 
 // 共用的API
 export const commonApi = {
-  login: (body: { qwe: string }) =>
+  staffBuyLogin: (body: { qwe: string }) =>
     api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),
   getUserInfo: () =>
     api

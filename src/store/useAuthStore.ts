@@ -2,10 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import CryptoJS from "crypto-js";
 
-
 const SECRET_KEY = "鼎泰豐讚啦~~";
 
-//混淆token
 const cryptoHelper = {
   encrypt: (data: any): string => {
     try {
@@ -23,13 +21,11 @@ const cryptoHelper = {
       if (!originalText) return null;
       return JSON.parse(originalText);
     } catch (e) {
-      // 當密鑰更換或資料受損時會進入此處
       console.warn("Decryption failed: data may be corrupted or key mismatched.");
       return null;
     }
   },
 };
-
 
 interface User {
   eID: string;
@@ -38,52 +34,63 @@ interface User {
   deptId: string;
 }
 
+export type TokenType = 'partyup' | 'staffbuy';
+
 interface AuthState {
-  token: string | null;
+  tokens: {
+    partyup: string | null;
+    staffbuy: string | null;
+  };
   user: User | null;
-  setToken: (token: string | null) => void;
+  setToken: (type: TokenType, token: string | null) => void;
   setUser: (user: User | null) => void;
   clearAuth: () => void;
 }
 
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      token: null,
+      tokens: {
+        partyup: null,
+        staffbuy: null,
+      },
       user: null,
-      setToken: (token) => set({ token }),
+      setToken: (type, token) => {
+        set((state) => ({
+          tokens: { ...state.tokens, [type]: token }
+        }))
+      },
       setUser: (user) => set({ user }),
-      clearAuth: () => set({ token: null, user: null }),
+      clearAuth: () => set({ tokens: { partyup: null, staffbuy: null }, user: null }),
     }),
     {
       name: "auth-storage",
       storage: {
         getItem: (name) => {
-          const encryptedToken = localStorage.getItem(`${name}-token`);
+          const encryptedTokens = localStorage.getItem(`${name}-tokens`);
           const userData = localStorage.getItem(`${name}-user`);
 
-          const decryptedData = encryptedToken ? cryptoHelper.decrypt(encryptedToken) : null;
+          const decryptedTokens = encryptedTokens ? cryptoHelper.decrypt(encryptedTokens) : null;
 
           return {
             state: {
-              token: decryptedData?.token || null,
+              tokens: decryptedTokens || { partyup: null, staffbuy: null },
               user: userData ? JSON.parse(userData) : null,
             },
             version: 0,
           };
         },
         setItem: (name, value) => {
-          const { token, user } = value.state;
-
-          // 1. 加密 Token 並儲存 (儲存為字串)
-          if (token) {
-            const encryptedToken = cryptoHelper.encrypt({ token });
-            localStorage.setItem(`${name}-token`, encryptedToken);
+          const { tokens, user } = value.state;
+          // 1. 加密整個 tokens 物件
+          if (tokens && (tokens.partyup || tokens.staffbuy)) {
+            const encryptedTokens = cryptoHelper.encrypt(tokens);
+            localStorage.setItem(`${name}-tokens`, encryptedTokens);
           } else {
-            localStorage.removeItem(`${name}-token`);
+            localStorage.removeItem(`${name}-tokens`);
           }
 
+          // 2. 儲存 user
           if (user) {
             localStorage.setItem(`${name}-user`, JSON.stringify(user));
           } else {
@@ -91,7 +98,7 @@ export const useAuthStore = create<AuthState>()(
           }
         },
         removeItem: (name) => {
-          localStorage.removeItem(`${name}-token`);
+          localStorage.removeItem(`${name}-tokens`);
           localStorage.removeItem(`${name}-user`);
         },
       },

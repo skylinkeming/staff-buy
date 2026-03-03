@@ -8,8 +8,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-    const token = useAuthStore.getState().token;
-
+    const token = useAuthStore.getState().tokens.partyup;
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -158,12 +157,12 @@ export interface CheckoutItem {
 
 export interface CreateOrderRequest {
     /** 團購活動/事件 ID (UUID) */
-    eventId: string;
+    partyId: string;
     /** 配送方式 (例如: 'HOME_DELIVERY', 'OFFICE_PICKUP') */
-    deliveryMethod: string;
-    receiverName: string;
-    receiverPhone: string;
-    receiverAddress: string;
+    // deliveryMethod: string;
+    receiverName?: string;
+    receiverPhone?: string;
+    receiverAddress?: string;
     /** 配送備註 (選填) */
     deliveryNote?: string;
     /** 購買商品清單 */
@@ -171,15 +170,33 @@ export interface CreateOrderRequest {
 }
 
 export const partyupApi = {
-    async getPartyList(): Promise<ApiResponse<PartyListResponse>> {
-        const response = await api.get(`/PartyUp?Page=1&PageSize=10`);
+    // PS:partyup的登入API路徑與staffbuyLogin的API路徑不同 所以另外寫一隻login
+    partyupLogin: (body: { qwe: string }) =>
+        api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),
+    getUserInfo: () =>
+        api
+            .get<
+                ApiResponse<{
+                    eID: string;
+                    displayName: string;
+                    deptId: string;
+                    deptName: string;
+                }>
+            >("/Auth/userinfo")
+            .then((res) => res.data),
+    async getPartyList(searchText?: string): Promise<ApiResponse<PartyListResponse>> {
+        let url = `/PartyUp?Page=1&PageSize=10`
+        if (searchText) {
+            url += "&SearchText=" + searchText
+        }
+        const response = await api.get(url);
         return response.data;
     },
     async getPartyDetail(id: string): Promise<ApiResponse<PartyDetail>> {
         const response = await api.get(`/PartyUp/${id}`);
         return response.data;
     },
-    async createOrder(body: CreateOrderRequest): Promise<ApiResponse<CreateOrderResponse>> {
+    async createOrder(body: CreateOrderRequest): Promise<ApiResponse<any>> {
         const response = await api.post(`/Orders`, body);
         return response.data;
     },

@@ -153,10 +153,9 @@ export const usePartyupStore = create<CartState>()(
                         // 如果該揪團沒有任何勾選商品，則不產出該筆訂單
                         if (checkedItems.length === 0) return null;
 
-                        // 2. 組裝符合 CreateOrderRequest 格式的物件
                         const request: CreateOrderRequest = {
-                            eventId: partyEntry.partyId,
-                            deliveryMethod: partyEntry.requiresShippingInfo ? 'HOME_DELIVERY' : 'OFFICE_PICKUP',
+                            partyId: partyEntry.partyId,
+                            // deliveryMethod: partyEntry.requiresShippingInfo ? 'HOME_DELIVERY' : 'OFFICE_PICKUP',
                             receiverName: partyEntry.shippingInfo.name || "",
                             receiverPhone: partyEntry.shippingInfo.phone || "",
                             receiverAddress: partyEntry.shippingInfo.address || "",
