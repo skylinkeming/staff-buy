@@ -17,16 +17,11 @@ export default function ClientCheckoutPage() {
     const partyCarts = usePartyupStore((state) => state.cartsByParty);
     const removeFromCart = usePartyupStore((state) => state.removeFromCart);
     const getApiPayload = usePartyupStore((state) => state.getApiPayload);
-    // const clearCart = usePartyupStore((state) => state.clearCart);
     const navigate = useNavigate();
-
-
-    // const cartItems = Object.values(groupCart);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [])
-
 
 
     const handleClickPurchaseButton = async () => {
@@ -71,7 +66,12 @@ export default function ClientCheckoutPage() {
             try {
                 const response = await partyupApi.createOrder(data);
                 results.push(response);
-
+                if (response.success) {
+                    // 訂單建成後就把商品從購物車移除
+                    data.items.forEach((item) => {
+                        removeFromCart(data.partyId, item.optionId);
+                    });
+                }
             } catch (error) {
                 console.error(`訂購揪團 ${data.partyId} 失敗:`, error);
                 break;
@@ -89,7 +89,6 @@ export default function ClientCheckoutPage() {
                 isAllSuccess = false;
                 failPartyNames.push(result.data.partyName);
             }
-            removeFromCart(result.data.partyId, result.data.productId);
         });
         if (isAllSuccess) {
             await AppAlert({
