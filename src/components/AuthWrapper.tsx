@@ -65,10 +65,10 @@ export default function AuthWrapper() {
 
 
   useEffect(() => {
-    if (qweValue) {
+    if (qweValue && !pending) {
       autoLogin();
     }
-  }, []);
+  }, [pending]);
 
   if (qweValue && pending) {
     return (

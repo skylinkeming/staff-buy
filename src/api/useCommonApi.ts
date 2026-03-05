@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { commonApi } from "./commonApi";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const useCommonApi = {
   useHasLayoutQuery: () =>
@@ -9,6 +10,7 @@ export const useCommonApi = {
       select: (res) => {
         return res.data;
       },
+      enabled: useAuthStore.getState().tokens.staffbuy !== null,
       staleTime: 30000,
     }),
   useUserInfoQuery: () =>

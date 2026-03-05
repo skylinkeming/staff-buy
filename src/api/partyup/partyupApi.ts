@@ -68,28 +68,29 @@ export interface PartyUpData {
 
 /** 訂單列表 API 回傳總介面 */
 export interface OrderListResponse {
-    orderList: OrderData[];
-    pagination: Pagination;
+    list: Order[];
+    page: number;
+    pageSize: number;
+    total: number;
+}
+export interface OrderItem {
+    optionName: string;
+    specText: string;
+    qty: number;
+    unitPrice: number;
+    subtotal: number;
+    imageUrl: string;
 }
 
-/** 單筆訂單主資料 */
-export interface OrderData {
-    orderId: string;           // 訂單編號
-    createdAt: string;         // 建立時間 (YYYY-MM-DD HH:mm)
-    pickupDate: string;        // 領取/送達時間
-    pickupMethod: "自取" | "宅配"; // 領取方式
-    orderStatus: string;       // 訂單狀態 (如：已領取、待發貨)
-    totalAmount: number;       // 總金額
-    partyName: string;         // 團購活動名稱
-    buyItems: OrderBuyItem[];  // 購買商品清單
-    shippingInfo?: OrderShippingInfo; // 配送資訊 (若為自取可能為 null 或不帶，故設為可選)
-}
-
-export interface OrderBuyItem {
-    imageUrl: string; // 商品圖片網址
-    name: string;     // 商品名稱
-    qty: number;      // 數量
-    price: number;    // 單價
+export interface Order {
+    orderId: string;
+    orderNo: string;
+    createdAt: string; // 若需處理 Date 物件，可在接收後自行轉換
+    status: 'SUBMITTED' | 'CANCELLED' | 'COMPLETED'; // 這裡可根據實際狀況擴充狀態字串
+    deliveryMethod: 'PICKUP' | 'DELIVERY'; // 同上，建議用 Union Type 增加精確度
+    totalAmount: number;
+    partyTitle: string;
+    items: OrderItem[];
 }
 
 export interface OrderShippingInfo {
@@ -171,23 +172,28 @@ export interface CreateOrderRequest {
 
 export const partyupApi = {
     // PS:partyup的登入API路徑與staffbuyLogin的API路徑不同 所以另外寫一隻login
-    partyupLogin: (body: { qwe: string }) =>
-        api.post<ApiResponse<string>>("/Auth/login", body).then((res) => res.data),
-    getUserInfo: () =>
-        api
-            .get<
-                ApiResponse<{
-                    eID: string;
-                    displayName: string;
-                    deptId: string;
-                    deptName: string;
-                }>
-            >("/Auth/userinfo")
-            .then((res) => res.data),
+    async partyupLogin(body: { qwe: string }): Promise<ApiResponse<string>> {
+        const response = await api.post<ApiResponse<string>>("/Auth/login", body);
+        return response.data;
+    },
+    async getUserInfo(): Promise<ApiResponse<{
+        eID: string;
+        displayName: string;
+        deptId: string;
+        deptName: string;
+    }>> {
+        const response = await api.get<ApiResponse<{
+            eID: string;
+            displayName: string;
+            deptId: string;
+            deptName: string;
+        }>>("/Auth/userinfo");
+        return response.data;
+    },
     async getPartyList(searchText?: string): Promise<ApiResponse<PartyListResponse>> {
-        let url = `/PartyUp?Page=1&PageSize=10`
+        let url = `/PartyUp?Page=1&PageSize=10`;
         if (searchText) {
-            url += "&SearchText=" + searchText
+            url += `&SearchText=${searchText}`;
         }
         const response = await api.get(url);
         return response.data;
@@ -199,6 +205,33 @@ export const partyupApi = {
     async createOrder(body: CreateOrderRequest): Promise<ApiResponse<any>> {
         const response = await api.post(`/Orders`, body);
         return response.data;
+    },
+    getOrderList: async ({
+        page = 1,
+        pageSize = 10,
+        orderId,
+        startDate,
+        endDate,
+    }: {
+        page: number;
+        pageSize?: number;
+        orderId?: string;
+        startDate?: string;
+        endDate?: string;
+    }) => {
+        let baseUrl = `/Orders?Page=${page}&PageSize=${pageSize}`;
+
+        if (orderId) {
+            baseUrl += `&OrderId=${orderId}`;
+        }
+
+        if (startDate && endDate) {
+            baseUrl += `&StartDate=${startDate}&EndDate=${endDate}`;
+        }
+
+        return api
+            .get<ApiResponse<OrderListResponse>>(baseUrl)
+            .then((res) => res.data);
     },
 
 }
