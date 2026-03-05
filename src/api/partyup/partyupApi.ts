@@ -83,6 +83,7 @@ export interface OrderItem {
 }
 
 export interface Order {
+    partyId: string;
     orderId: string;
     orderNo: string;
     createdAt: string; // 若需處理 Date 物件，可在接收後自行轉換
@@ -91,6 +92,9 @@ export interface Order {
     totalAmount: number;
     partyTitle: string;
     items: OrderItem[];
+    receiverAddress: string;
+    receiverName: string;
+    receiverPhone: string;
 }
 
 export interface OrderShippingInfo {
@@ -159,12 +163,10 @@ export interface CheckoutItem {
 export interface CreateOrderRequest {
     /** 團購活動/事件 ID (UUID) */
     partyId: string;
-    /** 配送方式 (例如: 'HOME_DELIVERY', 'OFFICE_PICKUP') */
-    // deliveryMethod: string;
+    deliveryMethod: 'DELIVERY' | 'PICKUP';
     receiverName?: string;
     receiverPhone?: string;
     receiverAddress?: string;
-    /** 配送備註 (選填) */
     deliveryNote?: string;
     /** 購買商品清單 */
     items: CheckoutItem[];

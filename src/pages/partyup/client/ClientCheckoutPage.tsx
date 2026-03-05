@@ -27,9 +27,9 @@ export default function ClientCheckoutPage() {
     const handleClickPurchaseButton = async () => {
         setIsSubmitting(true);
 
-        if (Object.values(partyCarts).some((cart) => Object.values(cart.items).length === 0)) {
+        if (Object.values(partyCarts).some((cart) => Object.values(cart.items).filter(item => item.checked).length === 0)) {
             await AppAlert({
-                message: "購物車裡沒有商品",
+                message: "購物車裡沒有商品或尚未勾選要結帳的商品",
                 okText: "確定",
                 hideCancel: true,
             });
@@ -65,13 +65,7 @@ export default function ClientCheckoutPage() {
         for (const data of payloads) {
             try {
                 const response = await partyupApi.createOrder(data);
-                results.push(response);
-                if (response.success) {
-                    // 訂單建成後就把商品從購物車移除
-                    data.items.forEach((item) => {
-                        removeFromCart(data.partyId, item.optionId);
-                    });
-                }
+                results.push({ ...response, partyId: data.partyId, items: data.items });
             } catch (error) {
                 console.error(`訂購揪團 ${data.partyId} 失敗:`, error);
                 break;
@@ -83,11 +77,17 @@ export default function ClientCheckoutPage() {
 
     const handleOrderResults = async (results: any[]) => {
         let isAllSuccess = true;
-        let failPartyNames: string[] = [];
+        let failedPartyNames: string[] = [];
         results.forEach((result) => {
             if (!result.success) {
                 isAllSuccess = false;
-                failPartyNames.push(result.data.partyName);
+                failedPartyNames.push(result.data.partyName);
+            }
+            if (result.success) {
+                // 訂單建成後就把商品從購物車移除
+                result.items.forEach((item: any) => {
+                    removeFromCart(result.partyId, item.optionId);
+                });
             }
         });
         if (isAllSuccess) {
@@ -98,7 +98,7 @@ export default function ClientCheckoutPage() {
             navigate("/partyup/orders");
         } else {
             await AppAlert({
-                message: `${failPartyNames.join(", ")} 訂購失敗，請重新訂購 `,
+                message: `${failedPartyNames.join(", ")} 訂購失敗，請重新訂購 `,
                 type: "error",
             });
         }

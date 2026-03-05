@@ -140,7 +140,6 @@ export const usePartyupStore = create<CartState>()(
                     }
                     return { cartsByParty: newCarts };
                 }),
-
             clearAllCarts: () => set({ cartsByParty: {} }),
             getApiPayload: (): CreateOrderRequest[] => {
                 const { cartsByParty } = get();
@@ -155,7 +154,7 @@ export const usePartyupStore = create<CartState>()(
 
                         const request: CreateOrderRequest = {
                             partyId: partyEntry.partyId,
-                            // deliveryMethod: partyEntry.requiresShippingInfo ? 'HOME_DELIVERY' : 'OFFICE_PICKUP',
+                            deliveryMethod: partyEntry.requiresShippingInfo ? 'DELIVERY' : 'PICKUP',
                             receiverName: partyEntry.shippingInfo.name || "",
                             receiverPhone: partyEntry.shippingInfo.phone || "",
                             receiverAddress: partyEntry.shippingInfo.address || "",

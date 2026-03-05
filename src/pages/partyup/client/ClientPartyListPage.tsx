@@ -9,10 +9,13 @@ import { usePartyupApi } from "@/api/partyup/usePartyupApi";
 
 
 export default function ClientPartyListPage() {
-    const { data } = usePartyupApi.usePartyListQuery();
+    const { data, refetch } = usePartyupApi.usePartyListQuery();
     const [currentPage, setCurrentPage] = useState<number>(data?.page || 1);
     const [pageSize, setPageSize] = useState<number>(data?.pageSize || 10);
-    const handleSearch = () => { }
+    const handleSearch = (searchKey: string) => {
+        // refetch(searchKey)
+
+    }
 
 
 

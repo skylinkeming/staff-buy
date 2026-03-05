@@ -5,10 +5,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { partyupApi, type CreateOrderRequest } from "./partyupApi";
 
 export const usePartyupApi = {
-    usePartyListQuery: () =>
+    usePartyListQuery: (searchText?: string) =>
         useQuery({
             queryKey: ["partyup_partyList"],
-            queryFn: () => partyupApi.getPartyList(),
+            queryFn: () => partyupApi.getPartyList(searchText),
             staleTime: 0,
             select: (data) => data.data,
         }),
@@ -22,5 +22,24 @@ export const usePartyupApi = {
     useCreateOrderMutation: () =>
         useMutation({
             mutationFn: (body: CreateOrderRequest) => partyupApi.createOrder(body),
+        }),
+    useOrderListQuery: ({
+        page = 1,
+        pageSize = 10,
+        orderId,
+        startDate,
+        endDate,
+    }: {
+        page: number;
+        pageSize?: number;
+        orderId?: string;
+        startDate?: string;
+        endDate?: string;
+    }) =>
+        useQuery({
+            queryKey: ["partyup_orderList", page, pageSize, orderId, startDate, endDate],
+            queryFn: () => partyupApi.getOrderList({ page, pageSize, orderId, startDate, endDate }),
+            staleTime: 0,
+            select: (data) => data.data,
         }),
 };
