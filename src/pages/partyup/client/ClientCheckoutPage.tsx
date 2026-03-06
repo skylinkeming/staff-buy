@@ -115,6 +115,13 @@ export default function ClientCheckoutPage() {
                             <PartyCheckoutForm key={partyCartId} partyId={partyCartId} isSubmitting={isSubmitting} />
                         ))
                     }
+                    {
+                        Object.keys(partyCarts).length === 0 && (
+                            <div className="flex flex-col shadow-sm px-5 py-15 bg-white border-[#D9D9D9] border rounded-[10px]">
+                                <div className="flex gap-2.5 text-[18px] w-200 justify-center items-center px-5 py-5">購物車無商品</div>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
             <div className="hidden md:inline-block sticky top-35 h-100 mt-15">

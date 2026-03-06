@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router";
 import { Spin } from "antd";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -8,6 +8,7 @@ import { partyupApi } from "@/api/partyup/partyupApi";
 export default function AuthWrapper() {
   const { setToken, setUser } = useAuthStore();
   const [pending, setPending] = useState(false);
+  const hasCalledLogin = useRef(false);
   const getParam = (key: string) => {
     // 先嘗試從標準 search 拿，拿不到就從 hash 拿
     const params = new URLSearchParams(window.location.search);
@@ -19,17 +20,22 @@ export default function AuthWrapper() {
   const qweValue = getParam("qwe");
 
   const autoLogin = async () => {
+    if (hasCalledLogin.current) return; // 2. 如果已經打過了就直接擋掉
+    hasCalledLogin.current = true;
     setPending(true);
     try {
       const partyupLoginData = await partyupApi.partyupLogin({ qwe: qweValue! })
       const staffbuyLoginData = await commonApi.staffBuyLogin({ qwe: qweValue! })
-      // const partyupUserInfo = await partyupApi.getUserInfo()
-      const staffbuyUserInfo = await commonApi.getUserInfo()
-      setUser(staffbuyUserInfo.data);
       setToken('partyup', partyupLoginData.data);
       setToken('staffbuy', staffbuyLoginData.data);
+
+      // const partyupUserInfo = await partyupApi.getUserInfo()
+      const staffbuyUserInfo = await commonApi.getUserInfo()
+      if (staffbuyUserInfo.data.eID === "") return;
+      setUser(staffbuyUserInfo.data);
     } catch (error) {
       console.error(error);
+      hasCalledLogin.current = false;
     } finally {
       setPending(false);
     }
@@ -65,10 +71,10 @@ export default function AuthWrapper() {
 
 
   useEffect(() => {
-    if (qweValue && !pending) {
+    if (qweValue) {
       autoLogin();
     }
-  }, [pending]);
+  }, [qweValue]);
 
   if (qweValue && pending) {
     return (

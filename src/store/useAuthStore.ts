@@ -71,7 +71,6 @@ export const useAuthStore = create<AuthState>()(
           const userData = localStorage.getItem(`${name}-user`);
 
           const decryptedTokens = encryptedTokens ? cryptoHelper.decrypt(encryptedTokens) : null;
-
           return {
             state: {
               tokens: decryptedTokens || { partyup: null, staffbuy: null },
@@ -82,6 +81,7 @@ export const useAuthStore = create<AuthState>()(
         },
         setItem: (name, value) => {
           const { tokens, user } = value.state;
+
           // 1. 加密整個 tokens 物件
           if (tokens && (tokens.partyup || tokens.staffbuy)) {
             const encryptedTokens = cryptoHelper.encrypt(tokens);
