@@ -7,7 +7,7 @@ import { partyupApi, type CreateOrderRequest } from "./partyupApi";
 export const usePartyupApi = {
     usePartyListQuery: (searchText?: string) =>
         useQuery({
-            queryKey: ["partyup_partyList"],
+            queryKey: ["partyup_partyList", searchText],
             queryFn: () => partyupApi.getPartyList(searchText),
             staleTime: 0,
             select: (data) => data.data,
@@ -29,16 +29,18 @@ export const usePartyupApi = {
         orderId,
         startDate,
         endDate,
+        searchTxt,
     }: {
         page: number;
         pageSize?: number;
         orderId?: string;
         startDate?: string;
         endDate?: string;
+        searchTxt?: string;
     }) =>
         useQuery({
-            queryKey: ["partyup_orderList", page, pageSize, orderId, startDate, endDate],
-            queryFn: () => partyupApi.getOrderList({ page, pageSize, orderId, startDate, endDate }),
+            queryKey: ["partyup_orderList", page, pageSize, orderId, startDate, endDate, searchTxt],
+            queryFn: () => partyupApi.getOrderList({ page, pageSize, orderId, startDate, endDate, searchTxt }),
             staleTime: 0,
             select: (data) => data.data,
         }),

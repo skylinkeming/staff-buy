@@ -10,11 +10,11 @@ export default function ClientOrderPage() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [orderFilter, setOrderFilter] = useState<{
-        searchTerm: string;
+        searchTxt: string;
         startDate: string;
         endDate: string;
     }>({
-        searchTerm: "",
+        searchTxt: "",
         startDate: "",
         endDate: "",
     });
@@ -42,9 +42,8 @@ export default function ClientOrderPage() {
                     className="mt-5"
                     isLoading={isLoading}
                     onClickSearchBtn={(params) => {
-                        debugger;
                         setOrderFilter({
-                            searchTerm: params.searchTerm,
+                            searchTxt: params.searchTerm,
                             startDate: params.startDate,
                             endDate: params.endDate,
                         });

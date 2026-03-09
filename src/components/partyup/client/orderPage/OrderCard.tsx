@@ -1,11 +1,9 @@
 import type { Order } from "@/api/partyup/partyupApi";
 import { useState } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { useNavigate } from "react-router";
 
 export default function OrderCard({ orderItem }: { orderItem: Order }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const navigate = useNavigate();
     const renderRow = (label: string, value: string | number | React.ReactNode, isFullWidth = false) => {
         return (
             <div className={`flex w-full justify-between px-3 md:px-3 ${isFullWidth ? 'md:col-span-2' : ''}`}>
@@ -33,10 +31,10 @@ export default function OrderCard({ orderItem }: { orderItem: Order }) {
             {/* 訂單內容 */}
             <div className="gap-y-1.5 pt-4 pb-2 grid grid-cols-1 md:grid-cols-2">
                 {renderRow("訂單時間:", orderItem.createdAt)}
-                {renderRow("揪團名稱:", <span onClick={() => navigate(`/partyup/partyDetail/${orderItem.partyId}`)} className="cursor-pointer text-[#0B7F9F] font-bold flex items-center">{orderItem.partyTitle}</span>)}
-                {renderRow("訂單狀態:", orderItem.status)}
+                {renderRow("揪團名稱:", <span onClick={() => window.open(`/#/partyup/partyDetail/${orderItem.partyId}`)} className="cursor-pointer text-[#0B7F9F] font-bold flex items-center">{orderItem.partyTitle}</span>)}
+                {renderRow("訂單狀態:", orderItem.status_Name)}
                 {renderRow("領取日期:", orderItem.createdAt)}
-                {renderRow("領取方式:", orderItem.deliveryMethod)}
+                {renderRow("領取方式:", orderItem.deliveryMethod_Name)}
                 {renderRow("總金額:", <span className="text-[#FF5C5C] font-bold font-['Inria_Sans']">${orderItem.totalAmount.toLocaleString()}</span>)}
 
                 {/* 宅配資訊 - 展開後 */}

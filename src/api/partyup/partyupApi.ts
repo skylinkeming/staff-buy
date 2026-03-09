@@ -86,9 +86,11 @@ export interface Order {
     partyId: string;
     orderId: string;
     orderNo: string;
-    createdAt: string; // 若需處理 Date 物件，可在接收後自行轉換
-    status: 'SUBMITTED' | 'CANCELLED' | 'COMPLETED'; // 這裡可根據實際狀況擴充狀態字串
-    deliveryMethod: 'PICKUP' | 'DELIVERY'; // 同上，建議用 Union Type 增加精確度
+    createdAt: string;
+    status: 'SUBMITTED' | 'CANCELLED' | 'COMPLETED';
+    status_Name: string;
+    deliveryMethod: 'PICKUP' | 'DELIVERY';
+    deliveryMethod_Name: string;
     totalAmount: number;
     partyTitle: string;
     items: OrderItem[];
@@ -214,12 +216,14 @@ export const partyupApi = {
         orderId,
         startDate,
         endDate,
+        searchTxt,
     }: {
         page: number;
         pageSize?: number;
         orderId?: string;
         startDate?: string;
         endDate?: string;
+        searchTxt?: string;
     }) => {
         let baseUrl = `/Orders?Page=${page}&PageSize=${pageSize}`;
 
@@ -229,6 +233,10 @@ export const partyupApi = {
 
         if (startDate && endDate) {
             baseUrl += `&StartDate=${startDate}&EndDate=${endDate}`;
+        }
+
+        if (searchTxt) {
+            baseUrl += `&SearchTxt=${searchTxt}`;
         }
 
         return api

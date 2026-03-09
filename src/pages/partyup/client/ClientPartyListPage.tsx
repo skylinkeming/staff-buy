@@ -9,22 +9,18 @@ import { usePartyupApi } from "@/api/partyup/usePartyupApi";
 
 
 export default function ClientPartyListPage() {
-    const { data, refetch } = usePartyupApi.usePartyListQuery();
+    const [searchTxt, setSearchTxt] = useState<string>("");
+    const { data } = usePartyupApi.usePartyListQuery(searchTxt);
     const [currentPage, setCurrentPage] = useState<number>(data?.page || 1);
     const [pageSize, setPageSize] = useState<number>(data?.pageSize || 10);
     const handleSearch = (searchKey: string) => {
-        // refetch(searchKey)
-
+        setSearchTxt(searchKey);
     }
-
-
 
     const onPageChange = (page: number, pageSize: number) => {
         setCurrentPage(page);
         setPageSize(pageSize);
     }
-
-
 
     return (
         <div className="w-full bg-[#FBFBFB] pb-[120px] flex flex-col items-center justify-center gap-10">
@@ -44,6 +40,11 @@ export default function ClientPartyListPage() {
                             data?.list.map((party) => (
                                 <PartyProductCard key={party.id} partyData={party} />
                             ))
+                        }
+                        {
+                            data?.list.length === 0 && !!searchTxt && (
+                                <div className="w-full text-center">查無結果</div>
+                            )
                         }
                     </div>
 
